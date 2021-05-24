@@ -22,15 +22,13 @@ suppressMessages(library(curatedTCGAData))
 
 
 ## ----eval=TRUE----------------------------------------------------------------
-curatedTCGAData(diseaseCode="BRCA", assays="*",dry.run=TRUE,
-	version="1.1.38")
+curatedTCGAData(diseaseCode="BRCA", assays="*",dry.run=TRUE)
 
 
 ## ----eval=TRUE----------------------------------------------------------------
 brca <- suppressMessages(curatedTCGAData("BRCA",
                                          c("mRNAArray","Methylation_methyl27", "RPPAArray","miRNASeqGene"),
-                                         dry.run=FALSE,
-                                         version="1.1.38"))
+                                         dry.run=FALSE))
 
 
 ## ----eval=TRUE----------------------------------------------------------------
@@ -103,7 +101,6 @@ summary(groupList)
 ## ---- eval=TRUE---------------------------------------------------------------
 makeNets <- function(dataList, groupList, netDir,...) {
 	netList <- c() # initialize before is.null() check
-	# make RNA nets (NOTE: the check for is.null() is important!)
 	
 	layerNames <- c("BRCA_miRNASeqGene-20160128",
 		"BRCA_mRNAArray-20160128",
@@ -111,8 +108,8 @@ makeNets <- function(dataList, groupList, netDir,...) {
 		"BRCA_Methylation_methyl27-20160128")
 
 	# Similarity defined as Pearson correlation
-	for (nm in names(groupList)){
-		if (is.null(groupList[[nm]])){
+	for (nm in layerNames){
+		if (!is.null(groupList[[nm]])){ # IMPORANT check
 			netList_cur <- makePSN_NamedMatrix(dataList[[nm]],
 				rownames(dataList[[nm]]),
 				groupList[[nm]],
@@ -122,8 +119,7 @@ makeNets <- function(dataList, groupList, netDir,...) {
 		}
 
 	}
-	browser()
-	return(netList)
+	return(unlist(netList))
 }
 
 
