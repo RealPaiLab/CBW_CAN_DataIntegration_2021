@@ -44,8 +44,11 @@ for (k in 1:numSplits) {
 	   featScores[[cur]][[sprintf("Split%i",k)]] <- tmp
 	}
 }
+
+if (length(st)==2) {
 message("* Plotting performance")
 predPerf <- plotPerf(predList, predClasses=st)
+}
 
 message("* Compiling feature scores and calling selected features")
 feats <- runOverallFeatureSelection(featScores, 
@@ -207,4 +210,78 @@ createMultiAssayExperiment <- function(dataTables,pheno){
     return(MultiAssayExperiment(experiments=summList,
                         colData=pheno)
     )
+}
+
+confusionMatrix <- function(model) {
+    require(plotrix)
+
+    nmList <- grep("Split",names(model))
+    cl <- sort(unique(model$Split1$STATUS))
+    conf <- list()
+    mega <- NULL
+    for (nm in nmList){
+        pred <- model[[nm]][["predictions"]][,c("ID","STATUS","TT_STATUS","PRED_CLASS")]
+        m <- as.matrix(table(pred[,c("STATUS","PRED_CLASS")]))
+        conf[[nm]] <- m/colSums(m)
+        if (is.null(mega)) mega <- conf[[nm]] else mega <- mega + conf[[nm]]
+    }
+    
+        mega <- mega / length(conf) # average
+        mega <- round(mega*100,2)
+        mega <- t(mega)
+        metric <- "%% Accuracy"
+    
+    par(mar=c(4,8,2,2))
+    color2D.matplot(mega,show.values=TRUE, border="white", 
+        #cs1=c(1,1,1),cs2=c(1,0.5,0),cs3=c(0,0.5,0), 
+        extremes=c(1,2),
+        axes=FALSE,        
+        ylab="Actual class",xlab="Predicted class")
+    axis(1,at=seq_len(ncol(mega))-0.5,labels=colnames(mega))
+    axis(2,at=seq_len(ncol(mega))-0.5,labels=rev(rownames(mega)),las=2)
+    title(sprintf("Confusion matrix: Accuracy (avg of %i splits)",length(conf)))
+
+    return(list(splitWiseConfMatrix=conf, average=mega))
+}
+
+#' Plot tSNE
+#' 
+#' @details Plots tSNE of patient similarity network using Rtsne
+#' @param psn (matrix) Patient similarity network represented as adjacency
+#' matrix (symmetric). Row and column names are patient IDs. Note that NA
+#' values will be replaced by very small number (effectively zero).
+#' @param pheno (data.frame) Patient labels. ID column is patient ID and 
+#' STATUS is patient label of interest. tSNE will colour-code nodes by 
+#' patient label.
+#' @return (Rtsne) output of Rtsne call. Side effect of tSNE plot
+#' @import ggplot2
+#' @import Rtsne Rtsne
+#' @importFrom RColorBrewer brewer.pal
+#' @export
+tSNEPlotter <- function(psn,pheno,...) {
+message("* Making symmetric matrix")
+symmForm <- suppressMessages(makeSymmetric(psn))
+symmForm[which(is.na(symmForm))] <- .Machine$double.eps
+message("* Running tSNE")
+x <- Rtsne(symmForm,...)
+dat <- x$Y
+samps <- rownames(symmForm)
+idx <- match(samps, pheno$ID)
+if (all.equal(pheno$ID[idx],samps)!=TRUE) {
+	stop("pheno IDs not matching psn rownames")
+}
+st <- pheno$STATUS[idx]
+
+# to eliminate the "no visible binding for global variable" problem
+y <- status <- NULL
+
+message("* Plotting")
+colnames(dat) <- c("x","y")
+dat <- as.data.frame(dat,stringsAsFactors=TRUE)
+dat$status <- as.factor(st)
+p <- ggplot(dat,aes(x,y)) + geom_point(aes(colour=status))
+p <- p + xlab("") + ylab("") + ggtitle("Integrated PSN - tSNE")
+print(p)
+
+return(x)
 }

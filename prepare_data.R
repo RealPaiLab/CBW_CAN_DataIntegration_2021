@@ -8,7 +8,7 @@ colData(dat)$STAGE <- staget
 
 ### remove NA PAM50 calls, remove normal samples
 tmp <- colData(dat)$PAM50.mRNA
-idx <- union(which(tmp %in% c("Normal-like")),
+idx <- union(which(tmp %in% c("Normal-like","HER2-enriched")),
              		which(is.na(staget)))
 idx <- union(idx, which(is.na(tmp)))				
 pID <- colData(dat)$patientID

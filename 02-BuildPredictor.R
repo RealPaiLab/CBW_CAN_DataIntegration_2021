@@ -2,7 +2,8 @@ rm(list=ls())
 suppressWarnings(suppressMessages(require(netDx)))
 suppressMessages(library(curatedTCGAData))
 brca <- suppressMessages(curatedTCGAData("BRCA",
-                                         c("mRNAArray","Methylation_methyl27", "RPPAArray","miRNASeqGene"),
+                                         c("mRNAArray","Methylation_methyl27", 
+										 "RPPAArray","miRNASeqGene"),
                                          dry.run=FALSE))
 source("prepare_data.R")
 brca <- prepareDataForCBW(brca)
@@ -52,10 +53,10 @@ model <- buildPredictor(
 	  groupList=groupList,	## grouping strategy
       makeNetFunc=makeNets,	## function to build PSNs
       outDir=outDir, 		## output directory
-      numSplits=50L,			## number of train/test splits
-	  featScoreMax=10L,		## max score for feature selection
-      featSelCutoff=7L,		## threshold for calling something feature-selected
-      numCores=8L,			## set higher for parallelizing
+      numSplits=2L,			## number of train/test splits
+	  featScoreMax=2L,		## max score for feature selection
+      featSelCutoff=1L,		## threshold for calling something feature-selected
+      numCores=4L,			## set higher for parallelizing
 	  debugMode=FALSE,
 	  keepAllData=FALSE,
       logging="none"
@@ -69,8 +70,12 @@ results <- getResults(brca,model,featureSelCutoff=7L,
 	featureSelPct=0.7)
 
 psn <- getPSN(brca,groupList,makeNets,results$selectedFeatures)
-tsne <- plot_tSNE(psn$patientSimNetwork_unpruned,
-	colData(brca))
+#tsne <- plot_tSNE(psn$patientSimNetwork_unpruned,
+#	colData(brca))
+tsne <- tSNEplotter(
+	psn$patientSimNetwork_unpruned, 
+	colData(brca)
+	)
 
 
 
