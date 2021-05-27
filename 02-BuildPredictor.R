@@ -72,7 +72,7 @@ results <- getResults(brca,model,featureSelCutoff=7L,
 psn <- getPSN(brca,groupList,makeNets,results$selectedFeatures)
 #tsne <- plot_tSNE(psn$patientSimNetwork_unpruned,
 #	colData(brca))
-tsne <- tSNEplotter(
+tsne <- tSNEPlotter(
 	psn$patientSimNetwork_unpruned, 
 	colData(brca)
 	)

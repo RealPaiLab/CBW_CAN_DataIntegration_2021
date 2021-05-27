@@ -2,7 +2,7 @@
 
 ## Intro
 
-## Setup
+## Prepare data
 
 ```{r,eval=FALSE}
 suppressWarnings(suppressMessages(require(netDx)))
@@ -20,7 +20,8 @@ Take a look at the available data without downloading any (set `dry.run=TRUE`):
 curatedTCGAData(diseaseCode="BRCA", assays="*",dry.run=TRUE)
 ```
 
-Let's download 4 kinds of data:
+Let's download four kinds of data:
+
 * gene expression (measured on XXX arrays)
 * DNA methylation (XXX arrays)
 * proteomic measures from XXX, and 
@@ -33,18 +34,23 @@ brca <- suppressMessages(curatedTCGAData("BRCA",
                                          dry.run=FALSE))
 ```
 
-Let's look at the `MultiAssayExperiment` object. Recall that this is a container for 
+This call returns a `MultiAssayExperiment` object. Recall that this is a container for storing multiple assays performed on the same set of samples. [Look at this tutorial](https://bioconductor.org/packages/release/bioc/vignettes/MultiAssayExperiment/inst/doc/QuickStartMultiAssay.html) to learn more.
+
+Let's briefly explore the `brca` `MultiAssayExperiment` object.
 
 ```{r,eval=FALSE}
 brca
 ```
 
-### MultiAssayExperiment
+`assays()` returns a `list` with all -omic data associated with this object.  Particular assays can be accessed by subsetting in the standard R style: 
+
 ```{r,eval=FALSE}
 summary(assays(brca))
+names(assays(brca))
+head(assays(brca)[[1]])
 ```
 
-Look at sample phenotype data:
+Look at sample phenotype data, where rows contain data for each patient and columns have non-omic measures (e.g. clinical data):
 ```{r,eval=FALSE}
 pheno <- colData(brca)
 colnames(pheno)[1:20]
@@ -52,10 +58,11 @@ head(pheno[,1:5])
 ```
 
 This next code block prepares the TCGA data. This includes:
+
 * removing duplicate samples
 * reformatting patient IDs (e.g. removing spaces and hyphens)
 * creating an `ID` column in `colData(brca)`, which contains unique patient IDs
-* creating a `STATUS` column in `colData(brca)` which contains the patient labels (i.e what we want netDx to classify).
+* creating a `STATUS` column in `colData(brca)` which contains the patient labels (i.e what we want netDx to classify). 
 
 In practice you would do this once and save the data before running netDx. This code has been moved into a supporting file, `prepare_data.R`. You can explore it after the lab to see how some things are achieved (e.g. removing duplicate samples).
 
@@ -64,7 +71,8 @@ source("prepare_data.R")
 brca <- prepareDataForCBW(brca)
 ```
 
-Notice that we now have `ID` and `STATUS` columns in the sample metadata table:
+Notice that we now have `ID` and `STATUS` columns in the sample metadata table. 
+**Note: These columns are required by netDx. ** 
 
 ```{r,eval=FALSE}
 pheno <- colData(brca)
@@ -73,34 +81,23 @@ table(pheno$STATUS,useNA="always")  # useNA lets you see
 									# unintentional missing values
 ```
 
-## Design custom patient similarity networks (features)
+## Design PSN features
+netDx allows the user to define how data is converted into PSNs, which are the features that go into the model. This is done specifically by telling the model how to group different types of data and how to define similarity for each of these (e.g. Pearson correlation, normalized difference, etc.,).
 
-netDx allows the user to define a custom function that takes patient data and variable groupings as input, and returns a set of patient similarity networks (PSN) as output. The user can customize what datatypes are used, how they are grouped, and what defines patient similarity for a given datatype. 
-
-When running the predictor (next section), the user simply passes this custom function as an input variable; i.e. the `makeNetFunc` parameter when calling `buildPredictor()`.
-
-***Note:*** While netDx provides a high degree of flexibility in achieving your design of choice, it is up to the user to ensure that the design, i.e. the similarity metric and variable groupings, is appropriate for your application. Domain knowledge is almost likely required for good design. 
-
-netDx requires that this function take some generic parameters as input. These include:
+The relevant input parameters are:
 
 * `dataList`: the patient data, provided as a `MultiAssayExperiment` object. Refer to the [tutorials for MultiAssayExperiment](https://bioconductor.org/packages/release/bioc/html/MultiAssayExperiment.html) to see how to construct those objects from data.
 * `groupList`: sets of input data that would correspond to individual networks (e.g. genes grouped into pathways)
 * `netDir`: the directory where the resulting PSN would be stored.
 
 ### dataList
-**Function:** Multi-modal input data
+**What is this:** The input data (here, `brca`).
+
 **Format:** `MultiAssayExperiment` object. 
 
-```{r,eval=FALSE}
-summary(brca)
-```
 
 ### groupList
-**Function:** This object tells the predictor how to group units within a layer, to generate a PSN.
-Possible choices:
-* Simplest (fewest number of nets): All features go into one network ("Transcriptome","Metabolome",etc.,)
-* Granular (most number of nets): The other extreme, where each measure (e.g. each gene) gets its own network. ***Warning*** We do not recommend this design unless you have done some prefiltering. This can result in really slow run times and out-of-memory errors.
-* Biologically-meaningful groupings (intermediate): Group measures by user-specified sets; e.g. create one feature per pathway.
+**What is this:** `groupList` tells netDx how to group units within a layer, to generate a PSN. 
 
 In this simple example we just create one network per datatype
 ```{r,eval=FALSE}
@@ -114,12 +111,15 @@ for (k in 1:length(expr)) {
 }
 ```
 
-So the `groupList` variable has one entry per data *layer*:
+`groupList` is a two tiered list or list-of-lists. The first tier is for each data layers, with names matching those in `assays(brca)`. The second tier contains all the PSNs we want to make for that layer.
+
+Here is the first layer:
+
 ```{r,eval=FALSE}
 summary(groupList)
 ```
 
-For example, here are the networks to be created with RNA data. Genes corresponding to pathways are to be grouped into individual network. Such a groupList would create pathway-level networks:
+In this lab exercise we create only one PSN per data layer, using all the measures from an -omic assay. e.g. One PSN based on similarity across entire transcriptome, one for methylome, etc.,). So in this lab exercise, the inner tier simply contains one entry, with all measures for the given layer. This design will get more interested in Lab 2, when we create pathway-level features. 
 
 ```{r,eval=FALSE}
 names(groupList[["BRCA_mRNAArray-20160128"]])
@@ -131,6 +131,10 @@ This function is defined by the user and tells the predictor how to create netwo
 
 This function requires `dataList`,`groupList`, and `netDir` as input variables. The residual `...` parameter is to pass additional variables to `makePSN_NamedMatrix()`, notably `numCores` (number of parallel jobs).
 
+netDx requires that this function have:
+
+* `dataList`,`groupList`, and `netDir` as input variables. The residual `...` parameter is to pass additional variables to `makePSN_NamedMatrix()`, notably number of cores for parallel processing (`numCores`). 
+* 
 
 ```{r, eval=FALSE}
 makeNets <- function(dataList, groupList, netDir,...) {
@@ -140,29 +144,35 @@ makeNets <- function(dataList, groupList, netDir,...) {
 		"BRCA_mRNAArray-20160128",
 		"BRCA_RPPAArray-20160128",
 		"BRCA_Methylation_methyl27-20160128")
+	
+	for (nm in layerNames){  			## for each layer
 
-	# Similarity defined as Pearson correlation
-	for (nm in layerNames){
-		if (!is.null(groupList[[nm]])){ # IMPORANT check
-			netList_cur <- makePSN_NamedMatrix(dataList[[nm]],
-				rownames(dataList[[nm]]),
-				groupList[[nm]],
-				netDir,verbose=TRUE, 
-				writeProfiles=TRUE,...)
-			netList <- c(netList,netList_cur)
+		if (!is.null(groupList[[nm]])){ ## must check for null for each layer
+
+			netList_cur <- makePSN_NamedMatrix(
+				dataList[[nm]],
+				rownames(dataList[[nm]]),	## names of measures (e.g. genes, CpGs)
+				groupList[[nm]],			## how to group measures in that layer
+				netDir,						## leave this as-is, netDx will figure out where this is.
+				verbose=TRUE, 			
+				writeProfiles=TRUE,   		## use Pearson correlation-based similarity
+				...
+				)
+		
+			netList <- c(netList,netList_cur)	## just leave this in
 		}
-
 	}
-	return(unlist(netList))
+	return(unlist(netList))	## just leave this in 
 }
 
 ```
 
-**Note:** `dataList` and `groupList` are generic containers that can contain whatever object the user requires to create PSN. **The custom function gives the user complete flexibility in feature design**. 
+***Note:*** While netDx provides a high degree of flexibility in achieving your design of choice, it is up to the user to ensure that the design, i.e. the similarity metric and variable groupings, is appropriate for your application. Domain knowledge is almost likely required for good design. 
 
 ## Build predictor
 
 Finally we call the function that runs the netDx predictor. We provide:
+
 * patient data  (`dataList`)
 * grouping rules (`groupList`)
 * function to create PSN from data, includes choice of similarity metric (`makeNetFunc`)
@@ -184,8 +194,8 @@ These are unrealistically low values set so the example will run fast. In practi
 set.seed(42) # make results reproducible
 outDir <- paste(tempdir(),randAlphanumString(),
 	"pred_output",sep=getFileSep())
-## set keepAllData=TRUE to not delete at the end of the predictor run.
-## This can be useful for debugging.
+if (file.exists(outDir)) unlink(outDir,recursive=TRUE)
+
 model <- buildPredictor(
       dataList=brca,		## your data
 	  groupList=groupList,	## grouping strategy
@@ -199,7 +209,7 @@ model <- buildPredictor(
 	  featScoreMax=2L,		## max score for feature selection
       numCores=4L,			## set higher for parallelizing
 	  debugMode=FALSE,
-	  keepAllData=FALSE,
+	  keepAllData=FALSE,	## set to TRUE for debugging or low-level files used by the predictor
       logging="none"
 	  )
 ```
@@ -216,8 +226,8 @@ This list contains:
   * `featureSelected`: vector of features that pass feature selection. List of length `g`, with one entry per label.
 
 ```{r,eval=FALSE}
-summary(out)
-summary(out$Split1)
+summary(model)
+summary(model$Split1)
 ```
 
 ### Get model results
