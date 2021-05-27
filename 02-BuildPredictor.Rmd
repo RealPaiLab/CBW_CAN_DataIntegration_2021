@@ -2,6 +2,15 @@
 
 ## Intro
 
+In this lab we will build a predictor to classify three different types of breast tumours, two of a luminal subtype (Luminal A and Luminal B), and one of a basal subtype. 
+
+For this we will use data from the  The Cancer Genome Atlas, and will integrate four types of -omic data: 
+
+* gene expression (measured on XXX arrays)
+* DNA methylation (XXX arrays)
+* proteomic measures from XXX, and 
+* miRNA sequencing 
+
 ## Prepare data
 
 ```{r,eval=TRUE}
@@ -15,17 +24,13 @@ Here we load the required packages and download clinical and gene expression dat
 suppressMessages(library(curatedTCGAData))
 ```
 
+This package contains
+
 Take a look at the available data without downloading any (set `dry.run=TRUE`): 
 ```{r,eval=TRUE}
 curatedTCGAData(diseaseCode="BRCA", assays="*",dry.run=TRUE)
 ```
-
-Let's download four kinds of data:
-
-* gene expression (measured on XXX arrays)
-* DNA methylation (XXX arrays)
-* proteomic measures from XXX, and 
-* miRNA sequencing 
+Now let's actually sdownload the data:
 
 ```{r,eval=TRUE}
 brca <- suppressMessages(curatedTCGAData("BRCA",
@@ -34,7 +39,7 @@ brca <- suppressMessages(curatedTCGAData("BRCA",
                                          dry.run=FALSE))
 ```
 
-This call returns a `MultiAssayExperiment` object. Recall that this is a container for storing multiple assays performed on the same set of samples. [Look at this tutorial](https://bioconductor.org/packages/release/bioc/vignettes/MultiAssayExperiment/inst/doc/QuickStartMultiAssay.html) to learn more.
+This call returns a `MultiAssayExperiment` object. Recall that this is a container for storing multiple assays performed on the same set of samples. [See this tutorial](https://bioconductor.org/packages/release/bioc/vignettes/MultiAssayExperiment/inst/doc/QuickStartMultiAssay.html) to learn more.
 
 Let's briefly explore the `brca` `MultiAssayExperiment` object.
 
@@ -42,12 +47,20 @@ Let's briefly explore the `brca` `MultiAssayExperiment` object.
 brca
 ```
 
-`assays()` returns a `list` with all -omic data associated with this object.  Particular assays can be accessed by subsetting in the standard R style: 
+`assays()` returns a `list` with all -omic data associated with this object.  
 
 ```{r,eval=TRUE}
 summary(assays(brca))
+```
+`names()` shows you what -omic datatypes the layers correspond to:
+```{r,eval=TRUE}
 names(assays(brca))
-head(assays(brca)[[1]])
+```
+
+And here we subset the miRNA data, looking at data for the first five patients
+```{r,eval=TRUE}
+mir <- assays(brca)[["BRCA_miRNASeqGene-20160128"]]
+head(mir[,1:5])
 ```
 
 Look at sample phenotype data, where rows contain data for each patient and columns have non-omic measures (e.g. clinical data):
