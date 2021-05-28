@@ -61,13 +61,13 @@ The pathway file was downloaded from [download.baderlab.org/EM_Genesets](http://
 
 We can look at the first 20 lines of the file to see it:
 
-```{r,eval=FALSE}
-#system2(sprintf("head -n 20 %s", x))
+```{r,eval=TRUE}
+system2("head",args=c("-n","3", x))
 ```
 
 We then use `readPathways()` to read the pathways into a list format to provide the predictor with:
-```{r,eval=FALSE}
-pathList <- readPathways(fetchPathwayDefinitions("March",2021))
+```{r,eval=TRUE}
+pathList <- readPathways(x)
 head(pathList)
 ```
 
@@ -75,6 +75,7 @@ head(pathList)
 
 ```{r,eval=FALSE}
 myGMTfile <- "supporting_files/c6.all.c7.4.symbols.gmt"
+file.exists(myGMTfile)
 #x <- readPathways(myGMTfile)
 #head(x)
 ```

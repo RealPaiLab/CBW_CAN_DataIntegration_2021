@@ -243,19 +243,59 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## &quot;~/.cache/netDx/20e22fee64ce_Human_AllPathways_March_01_2021_symbol.gmt&quot;</code></pre>
 <p>The pathway file was downloaded from <a href="http://download.baderlab.org/EM_Genesets">download.baderlab.org/EM_Genesets</a>, which contains pathways compiled from curated pathway databases such as Reactome, Panther, NCI, MSigDB, etc., [REF], which is updated monthly. Data is contained in GMT format, a common format to represent gene-sets, such as pathways.</p>
 <p>We can look at the first 20 lines of the file to see it:</p>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="lab-2-pathway-level-features.html#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co">#system2(sprintf(&quot;head -n 20 %s&quot;, x))</span></span></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="lab-2-pathway-level-features.html#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">system2</span>(<span class="st">&quot;head&quot;</span>,<span class="at">args=</span><span class="fu">c</span>(<span class="st">&quot;-n&quot;</span>,<span class="st">&quot;3&quot;</span>, x))</span></code></pre></div>
 <p>We then use <code>readPathways()</code> to read the pathways into a list format to provide the predictor with:</p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="lab-2-pathway-level-features.html#cb80-1" aria-hidden="true" tabindex="-1"></a>pathList <span class="ot">&lt;-</span> <span class="fu">readPathways</span>(<span class="fu">fetchPathwayDefinitions</span>(<span class="st">&quot;March&quot;</span>,<span class="dv">2021</span>))</span>
-<span id="cb80-2"><a href="lab-2-pathway-level-features.html#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pathList)</span></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="lab-2-pathway-level-features.html#cb80-1" aria-hidden="true" tabindex="-1"></a>pathList <span class="ot">&lt;-</span> <span class="fu">readPathways</span>(x)</span></code></pre></div>
+<pre><code>## ---------------------------------------</code></pre>
+<pre><code>## File: 20e22fee64ce_Human_AllPathways_March_01_2021_symbol.gmt</code></pre>
+<pre><code>## Warning in scan(f, what = &quot;character&quot;, nlines = 1, quiet = TRUE, sep = &quot;\t&quot;): EOF within
+## quoted string</code></pre>
+<pre><code>## Read 1123 pathways in total, internal list has 1110 entries</code></pre>
+<pre><code>##  FILTER: sets with num genes in [10, 200]</code></pre>
+<pre><code>##    =&gt; 341 pathways excluded
+##    =&gt; 769 left</code></pre>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="lab-2-pathway-level-features.html#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pathList)</span></code></pre></div>
+<pre><code>## $STEARATE_BIOSYNTHESIS_I__ANIMALS_
+##  [1] &quot;ELOVL1&quot;  &quot;ACOT7&quot;   &quot;ACSL1&quot;   &quot;ACSL5&quot;   &quot;ELOVL6&quot;  &quot;ACSL4&quot;   &quot;ACSL3&quot;   &quot;ACOT2&quot;  
+##  [9] &quot;ACOT1&quot;   &quot;ACSBG1&quot;  &quot;ACSBG2&quot;  &quot;SLC27A2&quot; &quot;ACOT4&quot;  
+## 
+## $SUPERPATHWAY_OF_INOSITOL_PHOSPHATE_COMPOUNDS
+##  [1] &quot;PI4K2B&quot;  &quot;MTMR14&quot;  &quot;INPPL1&quot;  &quot;PTEN&quot;    &quot;PIK3CD&quot;  &quot;PIK3C2G&quot; &quot;PIK3CB&quot;  &quot;PIK3C2A&quot;
+##  [9] &quot;PIK3CG&quot;  &quot;PIK3C2B&quot; &quot;PIP4P2&quot;  &quot;PIP4P1&quot;  &quot;PLCZ1&quot;   &quot;PPIP5K1&quot; &quot;PPIP5K2&quot; &quot;PIP5KL1&quot;
+## [17] &quot;PLCE1&quot;   &quot;PIP4K2A&quot; &quot;PIP4K2B&quot; &quot;PIP4K2C&quot; &quot;SACM1L&quot;  &quot;ITPK1&quot;   &quot;IPMK&quot;    &quot;OCRL&quot;   
+## [25] &quot;ITPKB&quot;   &quot;ITPKC&quot;   &quot;MINPP1&quot;  &quot;PLCB3&quot;   &quot;PLCB4&quot;   &quot;PIK3CA&quot;  &quot;ITPKA&quot;   &quot;PIK3C3&quot; 
+## [33] &quot;PLCB1&quot;   &quot;PLCB2&quot;   &quot;PI4K2A&quot;  &quot;IPPK&quot;    &quot;MTMR3&quot;   &quot;PIK3R4&quot;  &quot;PIK3R3&quot;  &quot;PIK3R2&quot; 
+## [41] &quot;PIK3R1&quot;  &quot;PIK3R6&quot;  &quot;PIK3R5&quot;  &quot;INPP5B&quot;  &quot;INPP5A&quot;  &quot;INPP5D&quot;  &quot;PLCG2&quot;   &quot;INPP5J&quot; 
+## [49] &quot;PIP5K1A&quot; &quot;INPP5K&quot;  &quot;PIP5K1B&quot; &quot;PIP5K1C&quot; &quot;PLCG1&quot;   &quot;CDIPT&quot;   &quot;IP6K1&quot;   &quot;IP6K3&quot;  
+## [57] &quot;IP6K2&quot;   &quot;SYNJ2&quot;   &quot;FIG4&quot;    &quot;PIKFYVE&quot; &quot;SYNJ1&quot;   &quot;PI4KA&quot;   &quot;PLCH1&quot;   &quot;PI4KB&quot;  
+## [65] &quot;PLCH2&quot;   &quot;PLCD3&quot;   &quot;PLCD4&quot;   &quot;PLCD1&quot;  
+## 
+## $PUTRESCINE_DEGRADATION_III
+##  [1] &quot;ALDH3A2&quot; &quot;ALDH3B2&quot; &quot;ALDH3A1&quot; &quot;ALDH1B1&quot; &quot;MAOB&quot;    &quot;ALDH2&quot;   &quot;MAOA&quot;    &quot;ALDH3B1&quot;
+##  [9] &quot;SAT2&quot;    &quot;SAT1&quot;   
+## 
+## $TRYPTOPHAN_DEGRADATION_III__EUKARYOTIC_
+##  [1] &quot;ACAT1&quot; &quot;HADHB&quot; &quot;GCDH&quot;  &quot;TDO2&quot;  &quot;KYNU&quot;  &quot;HAAO&quot;  &quot;AFMID&quot; &quot;KMO&quot;   &quot;ACAA1&quot; &quot;ACAT2&quot;
+## [11] &quot;ACMSD&quot;
+## 
+## $MEVALONATE_PATHWAY_I
+##  [1] &quot;ACAT1&quot;  &quot;IDI1&quot;   &quot;MVK&quot;    &quot;HMGCS1&quot; &quot;IDI2&quot;   &quot;HADHB&quot;  &quot;PMVK&quot;   &quot;MVD&quot;    &quot;HMGCR&quot; 
+## [10] &quot;HMGCS2&quot; &quot;ACAA1&quot;  &quot;ACAT2&quot; 
+## 
+## $`D-_I_MYO__I_-INOSITOL-5-PHOSPHATE_METABOLISM`
+##  [1] &quot;PLCG1&quot;   &quot;PLCB3&quot;   &quot;PLCB4&quot;   &quot;PLCH1&quot;   &quot;PLCH2&quot;   &quot;PLCB1&quot;   &quot;MTMR14&quot;  &quot;PLCD3&quot;  
+##  [9] &quot;PLCB2&quot;   &quot;PLCD4&quot;   &quot;PLCD1&quot;   &quot;MTMR3&quot;   &quot;PIP4P2&quot;  &quot;PIP4P1&quot;  &quot;PLCZ1&quot;   &quot;PLCG2&quot;  
+## [17] &quot;PLCE1&quot;   &quot;PIP4K2A&quot; &quot;PIP4K2C&quot;</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Alternatively, you can also provide a custom pathway set to netDx by reading in a GMT file, using the <code>readPathways()</code> function. In this example, I’ve downloaded a geneset of <a href="http://www.gsea-msigdb.org/gsea/msigdb/collections.jsp#C7">pathways often dysregulated in cancer</a>, set C6 from MSigDB (REF):</li>
 </ol>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="lab-2-pathway-level-features.html#cb81-1" aria-hidden="true" tabindex="-1"></a>myGMTfile <span class="ot">&lt;-</span> <span class="st">&quot;supporting_files/c6.all.c7.4.symbols.gmt&quot;</span></span>
-<span id="cb81-2"><a href="lab-2-pathway-level-features.html#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="co">#x &lt;- readPathways(myGMTfile)</span></span>
-<span id="cb81-3"><a href="lab-2-pathway-level-features.html#cb81-3" aria-hidden="true" tabindex="-1"></a><span class="co">#head(x)</span></span></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="lab-2-pathway-level-features.html#cb89-1" aria-hidden="true" tabindex="-1"></a>myGMTfile <span class="ot">&lt;-</span> <span class="st">&quot;supporting_files/c6.all.c7.4.symbols.gmt&quot;</span></span>
+<span id="cb89-2"><a href="lab-2-pathway-level-features.html#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="fu">file.exists</span>(myGMTfile)</span>
+<span id="cb89-3"><a href="lab-2-pathway-level-features.html#cb89-3" aria-hidden="true" tabindex="-1"></a><span class="co">#x &lt;- readPathways(myGMTfile)</span></span>
+<span id="cb89-4"><a href="lab-2-pathway-level-features.html#cb89-4" aria-hidden="true" tabindex="-1"></a><span class="co">#head(x)</span></span></code></pre></div>
 <p>For this tutorial we will limit ourselves to the first set of pathways and use <code>groupList</code> to tell netDx to group transcriptomic data using pathways.</p>
 <p><strong>NOTE: The pathway definition file should use the same identifier type as your data. For instance, if the genes in your transcriptomic data are represented using HGNC symbols, then your pathway definition file should also use HGNC symbols (e.g. <em>ID2S</em>) and not a different type of identifier, such as Ensembl IDs (which look like this: <em>ENSG00000010404</em>).</strong></p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="lab-2-pathway-level-features.html#cb82-1" aria-hidden="true" tabindex="-1"></a>groupList[[<span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>]] <span class="ot">&lt;-</span> pathList[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="lab-2-pathway-level-features.html#cb90-1" aria-hidden="true" tabindex="-1"></a>groupList[[<span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>]] <span class="ot">&lt;-</span> pathList[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code></pre></div>
 </div>
 </div>
 <div id="individual-clinical-variables-as-features" class="section level2">
@@ -267,55 +307,55 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><code>stage</code> to <code>STAGE</code></li>
 </ul>
 <p>These variables must be present in the <code>colData()</code> slot:</p>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="lab-2-pathway-level-features.html#cb83-1" aria-hidden="true" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">colData</span>(brca)</span>
-<span id="cb83-2"><a href="lab-2-pathway-level-features.html#cb83-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno[,<span class="fu">c</span>(<span class="st">&quot;patient.age_at_initial_pathologic_diagnosis&quot;</span>,<span class="st">&quot;stage&quot;</span>)])</span></code></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="lab-2-pathway-level-features.html#cb91-1" aria-hidden="true" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">colData</span>(brca)</span>
+<span id="cb91-2"><a href="lab-2-pathway-level-features.html#cb91-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno[,<span class="fu">c</span>(<span class="st">&quot;patient.age_at_initial_pathologic_diagnosis&quot;</span>,<span class="st">&quot;stage&quot;</span>)])</span></code></pre></div>
 <p>We now add the entry into <code>groupList</code>, which - recall - is where you tell netDx how to group variables. The entry for <code>clinical</code> is special because netDx will look for corresponding variables in the sample metadata table, <code>colData()</code>, rather than in a separate layer in <code>assays()</code>.</p>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="lab-2-pathway-level-features.html#cb84-1" aria-hidden="true" tabindex="-1"></a>groupList[[<span class="st">&quot;clinical&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb84-2"><a href="lab-2-pathway-level-features.html#cb84-2" aria-hidden="true" tabindex="-1"></a>      <span class="at">age=</span><span class="st">&quot;patient.age_at_initial_pathologic_diagnosis&quot;</span>,</span>
-<span id="cb84-3"><a href="lab-2-pathway-level-features.html#cb84-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">stage=</span><span class="st">&quot;STAGE&quot;</span></span>
-<span id="cb84-4"><a href="lab-2-pathway-level-features.html#cb84-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="lab-2-pathway-level-features.html#cb92-1" aria-hidden="true" tabindex="-1"></a>groupList[[<span class="st">&quot;clinical&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb92-2"><a href="lab-2-pathway-level-features.html#cb92-2" aria-hidden="true" tabindex="-1"></a>      <span class="at">age=</span><span class="st">&quot;patient.age_at_initial_pathologic_diagnosis&quot;</span>,</span>
+<span id="cb92-3"><a href="lab-2-pathway-level-features.html#cb92-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">stage=</span><span class="st">&quot;STAGE&quot;</span></span>
+<span id="cb92-4"><a href="lab-2-pathway-level-features.html#cb92-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 </div>
 <div id="function-to-create-psn" class="section level2">
 <h2>Function to create PSN</h2>
 <p>In this example, we will introduce the idea of different similarity metrics for gene expression vs clinical data, and show you how to provide a custom similarity function to <code>netDx</code>.</p>
 <p>This is <code>makeNets()</code> just as we had seen in the previous exercise, which provides <code>netDx</code> with a custom function to generate similarity networks (i.e. features). We previously used the following code to create PSN based on Pearson correlation:</p>
 <p><em>(Do not paste this in)</em></p>
-<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="lab-2-pathway-level-features.html#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">makePSN_NamedMatrix</span>(..., <span class="at">writeProfiles=</span><span class="cn">TRUE</span>,...)<span class="st">`</span></span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="lab-2-pathway-level-features.html#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">makePSN_NamedMatrix</span>(..., <span class="at">writeProfiles=</span><span class="cn">TRUE</span>,...)<span class="st">`</span></span></code></pre></div>
 <p>We will now make a different call to <code>makePSN_NamedMatrix()</code> but this time, requesting the use of the normalized difference similarity metric.</p>
 <p>This is achieved by calling the following code <em>(Do not paste this in, either)</em>:</p>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="lab-2-pathway-level-features.html#cb86-1" aria-hidden="true" tabindex="-1"></a>   <span class="fu">makePSN_NamedMatrix</span>(,..., </span>
-<span id="cb86-2"><a href="lab-2-pathway-level-features.html#cb86-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">simMetric=</span><span class="st">&quot;custom&quot;</span>, <span class="at">customFunc=</span>normDiff,</span>
-<span id="cb86-3"><a href="lab-2-pathway-level-features.html#cb86-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">writeProfiles=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="lab-2-pathway-level-features.html#cb94-1" aria-hidden="true" tabindex="-1"></a>   <span class="fu">makePSN_NamedMatrix</span>(,..., </span>
+<span id="cb94-2"><a href="lab-2-pathway-level-features.html#cb94-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">simMetric=</span><span class="st">&quot;custom&quot;</span>, <span class="at">customFunc=</span>normDiff,</span>
+<span id="cb94-3"><a href="lab-2-pathway-level-features.html#cb94-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">writeProfiles=</span><span class="cn">FALSE</span>)</span></code></pre></div>
 <p><code>normDiff</code> is a function provided in the <code>netDx</code> package, but the user may define custom similarity functions in this block of code and pass those to <code>makePSN_NamedMatrix()</code>, using the <code>customFunc</code> parameters; additionally set <code>simMetric</code> to <code>custom</code>.</p>
-<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="lab-2-pathway-level-features.html#cb87-1" aria-hidden="true" tabindex="-1"></a>makeNets <span class="ot">&lt;-</span> <span class="cf">function</span>(dataList, groupList, netDir,...) {</span>
-<span id="cb87-2"><a href="lab-2-pathway-level-features.html#cb87-2" aria-hidden="true" tabindex="-1"></a>    netList <span class="ot">&lt;-</span> <span class="fu">c</span>() </span>
-<span id="cb87-3"><a href="lab-2-pathway-level-features.html#cb87-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (nm <span class="cf">in</span> <span class="fu">setdiff</span>(<span class="fu">names</span>(groupList),<span class="st">&quot;clinical&quot;</span>)) {</span>
-<span id="cb87-4"><a href="lab-2-pathway-level-features.html#cb87-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(groupList[[nm]])) { <span class="do">## REMEMBER TO CHECK FOR NULL</span></span>
-<span id="cb87-5"><a href="lab-2-pathway-level-features.html#cb87-5" aria-hidden="true" tabindex="-1"></a>        netList <span class="ot">&lt;-</span> <span class="fu">makePSN_NamedMatrix</span>(</span>
-<span id="cb87-6"><a href="lab-2-pathway-level-features.html#cb87-6" aria-hidden="true" tabindex="-1"></a>            dataList[[nm]],</span>
-<span id="cb87-7"><a href="lab-2-pathway-level-features.html#cb87-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rownames</span>(dataList[[nm]]),</span>
-<span id="cb87-8"><a href="lab-2-pathway-level-features.html#cb87-8" aria-hidden="true" tabindex="-1"></a>            groupList[[nm]],</span>
-<span id="cb87-9"><a href="lab-2-pathway-level-features.html#cb87-9" aria-hidden="true" tabindex="-1"></a>            netDir,</span>
-<span id="cb87-10"><a href="lab-2-pathway-level-features.html#cb87-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">verbose=</span><span class="cn">FALSE</span>,</span>
-<span id="cb87-11"><a href="lab-2-pathway-level-features.html#cb87-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">writeProfiles=</span><span class="cn">TRUE</span>,</span>
-<span id="cb87-12"><a href="lab-2-pathway-level-features.html#cb87-12" aria-hidden="true" tabindex="-1"></a>            ...) </span>
-<span id="cb87-13"><a href="lab-2-pathway-level-features.html#cb87-13" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb87-14"><a href="lab-2-pathway-level-features.html#cb87-14" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb87-15"><a href="lab-2-pathway-level-features.html#cb87-15" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb87-16"><a href="lab-2-pathway-level-features.html#cb87-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># make clinical nets (normalized difference)</span></span>
-<span id="cb87-17"><a href="lab-2-pathway-level-features.html#cb87-17" aria-hidden="true" tabindex="-1"></a>    netList2 <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb87-18"><a href="lab-2-pathway-level-features.html#cb87-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(groupList[[<span class="st">&quot;clinical&quot;</span>]])) {</span>
-<span id="cb87-19"><a href="lab-2-pathway-level-features.html#cb87-19" aria-hidden="true" tabindex="-1"></a>    netList2 <span class="ot">&lt;-</span> <span class="fu">makePSN_NamedMatrix</span>(</span>
-<span id="cb87-20"><a href="lab-2-pathway-level-features.html#cb87-20" aria-hidden="true" tabindex="-1"></a>        dataList<span class="sc">$</span>clinical, </span>
-<span id="cb87-21"><a href="lab-2-pathway-level-features.html#cb87-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">rownames</span>(dataList<span class="sc">$</span>clinical),</span>
-<span id="cb87-22"><a href="lab-2-pathway-level-features.html#cb87-22" aria-hidden="true" tabindex="-1"></a>        groupList[[<span class="st">&quot;clinical&quot;</span>]],netDir,</span>
-<span id="cb87-23"><a href="lab-2-pathway-level-features.html#cb87-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">simMetric=</span><span class="st">&quot;custom&quot;</span>,<span class="at">customFunc=</span>normDiff, <span class="do">### Notice simMetric &amp; customFunc</span></span>
-<span id="cb87-24"><a href="lab-2-pathway-level-features.html#cb87-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">writeProfiles=</span><span class="cn">FALSE</span>,</span>
-<span id="cb87-25"><a href="lab-2-pathway-level-features.html#cb87-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">sparsify=</span><span class="cn">TRUE</span>,<span class="at">verbose=</span><span class="cn">TRUE</span>,...)</span>
-<span id="cb87-26"><a href="lab-2-pathway-level-features.html#cb87-26" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb87-27"><a href="lab-2-pathway-level-features.html#cb87-27" aria-hidden="true" tabindex="-1"></a>    netList <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">unlist</span>(netList),<span class="fu">unlist</span>(netList2))</span>
-<span id="cb87-28"><a href="lab-2-pathway-level-features.html#cb87-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(netList)</span>
-<span id="cb87-29"><a href="lab-2-pathway-level-features.html#cb87-29" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="lab-2-pathway-level-features.html#cb95-1" aria-hidden="true" tabindex="-1"></a>makeNets <span class="ot">&lt;-</span> <span class="cf">function</span>(dataList, groupList, netDir,...) {</span>
+<span id="cb95-2"><a href="lab-2-pathway-level-features.html#cb95-2" aria-hidden="true" tabindex="-1"></a>    netList <span class="ot">&lt;-</span> <span class="fu">c</span>() </span>
+<span id="cb95-3"><a href="lab-2-pathway-level-features.html#cb95-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (nm <span class="cf">in</span> <span class="fu">setdiff</span>(<span class="fu">names</span>(groupList),<span class="st">&quot;clinical&quot;</span>)) {</span>
+<span id="cb95-4"><a href="lab-2-pathway-level-features.html#cb95-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(groupList[[nm]])) { <span class="do">## REMEMBER TO CHECK FOR NULL</span></span>
+<span id="cb95-5"><a href="lab-2-pathway-level-features.html#cb95-5" aria-hidden="true" tabindex="-1"></a>        netList <span class="ot">&lt;-</span> <span class="fu">makePSN_NamedMatrix</span>(</span>
+<span id="cb95-6"><a href="lab-2-pathway-level-features.html#cb95-6" aria-hidden="true" tabindex="-1"></a>            dataList[[nm]],</span>
+<span id="cb95-7"><a href="lab-2-pathway-level-features.html#cb95-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rownames</span>(dataList[[nm]]),</span>
+<span id="cb95-8"><a href="lab-2-pathway-level-features.html#cb95-8" aria-hidden="true" tabindex="-1"></a>            groupList[[nm]],</span>
+<span id="cb95-9"><a href="lab-2-pathway-level-features.html#cb95-9" aria-hidden="true" tabindex="-1"></a>            netDir,</span>
+<span id="cb95-10"><a href="lab-2-pathway-level-features.html#cb95-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">verbose=</span><span class="cn">FALSE</span>,</span>
+<span id="cb95-11"><a href="lab-2-pathway-level-features.html#cb95-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">writeProfiles=</span><span class="cn">TRUE</span>,</span>
+<span id="cb95-12"><a href="lab-2-pathway-level-features.html#cb95-12" aria-hidden="true" tabindex="-1"></a>            ...) </span>
+<span id="cb95-13"><a href="lab-2-pathway-level-features.html#cb95-13" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb95-14"><a href="lab-2-pathway-level-features.html#cb95-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb95-15"><a href="lab-2-pathway-level-features.html#cb95-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb95-16"><a href="lab-2-pathway-level-features.html#cb95-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># make clinical nets (normalized difference)</span></span>
+<span id="cb95-17"><a href="lab-2-pathway-level-features.html#cb95-17" aria-hidden="true" tabindex="-1"></a>    netList2 <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb95-18"><a href="lab-2-pathway-level-features.html#cb95-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(groupList[[<span class="st">&quot;clinical&quot;</span>]])) {</span>
+<span id="cb95-19"><a href="lab-2-pathway-level-features.html#cb95-19" aria-hidden="true" tabindex="-1"></a>    netList2 <span class="ot">&lt;-</span> <span class="fu">makePSN_NamedMatrix</span>(</span>
+<span id="cb95-20"><a href="lab-2-pathway-level-features.html#cb95-20" aria-hidden="true" tabindex="-1"></a>        dataList<span class="sc">$</span>clinical, </span>
+<span id="cb95-21"><a href="lab-2-pathway-level-features.html#cb95-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">rownames</span>(dataList<span class="sc">$</span>clinical),</span>
+<span id="cb95-22"><a href="lab-2-pathway-level-features.html#cb95-22" aria-hidden="true" tabindex="-1"></a>        groupList[[<span class="st">&quot;clinical&quot;</span>]],netDir,</span>
+<span id="cb95-23"><a href="lab-2-pathway-level-features.html#cb95-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">simMetric=</span><span class="st">&quot;custom&quot;</span>,<span class="at">customFunc=</span>normDiff, <span class="do">### Notice simMetric &amp; customFunc</span></span>
+<span id="cb95-24"><a href="lab-2-pathway-level-features.html#cb95-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">writeProfiles=</span><span class="cn">FALSE</span>,</span>
+<span id="cb95-25"><a href="lab-2-pathway-level-features.html#cb95-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">sparsify=</span><span class="cn">TRUE</span>,<span class="at">verbose=</span><span class="cn">TRUE</span>,...)</span>
+<span id="cb95-26"><a href="lab-2-pathway-level-features.html#cb95-26" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb95-27"><a href="lab-2-pathway-level-features.html#cb95-27" aria-hidden="true" tabindex="-1"></a>    netList <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">unlist</span>(netList),<span class="fu">unlist</span>(netList2))</span>
+<span id="cb95-28"><a href="lab-2-pathway-level-features.html#cb95-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(netList)</span>
+<span id="cb95-29"><a href="lab-2-pathway-level-features.html#cb95-29" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="build-predictor-1" class="section level2">
 <h2>Build predictor</h2>
@@ -328,40 +368,40 @@ We have:</p>
 <li>defined our similarity function (<code>makeNets()</code>).</li>
 </ul>
 <p>Now we build our predictor.s</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="lab-2-pathway-level-features.html#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># make results reproducible</span></span>
-<span id="cb88-2"><a href="lab-2-pathway-level-features.html#cb88-2" aria-hidden="true" tabindex="-1"></a>outDir <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">tempdir</span>(),<span class="st">&quot;pred_output&quot;</span>,<span class="at">sep=</span><span class="fu">getFileSep</span>()) <span class="co"># use absolute path</span></span>
-<span id="cb88-3"><a href="lab-2-pathway-level-features.html#cb88-3" aria-hidden="true" tabindex="-1"></a>numSplits <span class="ot">&lt;-</span> 2L</span>
-<span id="cb88-4"><a href="lab-2-pathway-level-features.html#cb88-4" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
-<span id="cb88-5"><a href="lab-2-pathway-level-features.html#cb88-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">buildPredictor</span>(</span>
-<span id="cb88-6"><a href="lab-2-pathway-level-features.html#cb88-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">dataList=</span>brca,</span>
-<span id="cb88-7"><a href="lab-2-pathway-level-features.html#cb88-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">groupList=</span>groupList,</span>
-<span id="cb88-8"><a href="lab-2-pathway-level-features.html#cb88-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">makeNetFunc=</span>makeNets,</span>
-<span id="cb88-9"><a href="lab-2-pathway-level-features.html#cb88-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">outDir=</span>outDir, </span>
-<span id="cb88-10"><a href="lab-2-pathway-level-features.html#cb88-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">numSplits=</span>numSplits, </span>
-<span id="cb88-11"><a href="lab-2-pathway-level-features.html#cb88-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">featScoreMax=</span>2L, </span>
-<span id="cb88-12"><a href="lab-2-pathway-level-features.html#cb88-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">featSelCutoff=</span>1L,</span>
-<span id="cb88-13"><a href="lab-2-pathway-level-features.html#cb88-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">numCores=</span>4L</span>
-<span id="cb88-14"><a href="lab-2-pathway-level-features.html#cb88-14" aria-hidden="true" tabindex="-1"></a>       )</span>
-<span id="cb88-15"><a href="lab-2-pathway-level-features.html#cb88-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="lab-2-pathway-level-features.html#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># make results reproducible</span></span>
+<span id="cb96-2"><a href="lab-2-pathway-level-features.html#cb96-2" aria-hidden="true" tabindex="-1"></a>outDir <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">tempdir</span>(),<span class="st">&quot;pred_output&quot;</span>,<span class="at">sep=</span><span class="fu">getFileSep</span>()) <span class="co"># use absolute path</span></span>
+<span id="cb96-3"><a href="lab-2-pathway-level-features.html#cb96-3" aria-hidden="true" tabindex="-1"></a>numSplits <span class="ot">&lt;-</span> 2L</span>
+<span id="cb96-4"><a href="lab-2-pathway-level-features.html#cb96-4" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
+<span id="cb96-5"><a href="lab-2-pathway-level-features.html#cb96-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">buildPredictor</span>(</span>
+<span id="cb96-6"><a href="lab-2-pathway-level-features.html#cb96-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">dataList=</span>brca,</span>
+<span id="cb96-7"><a href="lab-2-pathway-level-features.html#cb96-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">groupList=</span>groupList,</span>
+<span id="cb96-8"><a href="lab-2-pathway-level-features.html#cb96-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">makeNetFunc=</span>makeNets,</span>
+<span id="cb96-9"><a href="lab-2-pathway-level-features.html#cb96-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">outDir=</span>outDir, </span>
+<span id="cb96-10"><a href="lab-2-pathway-level-features.html#cb96-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">numSplits=</span>numSplits, </span>
+<span id="cb96-11"><a href="lab-2-pathway-level-features.html#cb96-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">featScoreMax=</span>2L, </span>
+<span id="cb96-12"><a href="lab-2-pathway-level-features.html#cb96-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">featSelCutoff=</span>1L,</span>
+<span id="cb96-13"><a href="lab-2-pathway-level-features.html#cb96-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">numCores=</span>4L</span>
+<span id="cb96-14"><a href="lab-2-pathway-level-features.html#cb96-14" aria-hidden="true" tabindex="-1"></a>       )</span>
+<span id="cb96-15"><a href="lab-2-pathway-level-features.html#cb96-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 </div>
 <div id="examine-output-1" class="section level2">
 <h2>Examine output</h2>
 <p>As before, we get model results, using <code>getResults()</code> from our helper script, <code>helper.R</code>:</p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="lab-2-pathway-level-features.html#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;helper.R&quot;</span>)</span>
-<span id="cb89-2"><a href="lab-2-pathway-level-features.html#cb89-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">getResults</span>(brca,model,<span class="at">featureSelCutoff=</span>2L,</span>
-<span id="cb89-3"><a href="lab-2-pathway-level-features.html#cb89-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">featureSelPct=</span><span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="lab-2-pathway-level-features.html#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;helper.R&quot;</span>)</span>
+<span id="cb97-2"><a href="lab-2-pathway-level-features.html#cb97-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">getResults</span>(brca,model,<span class="at">featureSelCutoff=</span>2L,</span>
+<span id="cb97-3"><a href="lab-2-pathway-level-features.html#cb97-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">featureSelPct=</span><span class="fl">0.5</span>)</span></code></pre></div>
 <p>Let’s examine our confusion matrix:</p>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="lab-2-pathway-level-features.html#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;get confusion matrix here&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="lab-2-pathway-level-features.html#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;get confusion matrix here&quot;</span>)</span></code></pre></div>
 </div>
 <div id="view-top-scoring-pathways-with-enrichmentmap" class="section level2">
 <h2>View top-scoring pathways with EnrichmentMap</h2>
 <p>We will now visualize top-scoring pathways using EnrichmentMap.</p>
-<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="lab-2-pathway-level-features.html#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="do">###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],</span></span>
-<span id="cb91-2"><a href="lab-2-pathway-level-features.html#cb91-2" aria-hidden="true" tabindex="-1"></a><span class="do">###         groupClusters=TRUE, hideNodeLabels=TRUE)</span></span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="lab-2-pathway-level-features.html#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="do">###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],</span></span>
+<span id="cb99-2"><a href="lab-2-pathway-level-features.html#cb99-2" aria-hidden="true" tabindex="-1"></a><span class="do">###         groupClusters=TRUE, hideNodeLabels=TRUE)</span></span></code></pre></div>
 </div>
 <div id="sessioninfo-1" class="section level2">
 <h2>sessionInfo</h2>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="lab-2-pathway-level-features.html#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="lab-2-pathway-level-features.html#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 
 </div>
 </div>
