@@ -8,32 +8,21 @@ We also use several strategies and definitions of similarity to create features:
 
  * Clinical variables: Each *variable* is its own feature (e.g. age); similarity is defined as *normalized difference*. 
  * Gene expression: Features are defined at the level of ***pathways***; i.e. a feature groups genes corresponding to the pathway. Similarity is defined as pairwise *Pearson correlation*
- * Proteomic and methylation data: Features are defined at the level of the entire *data layer*; a single feature is created for all of proteomic data, and the same for methylation. Similarity is defined by pairwise *Pearson correlation*
-
+ 
 ## Setup
-Load the `netDx` package.
-
-```{r,eval=FALSE}
-suppressWarnings(suppressMessages(require(netDx)))
-```
-
 For this example we pull data from the The Cancer Genome Atlas through the BioConductor `curatedTCGAData` package. The fetch command automatically brings in a `MultiAssayExperiment` object. 
 ```{r,eval=FALSE}
 suppressMessages(library(curatedTCGAData))
-```
-
-We use the `curatedTCGAData()` command to look at available assays in the breast cancer dataset. 
-```{r,eval=FALSE}
-curatedTCGAData(diseaseCode="BRCA", assays="*",dry.run=TRUE)
 ```
 
 In this call we fetch only the gene expression, proteomic and methylation data; setting `dry.run=FALSE` initiates the fetching of the data.
 
 ```{r,eval=FALSE}
 brca <- suppressMessages(
-   curatedTCGAData("BRCA",
-               c("mRNAArray","RPPA*","Methylation_methyl27*"),
-	dry.run=FALSE))
+   curatedTCGAData(
+	   "BRCA",c("mRNAArray"),
+	   dry.run=FALSE)
+	)
 ```
 
 Let's prepare the data:
@@ -44,89 +33,127 @@ brca <- prepareDataForCBW(brca)
 
 ## Rules to create features (patient similarity networks)
 
-Our plan is to group gene expression data by pathways and clinical data by single variables. We will treat methylation and proteomic data each as a single feature, so each of those groups will contain the entire input table for those corresponding data types. 
+Load the `netDx` package.
 
-In the code below, we fetch pathway definitions for January 2018 from (http://download.baderlab.org/EM_Genesets) and group gene expression data by pathways. To keep the example short, we limit to only three pathways, but in practice you would use all pathways meeting a size criterion; e.g. those containing between 10 and 500 genes. 
+```{r,eval=FALSE}
+suppressWarnings(suppressMessages(require(netDx)))
+```
+
+Our plan is to group gene expression data by pathways and clinical data by single variables.
+
+In the code below, we fetch pathway definitions for March 2021 from (http://download.baderlab.org/EM_Genesets) and group gene expression data by pathways. 
 
 ```{r,eval=FALSE}
 groupList <- list()
 ```
 
-### Pathway-level features
-Let's group genes into *pathway-level features*, i.e. instead of one PSN for transcriptomic data, we create one PSN for each *pathway*, using transcriptomic data. So if you had a pathway set with 2,000 pathways, this would generate 2,000 input PSN.
+### Creating pathway-level features from RNA
+Let's group genes into *pathway-level features*, i.e. instead of one PSN for transcriptomic data, we create one PSN for each *pathway*, using transcriptomic data. So if you had a pathway set with 2,000 pathways, this would generate 2,000 input PSN. 
 
-There are two ways of providing pathway data:
-
+There are two ways of providing pathway data to netDx:
 1. You can **download** a compilation of pathways from curated databases using the `fetchPathwayDefinitions()` function in netDx, like so:
 ```{r,eval=FALSE}
-pathList <- readPathways()
+x <- fetchPathwayDefinitions("March",2021)
+x
 ```
-2. You can also provide a custom pathway set to netDx by reading in a GMT file containing those pathways:
+
+The pathway file was downloaded from [download.baderlab.org/EM_Genesets](http://download.baderlab.org/EM_Genesets), which contains pathways compiled from curated pathway databases such as Reactome, Panther, NCI, MSigDB, etc., [REF], which is updated monthly. Data is contained in GMT format, a common format to represent gene-sets, such as pathways. 
+
+We can look at the first 20 lines of the file to see it:
+
 ```{r,eval=FALSE}
-# add code for gmt file reading here. 
+system2(sprintf("head -n 20 %s", x))
 ```
-- ADD SENTENCE SAYING WHAT GMT FILE IS
-- 
 
-# genes in mRNA data are grouped by pathways
+We then use `readPathways()` to read the pathways into a list format to provide the predictor with:
+```{r,eval=FALSE}
+pathList <- readPathways(x)
+head(pathList)
+```
 
+2. Alternatively, you can also provide a custom pathway set to netDx by reading in a GMT file, using the `readPathways()` function. In this example, I've downloaded a geneset of [pathways often dysregulated in cancer](http://www.gsea-msigdb.org/gsea/msigdb/collections.jsp#C7), set C6 from MSigDB (REF):
+
+```{r,eval=FALSE}
+myGMTfile <- "supporting_files/c6.all.c7.4.symbols.gmt"
+x <- readPathways(myGMTfile)
+head(x)
+```
+
+For this tutorial we will limit ourselves to the first set of pathways and use `groupList` to tell netDx to group transcriptomic data using pathways. 
+
+**NOTE: The pathway definition file should use the same identifier type as your data. For instance, if the genes in your transcriptomic data are represented using HGNC symbols, then your pathway definition file should also use HGNC symbols (e.g. *ID2S*) and not a different type of identifier, such as Ensembl IDs (which look like this: *ENSG00000010404*).**
+
+```{r,eval=FALSE}
 groupList[["BRCA_mRNAArray-20160128"]] <- pathList[1:3]
+```
 
+## Individual clinical variables as features
+Models often include clinical variables such as demographic or disease-related features such as age, sex, or treatment regimen. In this example, we take two variables from the sample metadata, and include create one PSN *for each variable*.  
 
-# clinical data is not grouped; each variable is its own feature
+So here, we map the following:
+
+* `patient.age_at_initial_pathologic_diagnosis` to `age` (just shorter)
+* `stage` to `STAGE`
+
+These variables must be present in the `colData()` slot:
+```{r,eval=FALSE}
+pheno <- colData(brca)
+head(pheno[,c("patient.age_at_initial_pathologic_diagnosis","stage")])
+```
+
+We now add the entry into `groupList`, which - recall - is where you tell netDx how to group variables. The entry for `clinical` is special because netDx will look for corresponding variables in the sample metadata table, `colData()`, rather than in a separate layer in `assays()`.
+
+```{r,eval=FALSE}
 groupList[["clinical"]] <- list(
       age="patient.age_at_initial_pathologic_diagnosis",
 	   stage="STAGE"
 )
-# for methylation generate one feature containing all probes
-# same for proteomics data
-tmp <- list(rownames(experiments(brca)[[2]]));
-names(tmp) <- names(brca)[2]
-groupList[[names(brca)[2]]] <- tmp
-
-tmp <- list(rownames(experiments(brca)[[3]]));
-names(tmp) <- names(brca)[3]
-groupList[[names(brca)[3]]] <- tmp
 ```
 
-## Define patient similarity for each network
+## Function to create PSN
+In this example, we will introduce the idea of different similarity metrics for gene expression vs clinical data, and show you how to provide a custom similarity function to `netDx`.
 
-We provide `netDx` with a custom function to generate similarity networks (i.e. features). The first block tells netDx to generate correlation-based networks using everything but the clinical data. This is achieved by the call:
+This is `makeNets()` just as we had seen in the previous exercise, which provides `netDx` with a custom function to generate similarity networks (i.e. features). We previously used the following code to create PSN based on Pearson correlation: 
+
+*(Do not paste this in)*
 ```{r,eval=FALSE}
 makePSN_NamedMatrix(..., writeProfiles=TRUE,...)`
 ```
+We will now make a different call to `makePSN_NamedMatrix()` but this time, requesting the use of the normalized difference similarity metric. 
 
-The second block makes a different call to `makePSN_NamedMatrix()` but this time, requesting the use of the normalized difference similarity metric. This is achieved by calling:
+This is achieved by calling the following code *(Do not paste this in, either)*:
 ```{r,eval=FALSE}
    makePSN_NamedMatrix(,..., 
                        simMetric="custom", customFunc=normDiff,
                        writeProfiles=FALSE)
 ```
 
-`normDiff` is a function provided in the `netDx` package, but the user may define custom similarity functions in this block of code and pass those to `makePSN_NamedMatrix()`, using the `customFunc` parameter.
+`normDiff` is a function provided in the `netDx` package, but the user may define custom similarity functions in this block of code and pass those to `makePSN_NamedMatrix()`, using the `customFunc` parameters; additionally set `simMetric` to `custom`.
 
 ```{r,eval=FALSE}
 makeNets <- function(dataList, groupList, netDir,...) {
-	netList <- c() # initialize before is.null() check
-	# correlation-based similarity for mRNA, RPPA and methylation data
-	# (Pearson correlation)
+	netList <- c() 
 	for (nm in setdiff(names(groupList),"clinical")) {
-	   # NOTE: the check for is.null() is important!
-		if (!is.null(groupList[[nm]])) {
-		netList <- makePSN_NamedMatrix(dataList[[nm]],
-		             rownames(dataList[[nm]]),
-                   groupList[[nm]],netDir,verbose=FALSE,
-		             writeProfiles=TRUE,...) 
+		if (!is.null(groupList[[nm]])) { ## REMEMBER TO CHECK FOR NULL
+		netList <- makePSN_NamedMatrix(
+			dataList[[nm]],
+			rownames(dataList[[nm]]),
+			groupList[[nm]],
+			netDir,
+			verbose=FALSE,
+			writeProfiles=TRUE,
+			...) 
 		}
 	}
 	
 	# make clinical nets (normalized difference)
 	netList2 <- c()
 	if (!is.null(groupList[["clinical"]])) {
-	netList2 <- makePSN_NamedMatrix(dataList$clinical, 
+	netList2 <- makePSN_NamedMatrix(
+		dataList$clinical, 
 		rownames(dataList$clinical),
 		groupList[["clinical"]],netDir,
-		simMetric="custom",customFunc=normDiff, # custom function
+		simMetric="custom",customFunc=normDiff, ### Notice simMetric & customFunc
 		writeProfiles=FALSE,
 		sparsify=TRUE,verbose=TRUE,...)
 	}
@@ -136,70 +163,60 @@ makeNets <- function(dataList, groupList, netDir,...) {
 
 ```
 
-# Build predictor
+## Build predictor
 
-Finally we make the call to build the predictor. 
+Finally!
+We have:
+
+* prepared our data,
+* grouped RNA by pathways (`fetchPathwayDefinitions()`, `readPathways()`),
+* created two PSN using clinical variables (`groupList$clincial`), and
+* defined our similarity function (`makeNets()`).
+
+Now we build our predictor.s
  
 ```{r,eval=FALSE}
 set.seed(42) # make results reproducible
-
-# location for intermediate work
-# set keepAllData to TRUE to not delete at the end of the 
-# predictor run.
-# This can be useful for debugging.
 outDir <- paste(tempdir(),"pred_output",sep=getFileSep()) # use absolute path
 numSplits <- 2L
-out <- suppressMessages(
-   buildPredictor(dataList=brca,groupList=groupList,
-      makeNetFunc=makeNets,
-      outDir=outDir, ## netDx requires absolute path
-      numSplits=numSplits, featScoreMax=2L, featSelCutoff=1L,
-	   numCores=1L)
+model <- suppressMessages(
+   buildPredictor(
+	   dataList=brca,
+	   groupList=groupList,
+	   makeNetFunc=makeNets,
+	   outDir=outDir, 
+	   numSplits=numSplits, 
+	   featScoreMax=2L, 
+	   featSelCutoff=1L,
+	   numCores=4L
+	   )
 )
 ```
 
-# Examine output
-The results are stored in the list object returned by the `buildPredictor()` call.
-This list contains:
-
-* `inputNets`: all input networks that the model started with. 
-* `Split<i>`: a list with results for each train-test split
-  * `featureScores`: feature scores for each label (list with `g` entries, where `g` is number of patient labels). Each entry contains the feature selection scores for the corresponding label.
-  * `featureSelected`: vector of features that pass feature selection. List of length `g`, with one entry per label.
-  * `predictions`: real and predicted labels for test patients
-  * `accuracy`: percent accuracy of predictions
+## Examine output
+As before, we get model results, using `getResults()` from our helper script, `helper.R`:
 
 ```{r,eval=FALSE}
-summary(out)
-summary(out$Split1)
+source("helper.R")
+results <- getResults(brca,model,featureSelCutoff=2L,
+	featureSelPct=0.5)
 ```
 
-Compute accuracy for three-way classificationL
-
+Let's examine our confusion matrix:
 ```{r,eval=FALSE}
-# Average accuracy
-st <- unique(colData(brca)$STATUS) 
-acc <- matrix(NA,ncol=length(st),nrow=numSplits) 
-colnames(acc) <- st 
-for (k in 1:numSplits) { 
-	pred <- out[[sprintf("Split%i",k)]][["predictions"]];
-	tmp <- pred[,c("ID","STATUS","TT_STATUS","PRED_CLASS",
-	                 sprintf("%s_SCORE",st))]
-	for (m in 1:length(st)) {
-	   tmp2 <- subset(tmp, STATUS==st[m])
-	   acc[k,m] <- sum(tmp2$PRED==tmp2$STATUS)/nrow(tmp2)
-	}
-}
-print(round(acc*100,2))
-```
-Also, examine the confusion matrix. We can see that the model perfectly classifies basal tumours, but performs poorly in distinguishing between the two types of luminal tumours. 
-
-```{r, eval=FALSE}
-res <- out$Split1$predictions
-print(table(res[,c("STATUS","PRED_CLASS")]))
+print("get confusion matrix here")
 ```
 
-# sessionInfo
+## View top-scoring pathways with EnrichmentMap
+We will now visualize top-scoring pathways using EnrichmentMap.
+
+```{r,eval=TRUE}
+###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],
+###         groupClusters=TRUE, hideNodeLabels=TRUE)
+```
+
+
+## sessionInfo
 ```{r,eval=FALSE}
 sessionInfo()
 ```
