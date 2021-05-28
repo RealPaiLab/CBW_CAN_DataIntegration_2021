@@ -35,19 +35,22 @@ brca <- prepareDataForCBW(brca)
 
 Load the `netDx` package.
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 suppressWarnings(suppressMessages(require(netDx)))
 ```
 
 Our plan is to group gene expression data by pathways and clinical data by single variables.
 
+
+
 In the code below, we fetch pathway definitions for March 2021 from (http://download.baderlab.org/EM_Genesets) and group gene expression data by pathways. 
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 groupList <- list()
 ```
 
-### Creating pathway-level features from RNA
+### RNA: Pathway features
+
 Let's group genes into *pathway-level features*, i.e. instead of one PSN for transcriptomic data, we create one PSN for each *pathway*, using transcriptomic data. So if you had a pathway set with 2,000 pathways, this would generate 2,000 input PSN. 
 
 There are two ways of providing pathway data to netDx:
@@ -74,10 +77,11 @@ head(pathList)
 2. Alternatively, you can also provide a custom pathway set to netDx by reading in a GMT file, using the `readPathways()` function. In this example, I've downloaded a geneset of [pathways often dysregulated in cancer](http://www.gsea-msigdb.org/gsea/msigdb/collections.jsp#C7), set C6 from MSigDB (REF):
 
 ```{r,eval=FALSE}
-myGMTfile <- "supporting_files/c6.all.c7.4.symbols.gmt"
-file.exists(myGMTfile)
-#x <- readPathways(myGMTfile)
-#head(x)
+#####TBA
+###myGMTfile <- "supporting_files/c6.all.c7.4.symbols.gmt"
+###file.exists(myGMTfile)
+####x <- readPathways(myGMTfile)
+###head(x)
 ```
 
 For this tutorial we will limit ourselves to the first set of pathways and use `groupList` to tell netDx to group transcriptomic data using pathways. 
@@ -88,7 +92,7 @@ For this tutorial we will limit ourselves to the first set of pathways and use `
 groupList[["BRCA_mRNAArray-20160128"]] <- pathList[1:3]
 ```
 
-## Individual clinical variables as features
+## Clinical data: Single variable features
 Models often include clinical variables such as demographic or disease-related features such as age, sex, or treatment regimen. In this example, we take two variables from the sample metadata, and include create one PSN *for each variable*.  
 
 So here, we map the following:
@@ -111,7 +115,7 @@ groupList[["clinical"]] <- list(
 )
 ```
 
-## Function to create PSN
+## Rules to create PSNs
 In this example, we will introduce the idea of different similarity metrics for gene expression vs clinical data, and show you how to provide a custom similarity function to `netDx`.
 
 This is `makeNets()` just as we had seen in the previous exercise, which provides `netDx` with a custom function to generate similarity networks (i.e. features). We previously used the following code to create PSN based on Pearson correlation: 

@@ -170,10 +170,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="lab-2-pathway-level-features.html"><a href="lab-2-pathway-level-features.html#setup"><i class="fa fa-check"></i>Setup</a></li>
 <li class="chapter" data-level="" data-path="lab-2-pathway-level-features.html"><a href="lab-2-pathway-level-features.html#rules-to-create-features-patient-similarity-networks"><i class="fa fa-check"></i>Rules to create features (patient similarity networks)</a>
 <ul>
-<li class="chapter" data-level="" data-path="lab-2-pathway-level-features.html"><a href="lab-2-pathway-level-features.html#creating-pathway-level-features-from-rna"><i class="fa fa-check"></i>Creating pathway-level features from RNA</a></li>
+<li class="chapter" data-level="" data-path="lab-2-pathway-level-features.html"><a href="lab-2-pathway-level-features.html#rna-pathway-features"><i class="fa fa-check"></i>RNA: Pathway features</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="lab-2-pathway-level-features.html"><a href="lab-2-pathway-level-features.html#individual-clinical-variables-as-features"><i class="fa fa-check"></i>Individual clinical variables as features</a></li>
-<li class="chapter" data-level="" data-path="lab-2-pathway-level-features.html"><a href="lab-2-pathway-level-features.html#function-to-create-psn"><i class="fa fa-check"></i>Function to create PSN</a></li>
+<li class="chapter" data-level="" data-path="lab-2-pathway-level-features.html"><a href="lab-2-pathway-level-features.html#clinical-data-single-variable-features"><i class="fa fa-check"></i>Clinical data: Single variable features</a></li>
+<li class="chapter" data-level="" data-path="lab-2-pathway-level-features.html"><a href="lab-2-pathway-level-features.html#rules-to-create-psns"><i class="fa fa-check"></i>Rules to create PSNs</a></li>
 <li class="chapter" data-level="" data-path="lab-2-pathway-level-features.html"><a href="lab-2-pathway-level-features.html#build-predictor-1"><i class="fa fa-check"></i>Build predictor</a></li>
 <li class="chapter" data-level="" data-path="lab-2-pathway-level-features.html"><a href="lab-2-pathway-level-features.html#examine-output-1"><i class="fa fa-check"></i>Examine output</a></li>
 <li class="chapter" data-level="" data-path="lab-2-pathway-level-features.html"><a href="lab-2-pathway-level-features.html#view-top-scoring-pathways-with-enrichmentmap"><i class="fa fa-check"></i>View top-scoring pathways with EnrichmentMap</a></li>
@@ -231,8 +231,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Our plan is to group gene expression data by pathways and clinical data by single variables.</p>
 <p>In the code below, we fetch pathway definitions for March 2021 from (<a href="http://download.baderlab.org/EM_Genesets" class="uri">http://download.baderlab.org/EM_Genesets</a>) and group gene expression data by pathways.</p>
 <div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="lab-2-pathway-level-features.html#cb74-1" aria-hidden="true" tabindex="-1"></a>groupList <span class="ot">&lt;-</span> <span class="fu">list</span>()</span></code></pre></div>
-<div id="creating-pathway-level-features-from-rna" class="section level3">
-<h3>Creating pathway-level features from RNA</h3>
+<div id="rna-pathway-features" class="section level3">
+<h3>RNA: Pathway features</h3>
 <p>Let’s group genes into <em>pathway-level features</em>, i.e. instead of one PSN for transcriptomic data, we create one PSN for each <em>pathway</em>, using transcriptomic data. So if you had a pathway set with 2,000 pathways, this would generate 2,000 input PSN.</p>
 <p>There are two ways of providing pathway data to netDx:
 1. You can <strong>download</strong> a compilation of pathways from curated databases using the <code>fetchPathwayDefinitions()</code> function in netDx, like so:</p>
@@ -248,58 +248,64 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="lab-2-pathway-level-features.html#cb80-1" aria-hidden="true" tabindex="-1"></a>pathList <span class="ot">&lt;-</span> <span class="fu">readPathways</span>(x)</span></code></pre></div>
 <pre><code>## ---------------------------------------</code></pre>
 <pre><code>## File: 20e22fee64ce_Human_AllPathways_March_01_2021_symbol.gmt</code></pre>
-<pre><code>## Warning in scan(f, what = &quot;character&quot;, nlines = 1, quiet = TRUE, sep = &quot;\t&quot;): EOF within
-## quoted string</code></pre>
+<pre><code>## Warning in scan(f, what = &quot;character&quot;, nlines = 1, quiet = TRUE,
+## sep = &quot;\t&quot;): EOF within quoted string</code></pre>
 <pre><code>## Read 1123 pathways in total, internal list has 1110 entries</code></pre>
 <pre><code>##  FILTER: sets with num genes in [10, 200]</code></pre>
 <pre><code>##    =&gt; 341 pathways excluded
 ##    =&gt; 769 left</code></pre>
 <div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="lab-2-pathway-level-features.html#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pathList)</span></code></pre></div>
 <pre><code>## $STEARATE_BIOSYNTHESIS_I__ANIMALS_
-##  [1] &quot;ELOVL1&quot;  &quot;ACOT7&quot;   &quot;ACSL1&quot;   &quot;ACSL5&quot;   &quot;ELOVL6&quot;  &quot;ACSL4&quot;   &quot;ACSL3&quot;   &quot;ACOT2&quot;  
-##  [9] &quot;ACOT1&quot;   &quot;ACSBG1&quot;  &quot;ACSBG2&quot;  &quot;SLC27A2&quot; &quot;ACOT4&quot;  
+##  [1] &quot;ELOVL1&quot;  &quot;ACOT7&quot;   &quot;ACSL1&quot;   &quot;ACSL5&quot;   &quot;ELOVL6&quot;  &quot;ACSL4&quot;  
+##  [7] &quot;ACSL3&quot;   &quot;ACOT2&quot;   &quot;ACOT1&quot;   &quot;ACSBG1&quot;  &quot;ACSBG2&quot;  &quot;SLC27A2&quot;
+## [13] &quot;ACOT4&quot;  
 ## 
 ## $SUPERPATHWAY_OF_INOSITOL_PHOSPHATE_COMPOUNDS
-##  [1] &quot;PI4K2B&quot;  &quot;MTMR14&quot;  &quot;INPPL1&quot;  &quot;PTEN&quot;    &quot;PIK3CD&quot;  &quot;PIK3C2G&quot; &quot;PIK3CB&quot;  &quot;PIK3C2A&quot;
-##  [9] &quot;PIK3CG&quot;  &quot;PIK3C2B&quot; &quot;PIP4P2&quot;  &quot;PIP4P1&quot;  &quot;PLCZ1&quot;   &quot;PPIP5K1&quot; &quot;PPIP5K2&quot; &quot;PIP5KL1&quot;
-## [17] &quot;PLCE1&quot;   &quot;PIP4K2A&quot; &quot;PIP4K2B&quot; &quot;PIP4K2C&quot; &quot;SACM1L&quot;  &quot;ITPK1&quot;   &quot;IPMK&quot;    &quot;OCRL&quot;   
-## [25] &quot;ITPKB&quot;   &quot;ITPKC&quot;   &quot;MINPP1&quot;  &quot;PLCB3&quot;   &quot;PLCB4&quot;   &quot;PIK3CA&quot;  &quot;ITPKA&quot;   &quot;PIK3C3&quot; 
-## [33] &quot;PLCB1&quot;   &quot;PLCB2&quot;   &quot;PI4K2A&quot;  &quot;IPPK&quot;    &quot;MTMR3&quot;   &quot;PIK3R4&quot;  &quot;PIK3R3&quot;  &quot;PIK3R2&quot; 
-## [41] &quot;PIK3R1&quot;  &quot;PIK3R6&quot;  &quot;PIK3R5&quot;  &quot;INPP5B&quot;  &quot;INPP5A&quot;  &quot;INPP5D&quot;  &quot;PLCG2&quot;   &quot;INPP5J&quot; 
-## [49] &quot;PIP5K1A&quot; &quot;INPP5K&quot;  &quot;PIP5K1B&quot; &quot;PIP5K1C&quot; &quot;PLCG1&quot;   &quot;CDIPT&quot;   &quot;IP6K1&quot;   &quot;IP6K3&quot;  
-## [57] &quot;IP6K2&quot;   &quot;SYNJ2&quot;   &quot;FIG4&quot;    &quot;PIKFYVE&quot; &quot;SYNJ1&quot;   &quot;PI4KA&quot;   &quot;PLCH1&quot;   &quot;PI4KB&quot;  
-## [65] &quot;PLCH2&quot;   &quot;PLCD3&quot;   &quot;PLCD4&quot;   &quot;PLCD1&quot;  
+##  [1] &quot;PI4K2B&quot;  &quot;MTMR14&quot;  &quot;INPPL1&quot;  &quot;PTEN&quot;    &quot;PIK3CD&quot;  &quot;PIK3C2G&quot;
+##  [7] &quot;PIK3CB&quot;  &quot;PIK3C2A&quot; &quot;PIK3CG&quot;  &quot;PIK3C2B&quot; &quot;PIP4P2&quot;  &quot;PIP4P1&quot; 
+## [13] &quot;PLCZ1&quot;   &quot;PPIP5K1&quot; &quot;PPIP5K2&quot; &quot;PIP5KL1&quot; &quot;PLCE1&quot;   &quot;PIP4K2A&quot;
+## [19] &quot;PIP4K2B&quot; &quot;PIP4K2C&quot; &quot;SACM1L&quot;  &quot;ITPK1&quot;   &quot;IPMK&quot;    &quot;OCRL&quot;   
+## [25] &quot;ITPKB&quot;   &quot;ITPKC&quot;   &quot;MINPP1&quot;  &quot;PLCB3&quot;   &quot;PLCB4&quot;   &quot;PIK3CA&quot; 
+## [31] &quot;ITPKA&quot;   &quot;PIK3C3&quot;  &quot;PLCB1&quot;   &quot;PLCB2&quot;   &quot;PI4K2A&quot;  &quot;IPPK&quot;   
+## [37] &quot;MTMR3&quot;   &quot;PIK3R4&quot;  &quot;PIK3R3&quot;  &quot;PIK3R2&quot;  &quot;PIK3R1&quot;  &quot;PIK3R6&quot; 
+## [43] &quot;PIK3R5&quot;  &quot;INPP5B&quot;  &quot;INPP5A&quot;  &quot;INPP5D&quot;  &quot;PLCG2&quot;   &quot;INPP5J&quot; 
+## [49] &quot;PIP5K1A&quot; &quot;INPP5K&quot;  &quot;PIP5K1B&quot; &quot;PIP5K1C&quot; &quot;PLCG1&quot;   &quot;CDIPT&quot;  
+## [55] &quot;IP6K1&quot;   &quot;IP6K3&quot;   &quot;IP6K2&quot;   &quot;SYNJ2&quot;   &quot;FIG4&quot;    &quot;PIKFYVE&quot;
+## [61] &quot;SYNJ1&quot;   &quot;PI4KA&quot;   &quot;PLCH1&quot;   &quot;PI4KB&quot;   &quot;PLCH2&quot;   &quot;PLCD3&quot;  
+## [67] &quot;PLCD4&quot;   &quot;PLCD1&quot;  
 ## 
 ## $PUTRESCINE_DEGRADATION_III
-##  [1] &quot;ALDH3A2&quot; &quot;ALDH3B2&quot; &quot;ALDH3A1&quot; &quot;ALDH1B1&quot; &quot;MAOB&quot;    &quot;ALDH2&quot;   &quot;MAOA&quot;    &quot;ALDH3B1&quot;
-##  [9] &quot;SAT2&quot;    &quot;SAT1&quot;   
+##  [1] &quot;ALDH3A2&quot; &quot;ALDH3B2&quot; &quot;ALDH3A1&quot; &quot;ALDH1B1&quot; &quot;MAOB&quot;    &quot;ALDH2&quot;  
+##  [7] &quot;MAOA&quot;    &quot;ALDH3B1&quot; &quot;SAT2&quot;    &quot;SAT1&quot;   
 ## 
 ## $TRYPTOPHAN_DEGRADATION_III__EUKARYOTIC_
-##  [1] &quot;ACAT1&quot; &quot;HADHB&quot; &quot;GCDH&quot;  &quot;TDO2&quot;  &quot;KYNU&quot;  &quot;HAAO&quot;  &quot;AFMID&quot; &quot;KMO&quot;   &quot;ACAA1&quot; &quot;ACAT2&quot;
-## [11] &quot;ACMSD&quot;
+##  [1] &quot;ACAT1&quot; &quot;HADHB&quot; &quot;GCDH&quot;  &quot;TDO2&quot;  &quot;KYNU&quot;  &quot;HAAO&quot;  &quot;AFMID&quot;
+##  [8] &quot;KMO&quot;   &quot;ACAA1&quot; &quot;ACAT2&quot; &quot;ACMSD&quot;
 ## 
 ## $MEVALONATE_PATHWAY_I
-##  [1] &quot;ACAT1&quot;  &quot;IDI1&quot;   &quot;MVK&quot;    &quot;HMGCS1&quot; &quot;IDI2&quot;   &quot;HADHB&quot;  &quot;PMVK&quot;   &quot;MVD&quot;    &quot;HMGCR&quot; 
-## [10] &quot;HMGCS2&quot; &quot;ACAA1&quot;  &quot;ACAT2&quot; 
+##  [1] &quot;ACAT1&quot;  &quot;IDI1&quot;   &quot;MVK&quot;    &quot;HMGCS1&quot; &quot;IDI2&quot;   &quot;HADHB&quot; 
+##  [7] &quot;PMVK&quot;   &quot;MVD&quot;    &quot;HMGCR&quot;  &quot;HMGCS2&quot; &quot;ACAA1&quot;  &quot;ACAT2&quot; 
 ## 
 ## $`D-_I_MYO__I_-INOSITOL-5-PHOSPHATE_METABOLISM`
-##  [1] &quot;PLCG1&quot;   &quot;PLCB3&quot;   &quot;PLCB4&quot;   &quot;PLCH1&quot;   &quot;PLCH2&quot;   &quot;PLCB1&quot;   &quot;MTMR14&quot;  &quot;PLCD3&quot;  
-##  [9] &quot;PLCB2&quot;   &quot;PLCD4&quot;   &quot;PLCD1&quot;   &quot;MTMR3&quot;   &quot;PIP4P2&quot;  &quot;PIP4P1&quot;  &quot;PLCZ1&quot;   &quot;PLCG2&quot;  
-## [17] &quot;PLCE1&quot;   &quot;PIP4K2A&quot; &quot;PIP4K2C&quot;</code></pre>
+##  [1] &quot;PLCG1&quot;   &quot;PLCB3&quot;   &quot;PLCB4&quot;   &quot;PLCH1&quot;   &quot;PLCH2&quot;   &quot;PLCB1&quot;  
+##  [7] &quot;MTMR14&quot;  &quot;PLCD3&quot;   &quot;PLCB2&quot;   &quot;PLCD4&quot;   &quot;PLCD1&quot;   &quot;MTMR3&quot;  
+## [13] &quot;PIP4P2&quot;  &quot;PIP4P1&quot;  &quot;PLCZ1&quot;   &quot;PLCG2&quot;   &quot;PLCE1&quot;   &quot;PIP4K2A&quot;
+## [19] &quot;PIP4K2C&quot;</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Alternatively, you can also provide a custom pathway set to netDx by reading in a GMT file, using the <code>readPathways()</code> function. In this example, I’ve downloaded a geneset of <a href="http://www.gsea-msigdb.org/gsea/msigdb/collections.jsp#C7">pathways often dysregulated in cancer</a>, set C6 from MSigDB (REF):</li>
 </ol>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="lab-2-pathway-level-features.html#cb89-1" aria-hidden="true" tabindex="-1"></a>myGMTfile <span class="ot">&lt;-</span> <span class="st">&quot;supporting_files/c6.all.c7.4.symbols.gmt&quot;</span></span>
-<span id="cb89-2"><a href="lab-2-pathway-level-features.html#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="fu">file.exists</span>(myGMTfile)</span>
-<span id="cb89-3"><a href="lab-2-pathway-level-features.html#cb89-3" aria-hidden="true" tabindex="-1"></a><span class="co">#x &lt;- readPathways(myGMTfile)</span></span>
-<span id="cb89-4"><a href="lab-2-pathway-level-features.html#cb89-4" aria-hidden="true" tabindex="-1"></a><span class="co">#head(x)</span></span></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="lab-2-pathway-level-features.html#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="do">#####TBA</span></span>
+<span id="cb89-2"><a href="lab-2-pathway-level-features.html#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="do">###myGMTfile &lt;- &quot;supporting_files/c6.all.c7.4.symbols.gmt&quot;</span></span>
+<span id="cb89-3"><a href="lab-2-pathway-level-features.html#cb89-3" aria-hidden="true" tabindex="-1"></a><span class="do">###file.exists(myGMTfile)</span></span>
+<span id="cb89-4"><a href="lab-2-pathway-level-features.html#cb89-4" aria-hidden="true" tabindex="-1"></a><span class="do">####x &lt;- readPathways(myGMTfile)</span></span>
+<span id="cb89-5"><a href="lab-2-pathway-level-features.html#cb89-5" aria-hidden="true" tabindex="-1"></a><span class="do">###head(x)</span></span></code></pre></div>
 <p>For this tutorial we will limit ourselves to the first set of pathways and use <code>groupList</code> to tell netDx to group transcriptomic data using pathways.</p>
 <p><strong>NOTE: The pathway definition file should use the same identifier type as your data. For instance, if the genes in your transcriptomic data are represented using HGNC symbols, then your pathway definition file should also use HGNC symbols (e.g. <em>ID2S</em>) and not a different type of identifier, such as Ensembl IDs (which look like this: <em>ENSG00000010404</em>).</strong></p>
 <div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="lab-2-pathway-level-features.html#cb90-1" aria-hidden="true" tabindex="-1"></a>groupList[[<span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>]] <span class="ot">&lt;-</span> pathList[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code></pre></div>
 </div>
 </div>
-<div id="individual-clinical-variables-as-features" class="section level2">
-<h2>Individual clinical variables as features</h2>
+<div id="clinical-data-single-variable-features" class="section level2">
+<h2>Clinical data: Single variable features</h2>
 <p>Models often include clinical variables such as demographic or disease-related features such as age, sex, or treatment regimen. In this example, we take two variables from the sample metadata, and include create one PSN <em>for each variable</em>.</p>
 <p>So here, we map the following:</p>
 <ul>
@@ -315,8 +321,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb92-3"><a href="lab-2-pathway-level-features.html#cb92-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">stage=</span><span class="st">&quot;STAGE&quot;</span></span>
 <span id="cb92-4"><a href="lab-2-pathway-level-features.html#cb92-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 </div>
-<div id="function-to-create-psn" class="section level2">
-<h2>Function to create PSN</h2>
+<div id="rules-to-create-psns" class="section level2">
+<h2>Rules to create PSNs</h2>
 <p>In this example, we will introduce the idea of different similarity metrics for gene expression vs clinical data, and show you how to provide a custom similarity function to <code>netDx</code>.</p>
 <p>This is <code>makeNets()</code> just as we had seen in the previous exercise, which provides <code>netDx</code> with a custom function to generate similarity networks (i.e. features). We previously used the following code to create PSN based on Pearson correlation:</p>
 <p><em>(Do not paste this in)</em></p>
