@@ -17,7 +17,7 @@ suppressMessages(library(curatedTCGAData))
 
 In this call we fetch only the gene expression, proteomic and methylation data; setting `dry.run=FALSE` initiates the fetching of the data.
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 brca <- suppressMessages(
    curatedTCGAData(
 	   "BRCA",c("mRNAArray"),
@@ -26,7 +26,7 @@ brca <- suppressMessages(
 ```
 
 Let's prepare the data:
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 source("prepare_data.R")
 brca <- prepareDataForCBW(brca)
 ```
@@ -52,7 +52,7 @@ Let's group genes into *pathway-level features*, i.e. instead of one PSN for tra
 
 There are two ways of providing pathway data to netDx:
 1. You can **download** a compilation of pathways from curated databases using the `fetchPathwayDefinitions()` function in netDx, like so:
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 x <- fetchPathwayDefinitions("March",2021)
 x
 ```
@@ -62,12 +62,12 @@ The pathway file was downloaded from [download.baderlab.org/EM_Genesets](http://
 We can look at the first 20 lines of the file to see it:
 
 ```{r,eval=FALSE}
-system2(sprintf("head -n 20 %s", x))
+#system2(sprintf("head -n 20 %s", x))
 ```
 
 We then use `readPathways()` to read the pathways into a list format to provide the predictor with:
 ```{r,eval=FALSE}
-pathList <- readPathways(x)
+pathList <- readPathways(fetchPathwayDefinitions("March",2021))
 head(pathList)
 ```
 
@@ -75,8 +75,8 @@ head(pathList)
 
 ```{r,eval=FALSE}
 myGMTfile <- "supporting_files/c6.all.c7.4.symbols.gmt"
-x <- readPathways(myGMTfile)
-head(x)
+#x <- readPathways(myGMTfile)
+#head(x)
 ```
 
 For this tutorial we will limit ourselves to the first set of pathways and use `groupList` to tell netDx to group transcriptomic data using pathways. 
@@ -210,7 +210,7 @@ print("get confusion matrix here")
 ## View top-scoring pathways with EnrichmentMap
 We will now visualize top-scoring pathways using EnrichmentMap.
 
-```{r,eval=TRUE}
+```{r,eval=FALSE}
 ###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],
 ###         groupClusters=TRUE, hideNodeLabels=TRUE)
 ```
