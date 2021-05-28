@@ -31,7 +31,7 @@
   
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
 <link rel="prev" href="intro.html"/>
-
+<link rel="next" href="lab-2-pathway-level-features.html"/>
 <script src="libs/header-attrs-2.8/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -151,7 +151,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="lab-1-build-3-way-patient-classifier-from-4-data-layers.html"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#intro-1"><i class="fa fa-check"></i>Intro</a></li>
 <li class="chapter" data-level="" data-path="lab-1-build-3-way-patient-classifier-from-4-data-layers.html"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#prepare-data"><i class="fa fa-check"></i>Prepare data</a></li>
-<li class="chapter" data-level="" data-path="lab-1-build-3-way-patient-classifier-from-4-data-layers.html"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#design-psn-features"><i class="fa fa-check"></i>Design PSN features</a>
+<li class="chapter" data-level="" data-path="lab-1-build-3-way-patient-classifier-from-4-data-layers.html"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#make-rules-to-convert-data-into-features"><i class="fa fa-check"></i>Make rules to convert data into features</a>
 <ul>
 <li class="chapter" data-level="" data-path="lab-1-build-3-way-patient-classifier-from-4-data-layers.html"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#datalist"><i class="fa fa-check"></i>dataList</a></li>
 <li class="chapter" data-level="" data-path="lab-1-build-3-way-patient-classifier-from-4-data-layers.html"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#grouplist"><i class="fa fa-check"></i>groupList</a></li>
@@ -165,6 +165,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="lab-1-build-3-way-patient-classifier-from-4-data-layers.html"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#conclusion"><i class="fa fa-check"></i>Conclusion</a></li>
 <li class="chapter" data-level="" data-path="lab-1-build-3-way-patient-classifier-from-4-data-layers.html"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#sessioninfo"><i class="fa fa-check"></i>sessionInfo</a></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="lab-2-pathway-level-features.html"><a href="lab-2-pathway-level-features.html"><i class="fa fa-check"></i>Lab 2: Pathway-level features</a></li>
+<li class="chapter" data-level="" data-path="setup.html"><a href="setup.html"><i class="fa fa-check"></i>Setup</a></li>
+<li class="chapter" data-level="" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i>Data</a></li>
+<li class="chapter" data-level="" data-path="rules-to-create-features-patient-similarity-networks.html"><a href="rules-to-create-features-patient-similarity-networks.html"><i class="fa fa-check"></i>Rules to create features (patient similarity networks)</a></li>
+<li class="chapter" data-level="" data-path="genes-in-mrna-data-are-grouped-by-pathways.html"><a href="genes-in-mrna-data-are-grouped-by-pathways.html"><i class="fa fa-check"></i>genes in mRNA data are grouped by pathways</a></li>
+<li class="chapter" data-level="" data-path="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html"><i class="fa fa-check"></i>clinical data is not grouped; each variable is its own feature</a></li>
+<li class="chapter" data-level="" data-path="build-predictor-1.html"><a href="build-predictor-1.html"><i class="fa fa-check"></i>Build predictor</a></li>
+<li class="chapter" data-level="" data-path="examine-output-1.html"><a href="examine-output-1.html"><i class="fa fa-check"></i>Examine output</a></li>
+<li class="chapter" data-level="" data-path="sessioninfo-1.html"><a href="sessioninfo-1.html"><i class="fa fa-check"></i>sessionInfo</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -200,13 +209,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="prepare-data" class="section level2">
 <h2>Prepare data</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressWarnings</span>(<span class="fu">suppressMessages</span>(<span class="fu">require</span>(netDx)))</span></code></pre></div>
-<p>In this example, we use curated data from The Cancer Genome Atlas, through the BioConductor <code>curatedTCGAData</code> package.</p>
-<p>Here we load the required packages and download clinical and gene expression data.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(curatedTCGAData))</span></code></pre></div>
-<p>This package contains</p>
+<p>In this example, we use curated data from The Cancer Genome Atlas, through the BioConductor <code>curatedTCGAData</code> package. Data for all cancer types profiled in TCGA are available through this package; <a href="https://bioconductor.org/packages/release/data/experiment/vignettes/curatedTCGAData/inst/doc/curatedTCGAData.html">see tutorial for more info</a>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(curatedTCGAData))</span></code></pre></div>
 <p>Take a look at the available data without downloading any (set <code>dry.run=TRUE</code>):</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">curatedTCGAData</span>(<span class="at">diseaseCode=</span><span class="st">&quot;BRCA&quot;</span>, <span class="at">assays=</span><span class="st">&quot;*&quot;</span>,<span class="at">dry.run=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">curatedTCGAData</span>(<span class="at">diseaseCode=</span><span class="st">&quot;BRCA&quot;</span>, <span class="at">assays=</span><span class="st">&quot;*&quot;</span>,<span class="at">dry.run=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>## snapshotDate(): 2020-10-27</code></pre>
 <pre><code>## See &#39;?curatedTCGAData&#39; for &#39;diseaseCode&#39; and &#39;assays&#39; inputs</code></pre>
 <pre><code>##     ah_id                                      title file_size                 rdataclass rdatadateadded rdatadateremoved
@@ -226,13 +232,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 14  EH596              BRCA_RNASeq2GeneNorm-20160128   64.5 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;
 ## 15  EH597                   BRCA_RNASeqGene-20160128     30 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;
 ## 16  EH598                    BRCA_RPPAArray-20160128    1.6 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb8-1" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">curatedTCGAData</span>(<span class="st">&quot;BRCA&quot;</span>,</span>
-<span id="cb8-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb8-2" aria-hidden="true" tabindex="-1"></a>                                         <span class="fu">c</span>(<span class="st">&quot;mRNAArray&quot;</span>,<span class="st">&quot;Methylation_methyl27&quot;</span>, </span>
-<span id="cb8-3"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb8-3" aria-hidden="true" tabindex="-1"></a>                                         <span class="st">&quot;RPPAArray&quot;</span>,<span class="st">&quot;miRNASeqGene&quot;</span>),</span>
-<span id="cb8-4"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb8-4" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">dry.run=</span><span class="cn">FALSE</span>))</span></code></pre></div>
-<p>This call returns a <code>MultiAssayExperiment</code> object. Recall that this is a container for storing multiple assays performed on the same set of samples. <a href="https://bioconductor.org/packages/release/bioc/vignettes/MultiAssayExperiment/inst/doc/QuickStartMultiAssay.html">Look at this tutorial</a> to learn more.</p>
+<p>Now let’s actually sdownload the data:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb7-1" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">curatedTCGAData</span>(<span class="st">&quot;BRCA&quot;</span>,</span>
+<span id="cb7-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb7-2" aria-hidden="true" tabindex="-1"></a>                                         <span class="fu">c</span>(<span class="st">&quot;mRNAArray&quot;</span>,<span class="st">&quot;Methylation_methyl27&quot;</span>, </span>
+<span id="cb7-3"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb7-3" aria-hidden="true" tabindex="-1"></a>                                         <span class="st">&quot;RPPAArray&quot;</span>,<span class="st">&quot;miRNASeqGene&quot;</span>),</span>
+<span id="cb7-4"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb7-4" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">dry.run=</span><span class="cn">FALSE</span>))</span></code></pre></div>
+<p>This call returns a <code>MultiAssayExperiment</code> object. Recall that this is a container for storing multiple assays performed on the same set of samples. <a href="https://bioconductor.org/packages/release/bioc/vignettes/MultiAssayExperiment/inst/doc/QuickStartMultiAssay.html">See this tutorial</a> to learn more.</p>
 <p>Let’s briefly explore the <code>brca</code> <code>MultiAssayExperiment</code> object.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb9-1" aria-hidden="true" tabindex="-1"></a>brca</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb8-1" aria-hidden="true" tabindex="-1"></a>brca</span></code></pre></div>
 <pre><code>## A MultiAssayExperiment object of 4 listed
 ##  experiments with user-defined names and respective classes.
 ##  Containing an ExperimentList class object of length 4:
@@ -249,15 +256,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##  assays() - convert ExperimentList to a SimpleList of matrices
 ##  exportClass() - save all data to files</code></pre>
 <p><code>assays()</code> returns a <code>list</code> with all -omic data associated with this object.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">assays</span>(brca))</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">assays</span>(brca))</span></code></pre></div>
 <pre><code>## [1] &quot;List object of length 4 with 0 metadata columns&quot;</code></pre>
 <p><code>names()</code> shows you what -omic datatypes the layers correspond to:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(<span class="fu">assays</span>(brca))</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(<span class="fu">assays</span>(brca))</span></code></pre></div>
 <pre><code>## [1] &quot;BRCA_miRNASeqGene-20160128&quot;         &quot;BRCA_mRNAArray-20160128&quot;            &quot;BRCA_RPPAArray-20160128&quot;           
 ## [4] &quot;BRCA_Methylation_methyl27-20160128&quot;</code></pre>
 <p>And here we subset the miRNA data, looking at data for the first five patients</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb15-1" aria-hidden="true" tabindex="-1"></a>mir <span class="ot">&lt;-</span> <span class="fu">assays</span>(brca)[[<span class="st">&quot;BRCA_miRNASeqGene-20160128&quot;</span>]]</span>
-<span id="cb15-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mir[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb14-1" aria-hidden="true" tabindex="-1"></a>mir <span class="ot">&lt;-</span> <span class="fu">assays</span>(brca)[[<span class="st">&quot;BRCA_miRNASeqGene-20160128&quot;</span>]]</span>
+<span id="cb14-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mir[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code></pre></div>
 <pre><code>##              TCGA-3C-AAAU-01A-11R-A41G-13 TCGA-3C-AALI-01A-11R-A41G-13 TCGA-3C-AALJ-01A-31R-A41G-13 TCGA-3C-AALK-01A-11R-A41G-13
 ## hsa-let-7a-1                        95618                        49201                        75342                        57278
 ## hsa-let-7a-2                       189674                        98691                       150472                       114320
@@ -273,8 +280,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## hsa-let-7c                          20429
 ## hsa-let-7d                           2162</code></pre>
 <p>Look at sample phenotype data, where rows contain data for each patient and columns have non-omic measures (e.g. clinical data):</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb17-1" aria-hidden="true" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">colData</span>(brca)</span>
-<span id="cb17-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(pheno)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb16-1" aria-hidden="true" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">colData</span>(brca)</span>
+<span id="cb16-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(pheno)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>]</span></code></pre></div>
 <pre><code>##  [1] &quot;patientID&quot;                            &quot;years_to_birth&quot;                       &quot;vital_status&quot;                        
 ##  [4] &quot;days_to_death&quot;                        &quot;days_to_last_followup&quot;                &quot;tumor_tissue_site&quot;                   
 ##  [7] &quot;pathologic_stage&quot;                     &quot;pathology_T_stage&quot;                    &quot;pathology_N_stage&quot;                   
@@ -282,7 +289,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [13] &quot;days_to_last_known_alive&quot;             &quot;radiation_therapy&quot;                    &quot;histological_type&quot;                   
 ## [16] &quot;number_of_lymph_nodes&quot;                &quot;race&quot;                                 &quot;ethnicity&quot;                           
 ## [19] &quot;admin.bcr&quot;                            &quot;admin.day_of_dcc_upload&quot;</code></pre>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code></pre></div>
 <pre><code>## DataFrame with 6 rows and 5 columns
 ##                 patientID years_to_birth vital_status days_to_death days_to_last_followup
 ##               &lt;character&gt;      &lt;integer&gt;    &lt;integer&gt;     &lt;integer&gt;             &lt;integer&gt;
@@ -300,8 +307,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>creating a <code>STATUS</code> column in <code>colData(brca)</code> which contains the patient labels (i.e what we want netDx to classify).</li>
 </ul>
 <p>In practice you would do this once and save the data before running netDx. This code has been moved into a supporting file, <code>prepare_data.R</code>. You can explore it after the lab to see how some things are achieved (e.g. removing duplicate samples).</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;prepare_data.R&quot;</span>)</span>
-<span id="cb21-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb21-2" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">prepareDataForCBW</span>(brca)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;prepare_data.R&quot;</span>)</span>
+<span id="cb20-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb20-2" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">prepareDataForCBW</span>(brca)</span></code></pre></div>
 <pre><code>## harmonizing input:
 ##   removing 42 sampleMap rows with &#39;colname&#39; not in colnames of experiments</code></pre>
 <pre><code>## harmonizing input:
@@ -312,8 +319,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   removing 26 sampleMap rows with &#39;colname&#39; not in colnames of experiments</code></pre>
 <p>Notice that we now have <code>ID</code> and <code>STATUS</code> columns in the sample metadata table.
 <strong>Note: These columns are required by netDx. </strong></p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb26-1" aria-hidden="true" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">colData</span>(brca)</span>
-<span id="cb26-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno[,<span class="fu">c</span>(<span class="st">&quot;ID&quot;</span>,<span class="st">&quot;STATUS&quot;</span>)])</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb25-1" aria-hidden="true" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">colData</span>(brca)</span>
+<span id="cb25-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno[,<span class="fu">c</span>(<span class="st">&quot;ID&quot;</span>,<span class="st">&quot;STATUS&quot;</span>)])</span></code></pre></div>
 <pre><code>## DataFrame with 6 rows and 2 columns
 ##                        ID      STATUS
 ##               &lt;character&gt; &lt;character&gt;
@@ -323,30 +330,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## TCGA-A1-A0SJ TCGA-A1-A0SJ   Luminal.A
 ## TCGA-A1-A0SK TCGA-A1-A0SK  Basal.like
 ## TCGA-A1-A0SM TCGA-A1-A0SM   Luminal.B</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(pheno<span class="sc">$</span>STATUS,<span class="at">useNA=</span><span class="st">&quot;always&quot;</span>)  <span class="co"># useNA lets you see </span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(pheno<span class="sc">$</span>STATUS,<span class="at">useNA=</span><span class="st">&quot;always&quot;</span>)  <span class="co"># useNA lets you see </span></span></code></pre></div>
 <pre><code>## 
 ## Basal.like  Luminal.A  Luminal.B       &lt;NA&gt; 
 ##         97        230        127          0</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb30-1" aria-hidden="true" tabindex="-1"></a>                                    <span class="co"># unintentional missing values</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb29-1" aria-hidden="true" tabindex="-1"></a>                                    <span class="co"># unintentional missing values</span></span></code></pre></div>
 </div>
-<div id="design-psn-features" class="section level2">
-<h2>Design PSN features</h2>
-<p>netDx allows the user to define how data is converted into PSNs, which are the features that go into the model. This is done specifically by telling the model how to group different types of data and how to define similarity for each of these (e.g. Pearson correlation, normalized difference, etc.,).</p>
+<div id="make-rules-to-convert-data-into-features" class="section level2">
+<h2>Make rules to convert data into features</h2>
+<p>Now let’s set up the data for input to netDx.
+netDx allows the user to define how data is converted into patient similarity networks (or PSNs), which are the features that go into the model. This is done specifically by telling the model how to group different types of data and how to define similarity for each of these (e.g. Pearson correlation, normalized difference, etc.,).</p>
 <p>The relevant input parameters are:</p>
 <ul>
 <li><code>dataList</code>: the patient data, provided as a <code>MultiAssayExperiment</code> object. Refer to the <a href="https://bioconductor.org/packages/release/bioc/html/MultiAssayExperiment.html">tutorials for MultiAssayExperiment</a> to see how to construct those objects from data.</li>
 <li><code>groupList</code>: sets of input data that would correspond to individual networks (e.g. genes grouped into pathways)</li>
-<li><code>netDir</code>: the directory where the resulting PSN would be stored.</li>
 </ul>
+<p>Let’s start by loading the <code>netDx</code> package.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressWarnings</span>(<span class="fu">suppressMessages</span>(<span class="fu">require</span>(netDx)))</span></code></pre></div>
+<p>Let’s set up each of the input arguments one by one.</p>
 <div id="datalist" class="section level3">
 <h3>dataList</h3>
-<p><strong>What is this:</strong> The input data (here, <code>brca</code>).</p>
+<p><strong>What is this:</strong> The input data.</p>
 <p><strong>Format:</strong> <code>MultiAssayExperiment</code> object.</p>
+<p>We’ve already set this up; this is the <code>brca</code> object, so nothing more to do here.</p>
 </div>
 <div id="grouplist" class="section level3">
 <h3>groupList</h3>
-<p><strong>What is this:</strong> <code>groupList</code> tells netDx how to group units within a layer, to generate a PSN.</p>
-<p>In this simple example we just create one network per datatype</p>
+<p><strong>What is this:</strong> <code>groupList</code> tells netDx how to group measures within a layer, to generate a PSN. Measures could be individual genes, proteins, CpG bases (in DNA methylation data), clinical variables, etc.,</p>
+<p>In this simple example we just create one PSN per datatype:</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb31-1" aria-hidden="true" tabindex="-1"></a>expr <span class="ot">&lt;-</span> <span class="fu">assays</span>(brca)</span>
 <span id="cb31-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb31-2" aria-hidden="true" tabindex="-1"></a>groupList <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
 <span id="cb31-3"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(expr)) {</span>
@@ -355,7 +366,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb31-6"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb31-6" aria-hidden="true" tabindex="-1"></a>    groupList[[nm]] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">nm=</span><span class="fu">rownames</span>(cur)) </span>
 <span id="cb31-7"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">names</span>(groupList[[nm]])[<span class="dv">1</span>] <span class="ot">&lt;-</span> nm;</span>
 <span id="cb31-8"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb31-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<p><code>groupList</code> is a two tiered list or list-of-lists. The first tier is for each data layers, with names matching those in <code>assays(brca)</code>. The second tier contains all the PSNs we want to make for that layer.</p>
+<p><code>groupList</code> is a two tiered list, or list-of-lists. The first tier is for each data layers, with names matching those in <code>assays(brca)</code>. The second tier contains all the PSNs we want to make for that layer.</p>
+<p>**SP:</p>
 <p>Here is the first layer:</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(groupList)</span></code></pre></div>
 <pre><code>##                                    Length Class  Mode
@@ -387,24 +399,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb38-7"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;BRCA_Methylation_methyl27-20160128&quot;</span>)</span>
 <span id="cb38-8"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-8" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb38-9"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (nm <span class="cf">in</span> layerNames){             <span class="do">## for each layer</span></span>
-<span id="cb38-10"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-11"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(groupList[[nm]])){ <span class="do">## must check for null for each layer</span></span>
-<span id="cb38-12"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-13"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-13" aria-hidden="true" tabindex="-1"></a>            netList_cur <span class="ot">&lt;-</span> <span class="fu">makePSN_NamedMatrix</span>(</span>
-<span id="cb38-14"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-14" aria-hidden="true" tabindex="-1"></a>                dataList[[nm]],</span>
-<span id="cb38-15"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-15" aria-hidden="true" tabindex="-1"></a>                <span class="fu">rownames</span>(dataList[[nm]]),   <span class="do">## names of measures (e.g. genes, CpGs)</span></span>
-<span id="cb38-16"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-16" aria-hidden="true" tabindex="-1"></a>                groupList[[nm]],            <span class="do">## how to group measures in that layer</span></span>
-<span id="cb38-17"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-17" aria-hidden="true" tabindex="-1"></a>                netDir,                     <span class="do">## leave this as-is, netDx will figure out where this is.</span></span>
-<span id="cb38-18"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">verbose=</span><span class="cn">TRUE</span>,           </span>
-<span id="cb38-19"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">writeProfiles=</span><span class="cn">TRUE</span>,         <span class="do">## use Pearson correlation-based similarity</span></span>
-<span id="cb38-20"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-20" aria-hidden="true" tabindex="-1"></a>                ...</span>
-<span id="cb38-21"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-21" aria-hidden="true" tabindex="-1"></a>                )</span>
-<span id="cb38-22"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-22" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb38-23"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-23" aria-hidden="true" tabindex="-1"></a>            netList <span class="ot">&lt;-</span> <span class="fu">c</span>(netList,netList_cur)   <span class="do">## just leave this in</span></span>
-<span id="cb38-24"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-24" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb38-25"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-25" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb38-26"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">unlist</span>(netList)) <span class="do">## just leave this in </span></span>
-<span id="cb38-27"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-27" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb38-10"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(groupList[[nm]])){ <span class="do">## must check for null for each layer</span></span>
+<span id="cb38-11"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-11" aria-hidden="true" tabindex="-1"></a>            netList_cur <span class="ot">&lt;-</span> <span class="fu">makePSN_NamedMatrix</span>(</span>
+<span id="cb38-12"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-12" aria-hidden="true" tabindex="-1"></a>                dataList[[nm]],</span>
+<span id="cb38-13"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-13" aria-hidden="true" tabindex="-1"></a>                <span class="fu">rownames</span>(dataList[[nm]]),   <span class="do">## names of measures (e.g. genes, CpGs)</span></span>
+<span id="cb38-14"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-14" aria-hidden="true" tabindex="-1"></a>                groupList[[nm]],            <span class="do">## how to group measures in that layer</span></span>
+<span id="cb38-15"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-15" aria-hidden="true" tabindex="-1"></a>                netDir,                     <span class="do">## leave this as-is, netDx will figure out where this is.</span></span>
+<span id="cb38-16"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">verbose=</span><span class="cn">TRUE</span>,           </span>
+<span id="cb38-17"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">writeProfiles=</span><span class="cn">TRUE</span>,         <span class="do">## use Pearson correlation-based similarity</span></span>
+<span id="cb38-18"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-18" aria-hidden="true" tabindex="-1"></a>                ...</span>
+<span id="cb38-19"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-19" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb38-20"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-21"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-21" aria-hidden="true" tabindex="-1"></a>            netList <span class="ot">&lt;-</span> <span class="fu">c</span>(netList,netList_cur)   <span class="do">## just leave this in</span></span>
+<span id="cb38-22"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-22" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb38-23"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-23" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb38-24"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">unlist</span>(netList)) <span class="do">## just leave this in </span></span>
+<span id="cb38-25"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb38-25" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p><strong><em>Note:</em></strong> While netDx provides a high degree of flexibility in achieving your design of choice, it is up to the user to ensure that the design, i.e. the similarity metric and variable groupings, is appropriate for your application. Domain knowledge is almost likely required for good design.</p>
 </div>
 </div>
@@ -561,12 +571,11 @@ This list contains:</p>
 <pre><code>## BRCA_RPPAArray-20160128: 1 features</code></pre>
 <pre><code>## BRCA_Methylation_methyl27-20160128: 1 features</code></pre>
 <pre><code>## * Making integrated PSN</code></pre>
-<pre><code>## Warning in dir.create(paste(netDir, &quot;profiles&quot;, sep = fsep)): &#39;/tmp/RtmpPdvy87/profiles&#39; already exists</code></pre>
-<pre><code>## Warning in dir.create(paste(netDir, &quot;INTERACTIONS&quot;, sep = fsep)): &#39;/tmp/RtmpPdvy87/INTERACTIONS&#39; already exists</code></pre>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb63-1" aria-hidden="true" tabindex="-1"></a>tsne <span class="ot">&lt;-</span> <span class="fu">tSNEPlotter</span>(</span>
-<span id="cb63-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb63-2" aria-hidden="true" tabindex="-1"></a>    psn<span class="sc">$</span>patientSimNetwork_unpruned, </span>
-<span id="cb63-3"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb63-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colData</span>(brca)</span>
-<span id="cb63-4"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb63-4" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<pre><code>## Warning in dir.create(paste(netDir, &quot;profiles&quot;, sep = fsep)): &#39;/tmp/RtmpH3a8cI/profiles&#39; already exists</code></pre>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb62-1" aria-hidden="true" tabindex="-1"></a>tsne <span class="ot">&lt;-</span> <span class="fu">tSNEPlotter</span>(</span>
+<span id="cb62-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb62-2" aria-hidden="true" tabindex="-1"></a>    psn<span class="sc">$</span>patientSimNetwork_unpruned, </span>
+<span id="cb62-3"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb62-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colData</span>(brca)</span>
+<span id="cb62-4"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb62-4" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
 <pre><code>## * Making symmetric matrix</code></pre>
 <pre><code>## * Running tSNE</code></pre>
 <pre><code>## * Plotting</code></pre>
@@ -581,7 +590,7 @@ This list contains:</p>
 </div>
 <div id="sessioninfo" class="section level2">
 <h2>sessionInfo</h2>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.0.5 (2021-03-31)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Ubuntu 20.04.2 LTS
@@ -653,8 +662,8 @@ This list contains:</p>
           </div>
         </div>
       </div>
-<a href="intro.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="intro.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="lab-2-pathway-level-features.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

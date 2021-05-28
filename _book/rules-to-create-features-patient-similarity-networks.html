@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Introduction | Multi-modal Data Integration</title>
+  <title>Rules to create features (patient similarity networks) | Multi-modal Data Integration</title>
   <meta name="description" content="Covers patient classification using multi-modal data integration" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Introduction | Multi-modal Data Integration" />
+  <meta property="og:title" content="Rules to create features (patient similarity networks) | Multi-modal Data Integration" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Introduction | Multi-modal Data Integration" />
+  <meta name="twitter:title" content="Rules to create features (patient similarity networks) | Multi-modal Data Integration" />
   
   <meta name="twitter:description" content="Covers patient classification using multi-modal data integration" />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="welcome.html"/>
-<link rel="next" href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html"/>
+<link rel="prev" href="data.html"/>
+<link rel="next" href="genes-in-mrna-data-are-grouped-by-pathways.html"/>
 <script src="libs/header-attrs-2.8/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -194,18 +194,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="intro" class="section level1">
-<h1>Introduction</h1>
-<p>What the major lab exercises will cover.</p>
-
+<div id="rules-to-create-features-patient-similarity-networks" class="section level1">
+<h1>Rules to create features (patient similarity networks)</h1>
+<p>Our plan is to group gene expression data by pathways and clinical data by single variables. We will treat methylation and proteomic data each as a single feature, so each of those groups will contain the entire input table for those corresponding data types.</p>
+<p>In the code below, we fetch pathway definitions for January 2018 from (<a href="http://download.baderlab.org/EM_Genesets" class="uri">http://download.baderlab.org/EM_Genesets</a>) and group gene expression data by pathways. To keep the example short, we limit to only three pathways, but in practice you would use all pathways meeting a size criterion; e.g. those containing between 10 and 500 genes.</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="rules-to-create-features-patient-similarity-networks.html#cb73-1" aria-hidden="true" tabindex="-1"></a>groupList <span class="ot">&lt;-</span> <span class="fu">list</span>()</span></code></pre></div>
+<p>Let’s group genes into <em>pathway-level features</em>, i.e. instead of one PSN for transcriptomic data, we create one PSN for each <em>pathway</em>, using transcriptomic data. So if you had a pathway set with 2,000 pathways, this would generate 2,000 input PSN.</p>
+<p>There are two ways of providing pathway data:</p>
+<ol style="list-style-type: decimal">
+<li>You can <strong>download</strong> a compilation of pathways from curated databases using the <code>fetchPathwayDefinitions()</code> function in netDx, like so:</li>
+</ol>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="rules-to-create-features-patient-similarity-networks.html#cb74-1" aria-hidden="true" tabindex="-1"></a>pathList <span class="ot">&lt;-</span> <span class="fu">readPathways</span>()</span></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li>You can also provide a custom pathway set to netDx by reading in a GMT file containing those pathways:</li>
+</ol>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="rules-to-create-features-patient-similarity-networks.html#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add code for gmt file reading here. </span></span></code></pre></div>
+<ul>
+<li>ADD SENTENCE SAYING WHAT GMT FILE IS</li>
+<li></li>
+</ul>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="welcome.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="genes-in-mrna-data-are-grouped-by-pathways.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -237,7 +252,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/01-intro.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/03-PathwayFeatures.Rmd",
 "text": "Edit"
 },
 "history": {

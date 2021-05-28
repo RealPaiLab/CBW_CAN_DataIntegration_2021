@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Introduction | Multi-modal Data Integration</title>
+  <title>clinical data is not grouped; each variable is its own feature | Multi-modal Data Integration</title>
   <meta name="description" content="Covers patient classification using multi-modal data integration" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Introduction | Multi-modal Data Integration" />
+  <meta property="og:title" content="clinical data is not grouped; each variable is its own feature | Multi-modal Data Integration" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Introduction | Multi-modal Data Integration" />
+  <meta name="twitter:title" content="clinical data is not grouped; each variable is its own feature | Multi-modal Data Integration" />
   
   <meta name="twitter:description" content="Covers patient classification using multi-modal data integration" />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="welcome.html"/>
-<link rel="next" href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html"/>
+<link rel="prev" href="genes-in-mrna-data-are-grouped-by-pathways.html"/>
+<link rel="next" href="build-predictor-1.html"/>
 <script src="libs/header-attrs-2.8/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -194,18 +194,67 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="intro" class="section level1">
-<h1>Introduction</h1>
-<p>What the major lab exercises will cover.</p>
+<div id="clinical-data-is-not-grouped-each-variable-is-its-own-feature" class="section level1">
+<h1>clinical data is not grouped; each variable is its own feature</h1>
+<p>groupList[[“clinical”]] &lt;- list(
+age=“patient.age_at_initial_pathologic_diagnosis,”
+stage=“STAGE”
+)
+# for methylation generate one feature containing all probes
+# same for proteomics data
+tmp &lt;- list(rownames(experiments(brca)[[2]]));
+names(tmp) &lt;- names(brca)[2]
+groupList[[names(brca)[2]]] &lt;- tmp</p>
+<p>tmp &lt;- list(rownames(experiments(brca)[[3]]));
+names(tmp) &lt;- names(brca)[3]
+groupList[[names(brca)[3]]] &lt;- tmp</p>
+<pre><code>
+## Define patient similarity for each network
 
+We provide `netDx` with a custom function to generate similarity networks (i.e. features). The first block tells netDx to generate correlation-based networks using everything but the clinical data. This is achieved by the call:
+
+```r
+makePSN_NamedMatrix(..., writeProfiles=TRUE,...)`</code></pre>
+<p>The second block makes a different call to <code>makePSN_NamedMatrix()</code> but this time, requesting the use of the normalized difference similarity metric. This is achieved by calling:</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb77-1" aria-hidden="true" tabindex="-1"></a>   <span class="fu">makePSN_NamedMatrix</span>(,..., </span>
+<span id="cb77-2"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb77-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">simMetric=</span><span class="st">&quot;custom&quot;</span>, <span class="at">customFunc=</span>normDiff,</span>
+<span id="cb77-3"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb77-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">writeProfiles=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<p><code>normDiff</code> is a function provided in the <code>netDx</code> package, but the user may define custom similarity functions in this block of code and pass those to <code>makePSN_NamedMatrix()</code>, using the <code>customFunc</code> parameter.</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-1" aria-hidden="true" tabindex="-1"></a>makeNets <span class="ot">&lt;-</span> <span class="cf">function</span>(dataList, groupList, netDir,...) {</span>
+<span id="cb78-2"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-2" aria-hidden="true" tabindex="-1"></a>    netList <span class="ot">&lt;-</span> <span class="fu">c</span>() <span class="co"># initialize before is.null() check</span></span>
+<span id="cb78-3"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># correlation-based similarity for mRNA, RPPA and methylation data</span></span>
+<span id="cb78-4"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># (Pearson correlation)</span></span>
+<span id="cb78-5"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (nm <span class="cf">in</span> <span class="fu">setdiff</span>(<span class="fu">names</span>(groupList),<span class="st">&quot;clinical&quot;</span>)) {</span>
+<span id="cb78-6"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-6" aria-hidden="true" tabindex="-1"></a>       <span class="co"># </span><span class="al">NOTE</span><span class="co">: the check for is.null() is important!</span></span>
+<span id="cb78-7"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(groupList[[nm]])) {</span>
+<span id="cb78-8"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-8" aria-hidden="true" tabindex="-1"></a>        netList <span class="ot">&lt;-</span> <span class="fu">makePSN_NamedMatrix</span>(dataList[[nm]],</span>
+<span id="cb78-9"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-9" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">rownames</span>(dataList[[nm]]),</span>
+<span id="cb78-10"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-10" aria-hidden="true" tabindex="-1"></a>                   groupList[[nm]],netDir,<span class="at">verbose=</span><span class="cn">FALSE</span>,</span>
+<span id="cb78-11"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">writeProfiles=</span><span class="cn">TRUE</span>,...) </span>
+<span id="cb78-12"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-12" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb78-13"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-13" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb78-14"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb78-15"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># make clinical nets (normalized difference)</span></span>
+<span id="cb78-16"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-16" aria-hidden="true" tabindex="-1"></a>    netList2 <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb78-17"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(groupList[[<span class="st">&quot;clinical&quot;</span>]])) {</span>
+<span id="cb78-18"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-18" aria-hidden="true" tabindex="-1"></a>    netList2 <span class="ot">&lt;-</span> <span class="fu">makePSN_NamedMatrix</span>(dataList<span class="sc">$</span>clinical, </span>
+<span id="cb78-19"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">rownames</span>(dataList<span class="sc">$</span>clinical),</span>
+<span id="cb78-20"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-20" aria-hidden="true" tabindex="-1"></a>        groupList[[<span class="st">&quot;clinical&quot;</span>]],netDir,</span>
+<span id="cb78-21"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">simMetric=</span><span class="st">&quot;custom&quot;</span>,<span class="at">customFunc=</span>normDiff, <span class="co"># custom function</span></span>
+<span id="cb78-22"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">writeProfiles=</span><span class="cn">FALSE</span>,</span>
+<span id="cb78-23"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">sparsify=</span><span class="cn">TRUE</span>,<span class="at">verbose=</span><span class="cn">TRUE</span>,...)</span>
+<span id="cb78-24"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-24" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb78-25"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-25" aria-hidden="true" tabindex="-1"></a>    netList <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">unlist</span>(netList),<span class="fu">unlist</span>(netList2))</span>
+<span id="cb78-26"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(netList)</span>
+<span id="cb78-27"><a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html#cb78-27" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="welcome.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="genes-in-mrna-data-are-grouped-by-pathways.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="build-predictor-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -237,7 +286,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/01-intro.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/03-PathwayFeatures.Rmd",
 "text": "Edit"
 },
 "history": {

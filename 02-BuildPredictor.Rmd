@@ -13,18 +13,11 @@ For this we will use data from the  The Cancer Genome Atlas, and will integrate 
 
 ## Prepare data
 
-```{r,eval=TRUE}
-suppressWarnings(suppressMessages(require(netDx)))
-```
+In this example, we use curated data from The Cancer Genome Atlas, through the BioConductor `curatedTCGAData` package. Data for all cancer types profiled in TCGA are available through this package; [see tutorial for more info](https://bioconductor.org/packages/release/data/experiment/vignettes/curatedTCGAData/inst/doc/curatedTCGAData.html). 
 
-In this example, we use curated data from The Cancer Genome Atlas, through the BioConductor `curatedTCGAData` package.
-
-Here we load the required packages and download clinical and gene expression data.
 ```{r,eval=TRUE}
 suppressMessages(library(curatedTCGAData))
 ```
-
-This package contains
 
 Take a look at the available data without downloading any (set `dry.run=TRUE`): 
 ```{r,eval=TRUE}
@@ -94,25 +87,37 @@ table(pheno$STATUS,useNA="always")  # useNA lets you see
 									# unintentional missing values
 ```
 
-## Design PSN features
-netDx allows the user to define how data is converted into PSNs, which are the features that go into the model. This is done specifically by telling the model how to group different types of data and how to define similarity for each of these (e.g. Pearson correlation, normalized difference, etc.,).
+## Make rules to convert data into features
+
+Now let's set up the data for input to netDx. 
+netDx allows the user to define how data is converted into patient similarity networks (or PSNs), which are the features that go into the model. This is done specifically by telling the model how to group different types of data and how to define similarity for each of these (e.g. Pearson correlation, normalized difference, etc.,).
 
 The relevant input parameters are:
 
 * `dataList`: the patient data, provided as a `MultiAssayExperiment` object. Refer to the [tutorials for MultiAssayExperiment](https://bioconductor.org/packages/release/bioc/html/MultiAssayExperiment.html) to see how to construct those objects from data.
 * `groupList`: sets of input data that would correspond to individual networks (e.g. genes grouped into pathways)
-* `netDir`: the directory where the resulting PSN would be stored.
+
+
+Let's start by loading the `netDx` package.
+
+```{r,eval=TRUE}
+suppressWarnings(suppressMessages(require(netDx)))
+```
+
+Let's set up each of the input arguments one by one.
 
 ### dataList
-**What is this:** The input data (here, `brca`).
+**What is this:** The input data.
 
 **Format:** `MultiAssayExperiment` object. 
 
+We've already set this up; this is the `brca` object, so nothing more to do here.
+
 
 ### groupList
-**What is this:** `groupList` tells netDx how to group units within a layer, to generate a PSN. 
+**What is this:** `groupList` tells netDx how to group measures within a layer, to generate a PSN. Measures could be individual genes, proteins, CpG bases (in DNA methylation data), clinical variables, etc., 
 
-In this simple example we just create one network per datatype
+In this simple example we just create one PSN per datatype:
 ```{r,eval=TRUE}
 expr <- assays(brca)
 groupList <- list()
@@ -123,8 +128,9 @@ for (k in 1:length(expr)) {
 	names(groupList[[nm]])[1] <- nm;
 }
 ```
+`groupList` is a two tiered list, or list-of-lists. The first tier is for each data layers, with names matching those in `assays(brca)`. The second tier contains all the PSNs we want to make for that layer.
 
-`groupList` is a two tiered list or list-of-lists. The first tier is for each data layers, with names matching those in `assays(brca)`. The second tier contains all the PSNs we want to make for that layer.
+**SP:
 
 Here is the first layer:
 
@@ -159,9 +165,7 @@ makeNets <- function(dataList, groupList, netDir,...) {
 		"BRCA_Methylation_methyl27-20160128")
 	
 	for (nm in layerNames){  			## for each layer
-
 		if (!is.null(groupList[[nm]])){ ## must check for null for each layer
-
 			netList_cur <- makePSN_NamedMatrix(
 				dataList[[nm]],
 				rownames(dataList[[nm]]),	## names of measures (e.g. genes, CpGs)
@@ -171,7 +175,7 @@ makeNets <- function(dataList, groupList, netDir,...) {
 				writeProfiles=TRUE,   		## use Pearson correlation-based similarity
 				...
 				)
-		
+
 			netList <- c(netList,netList_cur)	## just leave this in
 		}
 	}

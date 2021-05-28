@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Introduction | Multi-modal Data Integration</title>
+  <title>Build predictor | Multi-modal Data Integration</title>
   <meta name="description" content="Covers patient classification using multi-modal data integration" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Introduction | Multi-modal Data Integration" />
+  <meta property="og:title" content="Build predictor | Multi-modal Data Integration" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Introduction | Multi-modal Data Integration" />
+  <meta name="twitter:title" content="Build predictor | Multi-modal Data Integration" />
   
   <meta name="twitter:description" content="Covers patient classification using multi-modal data integration" />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="welcome.html"/>
-<link rel="next" href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html"/>
+<link rel="prev" href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html"/>
+<link rel="next" href="examine-output-1.html"/>
 <script src="libs/header-attrs-2.8/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -194,18 +194,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="intro" class="section level1">
-<h1>Introduction</h1>
-<p>What the major lab exercises will cover.</p>
-
+<div id="build-predictor-1" class="section level1">
+<h1>Build predictor</h1>
+<p>Finally we make the call to build the predictor.</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="build-predictor-1.html#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># make results reproducible</span></span>
+<span id="cb79-2"><a href="build-predictor-1.html#cb79-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-3"><a href="build-predictor-1.html#cb79-3" aria-hidden="true" tabindex="-1"></a><span class="co"># location for intermediate work</span></span>
+<span id="cb79-4"><a href="build-predictor-1.html#cb79-4" aria-hidden="true" tabindex="-1"></a><span class="co"># set keepAllData to TRUE to not delete at the end of the </span></span>
+<span id="cb79-5"><a href="build-predictor-1.html#cb79-5" aria-hidden="true" tabindex="-1"></a><span class="co"># predictor run.</span></span>
+<span id="cb79-6"><a href="build-predictor-1.html#cb79-6" aria-hidden="true" tabindex="-1"></a><span class="co"># This can be useful for debugging.</span></span>
+<span id="cb79-7"><a href="build-predictor-1.html#cb79-7" aria-hidden="true" tabindex="-1"></a>outDir <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">tempdir</span>(),<span class="st">&quot;pred_output&quot;</span>,<span class="at">sep=</span><span class="fu">getFileSep</span>()) <span class="co"># use absolute path</span></span>
+<span id="cb79-8"><a href="build-predictor-1.html#cb79-8" aria-hidden="true" tabindex="-1"></a>numSplits <span class="ot">&lt;-</span> 2L</span>
+<span id="cb79-9"><a href="build-predictor-1.html#cb79-9" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
+<span id="cb79-10"><a href="build-predictor-1.html#cb79-10" aria-hidden="true" tabindex="-1"></a>   <span class="fu">buildPredictor</span>(<span class="at">dataList=</span>brca,<span class="at">groupList=</span>groupList,</span>
+<span id="cb79-11"><a href="build-predictor-1.html#cb79-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">makeNetFunc=</span>makeNets,</span>
+<span id="cb79-12"><a href="build-predictor-1.html#cb79-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">outDir=</span>outDir, <span class="do">## netDx requires absolute path</span></span>
+<span id="cb79-13"><a href="build-predictor-1.html#cb79-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">numSplits=</span>numSplits, <span class="at">featScoreMax=</span>2L, <span class="at">featSelCutoff=</span>1L,</span>
+<span id="cb79-14"><a href="build-predictor-1.html#cb79-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">numCores=</span>1L)</span>
+<span id="cb79-15"><a href="build-predictor-1.html#cb79-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="welcome.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="clinical-data-is-not-grouped-each-variable-is-its-own-feature.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="examine-output-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -237,7 +251,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/01-intro.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/03-PathwayFeatures.Rmd",
 "text": "Edit"
 },
 "history": {

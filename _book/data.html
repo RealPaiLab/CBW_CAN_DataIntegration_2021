@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Introduction | Multi-modal Data Integration</title>
+  <title>Data | Multi-modal Data Integration</title>
   <meta name="description" content="Covers patient classification using multi-modal data integration" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Introduction | Multi-modal Data Integration" />
+  <meta property="og:title" content="Data | Multi-modal Data Integration" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Introduction | Multi-modal Data Integration" />
+  <meta name="twitter:title" content="Data | Multi-modal Data Integration" />
   
   <meta name="twitter:description" content="Covers patient classification using multi-modal data integration" />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="welcome.html"/>
-<link rel="next" href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html"/>
+<link rel="prev" href="setup.html"/>
+<link rel="next" href="rules-to-create-features-patient-similarity-networks.html"/>
 <script src="libs/header-attrs-2.8/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -194,18 +194,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="intro" class="section level1">
-<h1>Introduction</h1>
-<p>What the major lab exercises will cover.</p>
-
+<div id="data" class="section level1">
+<h1>Data</h1>
+<p>For this example we pull data from the The Cancer Genome Atlas through the BioConductor <code>curatedTCGAData</code> package. The fetch command automatically brings in a <code>MultiAssayExperiment</code> object.</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="data.html#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(curatedTCGAData))</span></code></pre></div>
+<p>We use the <code>curatedTCGAData()</code> command to look at available assays in the breast cancer dataset.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="data.html#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">curatedTCGAData</span>(<span class="at">diseaseCode=</span><span class="st">&quot;BRCA&quot;</span>, <span class="at">assays=</span><span class="st">&quot;*&quot;</span>,<span class="at">dry.run=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p>In this call we fetch only the gene expression, proteomic and methylation data; setting <code>dry.run=FALSE</code> initiates the fetching of the data.</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="data.html#cb71-1" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
+<span id="cb71-2"><a href="data.html#cb71-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">curatedTCGAData</span>(<span class="st">&quot;BRCA&quot;</span>,</span>
+<span id="cb71-3"><a href="data.html#cb71-3" aria-hidden="true" tabindex="-1"></a>               <span class="fu">c</span>(<span class="st">&quot;mRNAArray&quot;</span>,<span class="st">&quot;RPPA*&quot;</span>,<span class="st">&quot;Methylation_methyl27*&quot;</span>),</span>
+<span id="cb71-4"><a href="data.html#cb71-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">dry.run=</span><span class="cn">FALSE</span>))</span></code></pre></div>
+<p>Let’s prepare the data:</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="data.html#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;prepare_data.R&quot;</span>)</span>
+<span id="cb72-2"><a href="data.html#cb72-2" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">prepareDataForCBW</span>(brca)</span></code></pre></div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="welcome.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="setup.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="rules-to-create-features-patient-similarity-networks.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -237,7 +247,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/01-intro.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/03-PathwayFeatures.Rmd",
 "text": "Edit"
 },
 "history": {

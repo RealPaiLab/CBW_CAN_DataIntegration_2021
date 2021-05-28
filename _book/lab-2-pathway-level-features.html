@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Introduction | Multi-modal Data Integration</title>
+  <title>Lab 2: Pathway-level features | Multi-modal Data Integration</title>
   <meta name="description" content="Covers patient classification using multi-modal data integration" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Introduction | Multi-modal Data Integration" />
+  <meta property="og:title" content="Lab 2: Pathway-level features | Multi-modal Data Integration" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Introduction | Multi-modal Data Integration" />
+  <meta name="twitter:title" content="Lab 2: Pathway-level features | Multi-modal Data Integration" />
   
   <meta name="twitter:description" content="Covers patient classification using multi-modal data integration" />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="welcome.html"/>
-<link rel="next" href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html"/>
+<link rel="prev" href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html"/>
+<link rel="next" href="setup.html"/>
 <script src="libs/header-attrs-2.8/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -194,18 +194,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="intro" class="section level1">
-<h1>Introduction</h1>
-<p>What the major lab exercises will cover.</p>
-
+<div id="lab-2-pathway-level-features" class="section level1">
+<h1>Lab 2: Pathway-level features</h1>
+<p>In this example, we will use …</p>
+<p>ADD FIGURE showing design here.</p>
+<p>We also use several strategies and definitions of similarity to create features:</p>
+<ul>
+<li>Clinical variables: Each <em>variable</em> is its own feature (e.g. age); similarity is defined as <em>normalized difference</em>.</li>
+<li>Gene expression: Features are defined at the level of <strong><em>pathways</em></strong>; i.e. a feature groups genes corresponding to the pathway. Similarity is defined as pairwise <em>Pearson correlation</em></li>
+<li>Proteomic and methylation data: Features are defined at the level of the entire <em>data layer</em>; a single feature is created for all of proteomic data, and the same for methylation. Similarity is defined by pairwise <em>Pearson correlation</em></li>
+</ul>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="welcome.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="setup.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -237,7 +243,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/01-intro.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/03-PathwayFeatures.Rmd",
 "text": "Edit"
 },
 "history": {
