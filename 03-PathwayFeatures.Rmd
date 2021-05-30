@@ -7,7 +7,9 @@ In this example, we will learn how to:
 
 Here, we will again use breast cancer samples, and discriminate between Luminal A, Luminal B and basal-like tumours. We will limit ourselves to clinical data and gene expression data but will make the following design changes:
 
-![](images/Lab2_design.jpg)
+```{r,eval=TRUE,include=FALSE}
+knitr::include_graphics("images/Lab2_design.jpg")
+```
 
  * Clinical variables: A feature (or patient similarity network;PSN) will be defined at the level of selected  *variables* (e.g. age); we will define similarity as *normalized difference*. 
  * Gene expression: Features will be defined at the level of ***pathways***; i.e. each feature groups only those genes corresponding to the pathway. Similarity is defined as pairwise *Pearson correlation*.
