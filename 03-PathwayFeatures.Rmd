@@ -7,7 +7,7 @@ In this example, we will learn how to:
 
 Here, we will again use breast cancer samples, and discriminate between Luminal A, Luminal B and basal-like tumours. We will limit ourselves to clinical data and gene expression data but will make the following design changes:
 
-```{r,eval=TRUE,include=FALSE}
+```{r,echo=FALSE, fig.cap="Lab 2: Predictor design"}
 knitr::include_graphics("images/Lab2_design.jpg")
 ```
 
