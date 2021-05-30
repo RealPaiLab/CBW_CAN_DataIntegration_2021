@@ -1,17 +1,19 @@
 # Lab 2: Pathway-level features
 
-In this example, we will use ...
+In this example, we will learn how to:
 
-ADD FIGURE showing design here.
+* Use custom similarity metrics
+* Group variables into biologically-meaningful units such as pathways, for improved interpretability
+* 
 
-We also use several strategies and definitions of similarity to create features: 
+Here, we will again use breast cancer samples, and discriminate between Luminal A, Luminal B and basal-like tumours. We will limit ourselves to clinical data and gene expression data but will make the following design changes:
 
- * Clinical variables: Each *variable* is its own feature (e.g. age); similarity is defined as *normalized difference*. 
- * Gene expression: Features are defined at the level of ***pathways***; i.e. a feature groups genes corresponding to the pathway. Similarity is defined as pairwise *Pearson correlation*
+ * Clinical variables: A feature (or patient similarity network;PSN) will be defined at the level of selected  *variables* (e.g. age); we will define similarity as *normalized difference*. 
+ * Gene expression: Features will be defined at the level of ***pathways***; i.e. each feature groups only those genes corresponding to the pathway. Similarity is defined as pairwise *Pearson correlation*.
  
 ## Setup
 For this example we pull data from the The Cancer Genome Atlas through the BioConductor `curatedTCGAData` package. The fetch command automatically brings in a `MultiAssayExperiment` object. 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 suppressMessages(library(curatedTCGAData))
 ```
 
@@ -65,18 +67,18 @@ The pathway file was downloaded from [download.baderlab.org/EM_Genesets](http://
 We can look at the first 20 lines of the file to see it:
 
 ```{r,eval=TRUE}
-system2("head",args=c("-n","3", x))
+###system2("head",args=c("-n","3", x))
 ```
 
 We then use `readPathways()` to read the pathways into a list format to provide the predictor with:
 ```{r,eval=TRUE}
-pathList <- readPathways(x)
+pathList <- readPathways(fetchPathwayDefinitions("March",2021))
 head(pathList)
 ```
 
 2. Alternatively, you can also provide a custom pathway set to netDx by reading in a GMT file, using the `readPathways()` function. In this example, I've downloaded a geneset of [pathways often dysregulated in cancer](http://www.gsea-msigdb.org/gsea/msigdb/collections.jsp#C7), set C6 from MSigDB (REF):
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 #####TBA
 ###myGMTfile <- "supporting_files/c6.all.c7.4.symbols.gmt"
 ###file.exists(myGMTfile)
@@ -88,7 +90,7 @@ For this tutorial we will limit ourselves to the first set of pathways and use `
 
 **NOTE: The pathway definition file should use the same identifier type as your data. For instance, if the genes in your transcriptomic data are represented using HGNC symbols, then your pathway definition file should also use HGNC symbols (e.g. *ID2S*) and not a different type of identifier, such as Ensembl IDs (which look like this: *ENSG00000010404*).**
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 groupList[["BRCA_mRNAArray-20160128"]] <- pathList[1:3]
 ```
 
@@ -101,14 +103,14 @@ So here, we map the following:
 * `stage` to `STAGE`
 
 These variables must be present in the `colData()` slot:
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 pheno <- colData(brca)
-head(pheno[,c("patient.age_at_initial_pathologic_diagnosis","stage")])
+head(pheno[,c("patient.age_at_initial_pathologic_diagnosis","STAGE")])
 ```
 
 We now add the entry into `groupList`, which - recall - is where you tell netDx how to group variables. The entry for `clinical` is special because netDx will look for corresponding variables in the sample metadata table, `colData()`, rather than in a separate layer in `assays()`.
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 groupList[["clinical"]] <- list(
       age="patient.age_at_initial_pathologic_diagnosis",
 	   stage="STAGE"
@@ -175,10 +177,10 @@ We have:
 
 * prepared our data,
 * grouped RNA by pathways (`fetchPathwayDefinitions()`, `readPathways()`),
-* created two PSN using clinical variables (`groupList$clincial`), and
+* created two PSN using clinical variables (`groupList$clinical`), and
 * defined our similarity function (`makeNets()`).
 
-Now we build our predictor.s
+Now we build our predictors:
  
 ```{r,eval=FALSE}
 set.seed(42) # make results reproducible
@@ -215,13 +217,13 @@ print("get confusion matrix here")
 ## View top-scoring pathways with EnrichmentMap
 We will now visualize top-scoring pathways using EnrichmentMap.
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 ###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],
 ###         groupClusters=TRUE, hideNodeLabels=TRUE)
 ```
 
 
 ## sessionInfo
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 sessionInfo()
 ```
