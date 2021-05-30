@@ -45,6 +45,7 @@ for (k in 1:numSplits) {
 	}
 }
 
+# only plot ROC and PR curves 
 if (length(st)==2) {
 message("* Plotting performance")
 predPerf <- plotPerf(predList, predClasses=st)
@@ -284,4 +285,17 @@ p <- p + xlab("") + ylab("") + ggtitle("Integrated PSN - tSNE")
 print(p)
 
 return(x)
+}
+
+# SP to clean this up -- temporary
+createNetMaker <- function(layerSimilarities) {
+    makeNetFunc <- function(dataList, groupList, netDir, ...){
+    }
+    
+    for (nm in names(layerSimilarities)) {
+        curmet <- tolower(layerSimilarities[[nm]])
+        if (curmet == "pearson") {
+                # ? 
+		}
+        }   
 }

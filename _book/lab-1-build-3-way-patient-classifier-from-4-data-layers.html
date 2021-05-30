@@ -220,40 +220,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">curatedTCGAData</span>(<span class="at">diseaseCode=</span><span class="st">&quot;BRCA&quot;</span>, <span class="at">assays=</span><span class="st">&quot;*&quot;</span>,<span class="at">dry.run=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>## snapshotDate(): 2020-10-27</code></pre>
 <pre><code>## See &#39;?curatedTCGAData&#39; for &#39;diseaseCode&#39; and &#39;assays&#39; inputs</code></pre>
-<pre><code>##     ah_id                                      title file_size
-## 1   EH584                       BRCA_CNASeq-20160128      0 Mb
-## 2   EH585                       BRCA_CNASNP-20160128    9.8 Mb
-## 3   EH586                       BRCA_CNVSNP-20160128    2.8 Mb
-## 4   EH588             BRCA_GISTIC_AllByGene-20160128    1.3 Mb
-## 5  EH2121                 BRCA_GISTIC_Peaks-20160128      0 Mb
-## 6   EH589     BRCA_GISTIC_ThresholdedByGene-20160128    0.4 Mb
-## 7  EH2122  BRCA_Methylation_methyl27-20160128_assays   63.2 Mb
-## 8  EH2123      BRCA_Methylation_methyl27-20160128_se    0.4 Mb
-## 9  EH2124 BRCA_Methylation_methyl450-20160128_assays 2613.2 Mb
-## 10 EH2125     BRCA_Methylation_methyl450-20160128_se    6.1 Mb
-## 11  EH593                 BRCA_miRNASeqGene-20160128    0.6 Mb
-## 12  EH594                    BRCA_mRNAArray-20160128   27.3 Mb
-## 13  EH595                     BRCA_Mutation-20160128    4.5 Mb
-## 14  EH596              BRCA_RNASeq2GeneNorm-20160128   64.5 Mb
-## 15  EH597                   BRCA_RNASeqGene-20160128     30 Mb
-## 16  EH598                    BRCA_RPPAArray-20160128    1.6 Mb
-##                    rdataclass rdatadateadded rdatadateremoved
-## 1            RaggedExperiment     2017-10-10             &lt;NA&gt;
-## 2            RaggedExperiment     2017-10-10             &lt;NA&gt;
-## 3            RaggedExperiment     2017-10-10             &lt;NA&gt;
-## 4        SummarizedExperiment     2017-10-10             &lt;NA&gt;
-## 5  RangedSummarizedExperiment     2019-01-09             &lt;NA&gt;
-## 6        SummarizedExperiment     2017-10-10             &lt;NA&gt;
-## 7        SummarizedExperiment     2019-01-09             &lt;NA&gt;
-## 8        SummarizedExperiment     2019-01-09             &lt;NA&gt;
-## 9            RaggedExperiment     2019-01-09             &lt;NA&gt;
-## 10       SummarizedExperiment     2019-01-09             &lt;NA&gt;
-## 11       SummarizedExperiment     2017-10-10             &lt;NA&gt;
-## 12       SummarizedExperiment     2017-10-10             &lt;NA&gt;
-## 13           RaggedExperiment     2017-10-10             &lt;NA&gt;
-## 14       SummarizedExperiment     2017-10-10             &lt;NA&gt;
-## 15       SummarizedExperiment     2017-10-10             &lt;NA&gt;
-## 16       SummarizedExperiment     2017-10-10             &lt;NA&gt;</code></pre>
+<pre><code>##     ah_id                                      title file_size                 rdataclass rdatadateadded rdatadateremoved
+## 1   EH584                       BRCA_CNASeq-20160128      0 Mb           RaggedExperiment     2017-10-10             &lt;NA&gt;
+## 2   EH585                       BRCA_CNASNP-20160128    9.8 Mb           RaggedExperiment     2017-10-10             &lt;NA&gt;
+## 3   EH586                       BRCA_CNVSNP-20160128    2.8 Mb           RaggedExperiment     2017-10-10             &lt;NA&gt;
+## 4   EH588             BRCA_GISTIC_AllByGene-20160128    1.3 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;
+## 5  EH2121                 BRCA_GISTIC_Peaks-20160128      0 Mb RangedSummarizedExperiment     2019-01-09             &lt;NA&gt;
+## 6   EH589     BRCA_GISTIC_ThresholdedByGene-20160128    0.4 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;
+## 7  EH2122  BRCA_Methylation_methyl27-20160128_assays   63.2 Mb       SummarizedExperiment     2019-01-09             &lt;NA&gt;
+## 8  EH2123      BRCA_Methylation_methyl27-20160128_se    0.4 Mb       SummarizedExperiment     2019-01-09             &lt;NA&gt;
+## 9  EH2124 BRCA_Methylation_methyl450-20160128_assays 2613.2 Mb           RaggedExperiment     2019-01-09             &lt;NA&gt;
+## 10 EH2125     BRCA_Methylation_methyl450-20160128_se    6.1 Mb       SummarizedExperiment     2019-01-09             &lt;NA&gt;
+## 11  EH593                 BRCA_miRNASeqGene-20160128    0.6 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;
+## 12  EH594                    BRCA_mRNAArray-20160128   27.3 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;
+## 13  EH595                     BRCA_Mutation-20160128    4.5 Mb           RaggedExperiment     2017-10-10             &lt;NA&gt;
+## 14  EH596              BRCA_RNASeq2GeneNorm-20160128   64.5 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;
+## 15  EH597                   BRCA_RNASeqGene-20160128     30 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;
+## 16  EH598                    BRCA_RPPAArray-20160128    1.6 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;</code></pre>
 <p>Now let’s actually sdownload the data:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb7-1" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">curatedTCGAData</span>(<span class="st">&quot;BRCA&quot;</span>,</span>
 <span id="cb7-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb7-2" aria-hidden="true" tabindex="-1"></a>                                         <span class="fu">c</span>(<span class="st">&quot;mRNAArray&quot;</span>,<span class="st">&quot;Methylation_methyl27&quot;</span>, </span>
@@ -282,89 +265,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## [1] &quot;List object of length 4 with 0 metadata columns&quot;</code></pre>
 <p><code>names()</code> shows you what -omic datatypes the layers correspond to:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(<span class="fu">assays</span>(brca))</span></code></pre></div>
-<pre><code>## [1] &quot;BRCA_miRNASeqGene-20160128&quot;        
-## [2] &quot;BRCA_mRNAArray-20160128&quot;           
-## [3] &quot;BRCA_RPPAArray-20160128&quot;           
-## [4] &quot;BRCA_Methylation_methyl27-20160128&quot;</code></pre>
+<pre><code>## [1] &quot;BRCA_miRNASeqGene-20160128&quot;         &quot;BRCA_mRNAArray-20160128&quot;            &quot;BRCA_RPPAArray-20160128&quot;            &quot;BRCA_Methylation_methyl27-20160128&quot;</code></pre>
 <p>And here we subset the miRNA data, looking at data for the first five patients</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb14-1" aria-hidden="true" tabindex="-1"></a>mir <span class="ot">&lt;-</span> <span class="fu">assays</span>(brca)[[<span class="st">&quot;BRCA_miRNASeqGene-20160128&quot;</span>]]</span>
 <span id="cb14-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mir[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code></pre></div>
-<pre><code>##              TCGA-3C-AAAU-01A-11R-A41G-13
-## hsa-let-7a-1                        95618
-## hsa-let-7a-2                       189674
-## hsa-let-7a-3                        96815
-## hsa-let-7b                         264034
-## hsa-let-7c                           3641
-## hsa-let-7d                           4333
-##              TCGA-3C-AALI-01A-11R-A41G-13
-## hsa-let-7a-1                        49201
-## hsa-let-7a-2                        98691
-## hsa-let-7a-3                        49035
-## hsa-let-7b                         148591
-## hsa-let-7c                           5095
-## hsa-let-7d                           3263
-##              TCGA-3C-AALJ-01A-31R-A41G-13
-## hsa-let-7a-1                        75342
-## hsa-let-7a-2                       150472
-## hsa-let-7a-3                        76206
-## hsa-let-7b                          99938
-## hsa-let-7c                           5799
-## hsa-let-7d                           5658
-##              TCGA-3C-AALK-01A-11R-A41G-13
-## hsa-let-7a-1                        57278
-## hsa-let-7a-2                       114320
-## hsa-let-7a-3                        57540
-## hsa-let-7b                         164553
-## hsa-let-7c                          18464
-## hsa-let-7d                           2114
-##              TCGA-4H-AAAK-01A-12R-A41G-13
-## hsa-let-7a-1                        67196
-## hsa-let-7a-2                       134563
-## hsa-let-7a-3                        67607
-## hsa-let-7b                         136918
-## hsa-let-7c                          20429
-## hsa-let-7d                           2162</code></pre>
+<pre><code>##              TCGA-3C-AAAU-01A-11R-A41G-13 TCGA-3C-AALI-01A-11R-A41G-13 TCGA-3C-AALJ-01A-31R-A41G-13 TCGA-3C-AALK-01A-11R-A41G-13 TCGA-4H-AAAK-01A-12R-A41G-13
+## hsa-let-7a-1                        95618                        49201                        75342                        57278                        67196
+## hsa-let-7a-2                       189674                        98691                       150472                       114320                       134563
+## hsa-let-7a-3                        96815                        49035                        76206                        57540                        67607
+## hsa-let-7b                         264034                       148591                        99938                       164553                       136918
+## hsa-let-7c                           3641                         5095                         5799                        18464                        20429
+## hsa-let-7d                           4333                         3263                         5658                         2114                         2162</code></pre>
 <p>Look at sample phenotype data, where rows contain data for each patient and columns have non-omic measures (e.g. clinical data):</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb16-1" aria-hidden="true" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">colData</span>(brca)</span>
 <span id="cb16-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(pheno)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>]</span></code></pre></div>
-<pre><code>##  [1] &quot;patientID&quot;                           
-##  [2] &quot;years_to_birth&quot;                      
-##  [3] &quot;vital_status&quot;                        
-##  [4] &quot;days_to_death&quot;                       
-##  [5] &quot;days_to_last_followup&quot;               
-##  [6] &quot;tumor_tissue_site&quot;                   
-##  [7] &quot;pathologic_stage&quot;                    
-##  [8] &quot;pathology_T_stage&quot;                   
-##  [9] &quot;pathology_N_stage&quot;                   
-## [10] &quot;pathology_M_stage&quot;                   
-## [11] &quot;gender&quot;                              
-## [12] &quot;date_of_initial_pathologic_diagnosis&quot;
-## [13] &quot;days_to_last_known_alive&quot;            
-## [14] &quot;radiation_therapy&quot;                   
-## [15] &quot;histological_type&quot;                   
-## [16] &quot;number_of_lymph_nodes&quot;               
-## [17] &quot;race&quot;                                
-## [18] &quot;ethnicity&quot;                           
-## [19] &quot;admin.bcr&quot;                           
-## [20] &quot;admin.day_of_dcc_upload&quot;</code></pre>
+<pre><code>##  [1] &quot;patientID&quot;                            &quot;years_to_birth&quot;                       &quot;vital_status&quot;                         &quot;days_to_death&quot;                       
+##  [5] &quot;days_to_last_followup&quot;                &quot;tumor_tissue_site&quot;                    &quot;pathologic_stage&quot;                     &quot;pathology_T_stage&quot;                   
+##  [9] &quot;pathology_N_stage&quot;                    &quot;pathology_M_stage&quot;                    &quot;gender&quot;                               &quot;date_of_initial_pathologic_diagnosis&quot;
+## [13] &quot;days_to_last_known_alive&quot;             &quot;radiation_therapy&quot;                    &quot;histological_type&quot;                    &quot;number_of_lymph_nodes&quot;               
+## [17] &quot;race&quot;                                 &quot;ethnicity&quot;                            &quot;admin.bcr&quot;                            &quot;admin.day_of_dcc_upload&quot;</code></pre>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code></pre></div>
 <pre><code>## DataFrame with 6 rows and 5 columns
-##                 patientID years_to_birth vital_status
-##               &lt;character&gt;      &lt;integer&gt;    &lt;integer&gt;
-## TCGA-A1-A0SB TCGA-A1-A0SB             70            0
-## TCGA-A1-A0SD TCGA-A1-A0SD             59            0
-## TCGA-A1-A0SE TCGA-A1-A0SE             56            0
-## TCGA-A1-A0SF TCGA-A1-A0SF             54            0
-## TCGA-A1-A0SG TCGA-A1-A0SG             61            0
-## TCGA-A1-A0SH TCGA-A1-A0SH             39            0
-##              days_to_death days_to_last_followup
-##                  &lt;integer&gt;             &lt;integer&gt;
-## TCGA-A1-A0SB            NA                   259
-## TCGA-A1-A0SD            NA                   437
-## TCGA-A1-A0SE            NA                  1321
-## TCGA-A1-A0SF            NA                  1463
-## TCGA-A1-A0SG            NA                   434
-## TCGA-A1-A0SH            NA                  1437</code></pre>
+##                 patientID years_to_birth vital_status days_to_death days_to_last_followup
+##               &lt;character&gt;      &lt;integer&gt;    &lt;integer&gt;     &lt;integer&gt;             &lt;integer&gt;
+## TCGA-A1-A0SB TCGA-A1-A0SB             70            0            NA                   259
+## TCGA-A1-A0SD TCGA-A1-A0SD             59            0            NA                   437
+## TCGA-A1-A0SE TCGA-A1-A0SE             56            0            NA                  1321
+## TCGA-A1-A0SF TCGA-A1-A0SF             54            0            NA                  1463
+## TCGA-A1-A0SG TCGA-A1-A0SG             61            0            NA                   434
+## TCGA-A1-A0SH TCGA-A1-A0SH             39            0            NA                  1437</code></pre>
 <p>This next code block prepares the TCGA data. This includes:</p>
 <ul>
 <li>removing duplicate samples</li>
@@ -445,8 +374,7 @@ netDx allows the user to define how data is converted into patient similarity ne
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(groupList[[<span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>]])</span></code></pre></div>
 <pre><code>## [1] &quot;BRCA_mRNAArray-20160128&quot;</code></pre>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(groupList[[<span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>]][[<span class="dv">1</span>]])</span></code></pre></div>
-<pre><code>## [1] &quot;ELMO2&quot;    &quot;CREB3L1&quot;  &quot;RPS11&quot;    &quot;PNMA1&quot;    &quot;MMP2&quot;    
-## [6] &quot;C10orf90&quot;</code></pre>
+<pre><code>## [1] &quot;ELMO2&quot;    &quot;CREB3L1&quot;  &quot;RPS11&quot;    &quot;PNMA1&quot;    &quot;MMP2&quot;     &quot;C10orf90&quot;</code></pre>
 </div>
 <div id="define-patient-similarity-for-each-network" class="section level3">
 <h3>Define patient similarity for each network</h3>
@@ -580,63 +508,55 @@ This list contains:</p>
 <pre><code>## $Luminal.A
 ##                              Feature Split1 Split2
 ## 1 BRCA_Methylation_methyl27-20160128      1      1
-## 2            BRCA_RPPAArray-20160128      2      2
+## 2         BRCA_miRNASeqGene-20160128      1      1
 ## 3            BRCA_mRNAArray-20160128      2      2
-## 4         BRCA_miRNASeqGene-20160128      1      1
+## 4            BRCA_RPPAArray-20160128      2      2
 ## 
 ## $Basal.like
 ##                              Feature Split1 Split2
 ## 1 BRCA_Methylation_methyl27-20160128      2      2
-## 2            BRCA_RPPAArray-20160128      2      2
+## 2         BRCA_miRNASeqGene-20160128      1      2
 ## 3            BRCA_mRNAArray-20160128      2      2
-## 4         BRCA_miRNASeqGene-20160128      1      2
+## 4            BRCA_RPPAArray-20160128      2      2
 ## 
 ## $Luminal.B
 ##                              Feature Split1 Split2
 ## 1 BRCA_Methylation_methyl27-20160128      2      2
-## 2            BRCA_RPPAArray-20160128      2      2
-## 3            BRCA_mRNAArray-20160128      2      2</code></pre>
+## 2            BRCA_mRNAArray-20160128      2      2
+## 3            BRCA_RPPAArray-20160128      2      2</code></pre>
 <p>And here are selected features, which are those scoring 2 out of 2 in at least half of the splits. This threshold is simply for illustration. In practice we would run at least 10 train/test splits (ideally 100+), and look for features that score 7+ out of 10 in &gt;70% splits.</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb53-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>selectedFeatures</span></code></pre></div>
 <pre><code>## $featScores
 ## $featScores$Luminal.A
 ##                              Feature Split1 Split2
 ## 1 BRCA_Methylation_methyl27-20160128      1      1
-## 2            BRCA_RPPAArray-20160128      2      2
+## 2         BRCA_miRNASeqGene-20160128      1      1
 ## 3            BRCA_mRNAArray-20160128      2      2
-## 4         BRCA_miRNASeqGene-20160128      1      1
+## 4            BRCA_RPPAArray-20160128      2      2
 ## 
 ## $featScores$Basal.like
 ##                              Feature Split1 Split2
 ## 1 BRCA_Methylation_methyl27-20160128      2      2
-## 2            BRCA_RPPAArray-20160128      2      2
+## 2         BRCA_miRNASeqGene-20160128      1      2
 ## 3            BRCA_mRNAArray-20160128      2      2
-## 4         BRCA_miRNASeqGene-20160128      1      2
+## 4            BRCA_RPPAArray-20160128      2      2
 ## 
 ## $featScores$Luminal.B
 ##                              Feature Split1 Split2
 ## 1 BRCA_Methylation_methyl27-20160128      2      2
-## 2            BRCA_RPPAArray-20160128      2      2
-## 3            BRCA_mRNAArray-20160128      2      2
+## 2            BRCA_mRNAArray-20160128      2      2
+## 3            BRCA_RPPAArray-20160128      2      2
 ## 
 ## 
 ## $selectedFeatures
 ## $selectedFeatures$Luminal.A
-## [1] &quot;BRCA_Methylation_methyl27-20160128&quot;
-## [2] &quot;BRCA_RPPAArray-20160128&quot;           
-## [3] &quot;BRCA_mRNAArray-20160128&quot;           
-## [4] &quot;BRCA_miRNASeqGene-20160128&quot;        
+## [1] &quot;BRCA_Methylation_methyl27-20160128&quot; &quot;BRCA_miRNASeqGene-20160128&quot;         &quot;BRCA_mRNAArray-20160128&quot;            &quot;BRCA_RPPAArray-20160128&quot;           
 ## 
 ## $selectedFeatures$Basal.like
-## [1] &quot;BRCA_Methylation_methyl27-20160128&quot;
-## [2] &quot;BRCA_RPPAArray-20160128&quot;           
-## [3] &quot;BRCA_mRNAArray-20160128&quot;           
-## [4] &quot;BRCA_miRNASeqGene-20160128&quot;        
+## [1] &quot;BRCA_Methylation_methyl27-20160128&quot; &quot;BRCA_miRNASeqGene-20160128&quot;         &quot;BRCA_mRNAArray-20160128&quot;            &quot;BRCA_RPPAArray-20160128&quot;           
 ## 
 ## $selectedFeatures$Luminal.B
-## [1] &quot;BRCA_Methylation_methyl27-20160128&quot;
-## [2] &quot;BRCA_RPPAArray-20160128&quot;           
-## [3] &quot;BRCA_mRNAArray-20160128&quot;</code></pre>
+## [1] &quot;BRCA_Methylation_methyl27-20160128&quot; &quot;BRCA_mRNAArray-20160128&quot;            &quot;BRCA_RPPAArray-20160128&quot;</code></pre>
 <p>We finally get the integrated PSN and visualize it using a tSNE plot:</p>
 <div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb55-1" aria-hidden="true" tabindex="-1"></a>psn <span class="ot">&lt;-</span> <span class="fu">getPSN</span>(brca,groupList,makeNets,results<span class="sc">$</span>selectedFeatures)</span></code></pre></div>
 <pre><code>## BRCA_miRNASeqGene-20160128: 1 features</code></pre>
@@ -644,10 +564,8 @@ This list contains:</p>
 <pre><code>## BRCA_RPPAArray-20160128: 1 features</code></pre>
 <pre><code>## BRCA_Methylation_methyl27-20160128: 1 features</code></pre>
 <pre><code>## * Making integrated PSN</code></pre>
-<pre><code>## Warning in dir.create(paste(netDir, &quot;profiles&quot;, sep = fsep)): &#39;/
-## tmp/RtmpH3a8cI/profiles&#39; already exists</code></pre>
-<pre><code>## Warning in dir.create(paste(netDir, &quot;INTERACTIONS&quot;, sep = fsep)):
-## &#39;/tmp/RtmpH3a8cI/INTERACTIONS&#39; already exists</code></pre>
+<pre><code>## Warning in dir.create(paste(netDir, &quot;profiles&quot;, sep = fsep)): &#39;/tmp/RtmpOfga3p/profiles&#39; already exists</code></pre>
+<pre><code>## Warning in dir.create(paste(netDir, &quot;INTERACTIONS&quot;, sep = fsep)): &#39;/tmp/RtmpOfga3p/INTERACTIONS&#39; already exists</code></pre>
 <div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb63-1" aria-hidden="true" tabindex="-1"></a>tsne <span class="ot">&lt;-</span> <span class="fu">tSNEPlotter</span>(</span>
 <span id="cb63-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb63-2" aria-hidden="true" tabindex="-1"></a>    psn<span class="sc">$</span>patientSimNetwork_unpruned, </span>
 <span id="cb63-3"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb63-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colData</span>(brca)</span>
@@ -675,108 +593,51 @@ This list contains:</p>
 ## BLAS/LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.8.so
 ## 
 ## locale:
-##  [1] LC_CTYPE=C                 LC_NUMERIC=C              
-##  [3] LC_TIME=C                  LC_COLLATE=C              
-##  [5] LC_MONETARY=C              LC_MESSAGES=C             
-##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
-##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8     LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                  LC_ADDRESS=C               LC_TELEPHONE=C             LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
-## [1] stats4    parallel  stats     graphics  grDevices utils    
-## [7] datasets  methods   base     
+## [1] stats4    parallel  stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] plotrix_3.8-1               ggplot2_3.3.3              
-##  [3] Rtsne_0.15                  rhdf5_2.34.0               
-##  [5] curatedTCGAData_1.12.1      MultiAssayExperiment_1.16.0
-##  [7] SummarizedExperiment_1.20.0 GenomicRanges_1.42.0       
-##  [9] GenomeInfoDb_1.26.7         IRanges_2.24.1             
-## [11] S4Vectors_0.28.1            MatrixGenerics_1.2.1       
-## [13] matrixStats_0.58.0          netDx_1.2.3                
-## [15] bigmemory_4.5.36            Biobase_2.50.0             
-## [17] BiocGenerics_0.36.1        
+##  [1] plotrix_3.8-1               ggplot2_3.3.3               Rtsne_0.15                  rhdf5_2.34.0                curatedTCGAData_1.12.1     
+##  [6] MultiAssayExperiment_1.16.0 SummarizedExperiment_1.20.0 GenomicRanges_1.42.0        GenomeInfoDb_1.26.7         IRanges_2.24.1             
+## [11] S4Vectors_0.28.1            MatrixGenerics_1.2.1        matrixStats_0.58.0          netDx_1.2.3                 bigmemory_4.5.36           
+## [16] Biobase_2.50.0              BiocGenerics_0.36.1        
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] utf8_1.2.1                    R.utils_2.10.1               
-##   [3] tidyselect_1.1.1              RSQLite_2.2.7                
-##   [5] AnnotationDbi_1.52.0          grid_4.0.5                   
-##   [7] combinat_0.0-8                BiocParallel_1.24.1          
-##   [9] RNeXML_2.4.5                  munsell_0.5.0                
-##  [11] codetools_0.2-18              withr_2.4.2                  
-##  [13] colorspace_2.0-1              highr_0.9                    
-##  [15] knitr_1.33                    uuid_0.1-4                   
-##  [17] zinbwave_1.12.0               rstudioapi_0.13              
-##  [19] SingleCellExperiment_1.12.0   ROCR_1.0-11                  
-##  [21] NMF_0.23.0                    labeling_0.4.2               
-##  [23] GenomeInfoDbData_1.2.4        bit64_4.0.5                  
-##  [25] farver_2.1.0                  vctrs_0.3.8                  
-##  [27] generics_0.1.0                xfun_0.23                    
-##  [29] BiocFileCache_1.14.0          R6_2.5.0                     
-##  [31] doParallel_1.0.16             ggbeeswarm_0.6.0             
-##  [33] netSmooth_1.10.0              rsvd_1.0.5                   
-##  [35] RJSONIO_1.3-1.4               locfit_1.5-9.4               
-##  [37] bitops_1.0-7                  rhdf5filters_1.2.1           
-##  [39] cachem_1.0.5                  DelayedArray_0.16.3          
-##  [41] assertthat_0.2.1              promises_1.2.0.1             
-##  [43] scales_1.1.1                  beeswarm_0.3.1               
-##  [45] gtable_0.3.0                  phylobase_0.8.10             
-##  [47] beachmat_2.6.4                rlang_0.4.11                 
-##  [49] genefilter_1.72.1             splines_4.0.5                
-##  [51] lazyeval_0.2.2                BiocManager_1.30.15          
-##  [53] yaml_2.2.1                    reshape2_1.4.4               
-##  [55] httpuv_1.6.1                  tools_4.0.5                  
-##  [57] bookdown_0.22                 gridBase_0.4-7               
-##  [59] ellipsis_0.3.2                jquerylib_0.1.4              
-##  [61] RColorBrewer_1.1-2            Rcpp_1.0.6                   
-##  [63] plyr_1.8.6                    sparseMatrixStats_1.2.1      
-##  [65] progress_1.2.2                zlibbioc_1.36.0              
-##  [67] purrr_0.3.4                   RCurl_1.98-1.3               
-##  [69] prettyunits_1.1.1             viridis_0.6.1                
-##  [71] cluster_2.1.1                 tinytex_0.31                 
-##  [73] magrittr_2.0.1                data.table_1.14.0            
-##  [75] RSpectra_0.16-0               hms_1.1.0                    
-##  [77] mime_0.10                     evaluate_0.14                
-##  [79] xtable_1.8-4                  XML_3.99-0.6                 
-##  [81] gridExtra_2.3                 shape_1.4.6                  
-##  [83] compiler_4.0.5                scater_1.18.6                
-##  [85] tibble_3.1.2                  RCy3_2.10.2                  
-##  [87] crayon_1.4.1                  R.oo_1.24.0                  
-##  [89] htmltools_0.5.1.1             entropy_1.3.0                
-##  [91] later_1.2.0                   tidyr_1.1.3                  
-##  [93] howmany_0.3-1                 DBI_1.1.1                    
-##  [95] ExperimentHub_1.16.1          dbplyr_2.1.1                 
-##  [97] MASS_7.3-53.1                 rappdirs_0.3.3               
-##  [99] Matrix_1.3-2                  ade4_1.7-16                  
-## [101] R.methodsS3_1.8.1             igraph_1.2.6                 
-## [103] pkgconfig_2.0.3               bigmemory.sri_0.1.3          
-## [105] rncl_0.8.4                    registry_0.5-1               
-## [107] locfdr_1.1-8                  scuttle_1.0.4                
-## [109] xml2_1.3.2                    foreach_1.5.1                
-## [111] annotate_1.68.0               vipor_0.4.5                  
-## [113] bslib_0.2.5.1                 rngtools_1.5                 
-## [115] pkgmaker_0.32.2               XVector_0.30.0               
-## [117] stringr_1.4.0                 digest_0.6.27                
-## [119] pracma_2.3.3                  graph_1.68.0                 
-## [121] softImpute_1.4-1              rmarkdown_2.8                
-## [123] edgeR_3.32.1                  DelayedMatrixStats_1.12.3    
-## [125] curl_4.3.1                    kernlab_0.9-29               
-## [127] shiny_1.6.0                   lifecycle_1.0.0              
-## [129] nlme_3.1-152                  jsonlite_1.7.2               
-## [131] clusterExperiment_2.10.1      Rhdf5lib_1.12.1              
-## [133] BiocNeighbors_1.8.2           viridisLite_0.4.0            
-## [135] limma_3.46.0                  fansi_0.4.2                  
-## [137] pillar_1.6.1                  lattice_0.20-41              
-## [139] fastmap_1.1.0                 httr_1.4.2                   
-## [141] survival_3.2-10               interactiveDisplayBase_1.28.0
-## [143] glue_1.4.2                    iterators_1.0.13             
-## [145] BiocVersion_3.12.0            glmnet_4.1-1                 
-## [147] bit_4.0.4                     stringi_1.6.2                
-## [149] sass_0.4.0                    HDF5Array_1.18.1             
-## [151] blob_1.2.1                    BiocSingular_1.6.0           
-## [153] AnnotationHub_2.22.1          memoise_2.0.0                
-## [155] dplyr_1.0.6                   irlba_2.3.3                  
-## [157] ape_5.5</code></pre>
+##   [1] utf8_1.2.1                    R.utils_2.10.1                tidyselect_1.1.1              RSQLite_2.2.7                 AnnotationDbi_1.52.0         
+##   [6] grid_4.0.5                    combinat_0.0-8                BiocParallel_1.24.1           RNeXML_2.4.5                  munsell_0.5.0                
+##  [11] codetools_0.2-18              withr_2.4.2                   colorspace_2.0-1              highr_0.9                     knitr_1.33                   
+##  [16] uuid_0.1-4                    zinbwave_1.12.0               rstudioapi_0.13               SingleCellExperiment_1.12.0   ROCR_1.0-11                  
+##  [21] NMF_0.23.0                    labeling_0.4.2                GenomeInfoDbData_1.2.4        bit64_4.0.5                   farver_2.1.0                 
+##  [26] vctrs_0.3.8                   generics_0.1.0                xfun_0.23                     BiocFileCache_1.14.0          R6_2.5.0                     
+##  [31] doParallel_1.0.16             ggbeeswarm_0.6.0              netSmooth_1.10.0              rsvd_1.0.5                    RJSONIO_1.3-1.4              
+##  [36] locfit_1.5-9.4                bitops_1.0-7                  rhdf5filters_1.2.1            cachem_1.0.5                  DelayedArray_0.16.3          
+##  [41] assertthat_0.2.1              promises_1.2.0.1              scales_1.1.1                  beeswarm_0.3.1                gtable_0.3.0                 
+##  [46] phylobase_0.8.10              beachmat_2.6.4                rlang_0.4.11                  genefilter_1.72.1             splines_4.0.5                
+##  [51] lazyeval_0.2.2                BiocManager_1.30.15           yaml_2.2.1                    reshape2_1.4.4                httpuv_1.6.1                 
+##  [56] tools_4.0.5                   bookdown_0.22                 gridBase_0.4-7                ellipsis_0.3.2                jquerylib_0.1.4              
+##  [61] RColorBrewer_1.1-2            Rcpp_1.0.6                    plyr_1.8.6                    sparseMatrixStats_1.2.1       progress_1.2.2               
+##  [66] zlibbioc_1.36.0               purrr_0.3.4                   RCurl_1.98-1.3                prettyunits_1.1.1             viridis_0.6.1                
+##  [71] cluster_2.1.1                 tinytex_0.31                  magrittr_2.0.1                data.table_1.14.0             RSpectra_0.16-0              
+##  [76] hms_1.1.0                     mime_0.10                     evaluate_0.14                 xtable_1.8-4                  XML_3.99-0.6                 
+##  [81] gridExtra_2.3                 shape_1.4.6                   compiler_4.0.5                scater_1.18.6                 tibble_3.1.2                 
+##  [86] RCy3_2.10.2                   crayon_1.4.1                  R.oo_1.24.0                   htmltools_0.5.1.1             entropy_1.3.0                
+##  [91] later_1.2.0                   tidyr_1.1.3                   howmany_0.3-1                 DBI_1.1.1                     ExperimentHub_1.16.1         
+##  [96] dbplyr_2.1.1                  MASS_7.3-53.1                 rappdirs_0.3.3                Matrix_1.3-2                  ade4_1.7-16                  
+## [101] R.methodsS3_1.8.1             igraph_1.2.6                  pkgconfig_2.0.3               bigmemory.sri_0.1.3           rncl_0.8.4                   
+## [106] registry_0.5-1                locfdr_1.1-8                  scuttle_1.0.4                 xml2_1.3.2                    foreach_1.5.1                
+## [111] annotate_1.68.0               vipor_0.4.5                   bslib_0.2.5.1                 rngtools_1.5                  pkgmaker_0.32.2              
+## [116] XVector_0.30.0                stringr_1.4.0                 digest_0.6.27                 pracma_2.3.3                  graph_1.68.0                 
+## [121] softImpute_1.4-1              rmarkdown_2.8                 edgeR_3.32.1                  DelayedMatrixStats_1.12.3     curl_4.3.1                   
+## [126] kernlab_0.9-29                shiny_1.6.0                   lifecycle_1.0.0               nlme_3.1-152                  jsonlite_1.7.2               
+## [131] clusterExperiment_2.10.1      Rhdf5lib_1.12.1               BiocNeighbors_1.8.2           viridisLite_0.4.0             limma_3.46.0                 
+## [136] fansi_0.4.2                   pillar_1.6.1                  lattice_0.20-41               fastmap_1.1.0                 httr_1.4.2                   
+## [141] survival_3.2-10               interactiveDisplayBase_1.28.0 glue_1.4.2                    iterators_1.0.13              BiocVersion_3.12.0           
+## [146] glmnet_4.1-1                  bit_4.0.4                     stringi_1.6.2                 sass_0.4.0                    HDF5Array_1.18.1             
+## [151] blob_1.2.1                    BiocSingular_1.6.0            AnnotationHub_2.22.1          memoise_2.0.0                 dplyr_1.0.6                  
+## [156] irlba_2.3.3                   ape_5.5</code></pre>
 
 </div>
 </div>
