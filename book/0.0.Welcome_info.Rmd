@@ -1,0 +1,31 @@
+# Welcome
+
+This book contains material for the high-throughput data integration module, and is part of the CBW Cancer analysis workshop (insert link).
+
+## Class materials
+
+You can download course slides here. ADD LINK
+
+## Setup instructions
+
+Install these tools on your laptop before coming to the workshop:
+
+## Basic programs
+
+### Cytoscape Installation
+Please install the latest version of [Cytoscape 3.8.2](https://cytoscape.org/download-platforms.html) as well as a group of Cytoscape Apps that we will be using for different parts of the course.  
+
+ 1. Install Cytoscape 3.8.2:
+      * Go to: https://cytoscape.org/download-platforms.html
+      * Choose the version corresponding to your operating system (OS, Windows or UNIX)
+      * Follow instructions to install cytoscape
+      * Verify that Cytoscape has been installed correctly by launching the newly installed application
+      * Contact your system administrator if you have trouble with Java installation
+
+  1. Install the following Cytoscape Apps - Apps are installed from within Cytoscape. In order to install Apps launch Cytoscape  
+      * ![](./images/Cytoscape_app_manager.png)
+      * From the menu bar, select ‘Apps’, then ‘App Manager’.
+      * Within 'all apps', search for the following and install:  
+          * EnrichmentMap 3.3.2
+          * EnrichmentMap Pipeline Collection 1.1.0 (it will install ClusterMaker2, WordCloud and AutoAnnotate)
+  
