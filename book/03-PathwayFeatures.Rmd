@@ -18,7 +18,7 @@ knitr::include_graphics("images/Lab2_design.jpg")
 
 Let's fetch the BRCA data using `curatedTCGAData` again, this time only the gene expression data. Remember, the clinical data we automatically get in the `colData()` slot returned.
 
-```{r,eval=TRUE}
+```{r,eval=FALSE}
 suppressMessages(library(curatedTCGAData))
 brca <- suppressMessages(
    curatedTCGAData(
@@ -27,9 +27,15 @@ brca <- suppressMessages(
 	)
 ```
 
+Let's look at the data. Notice that we now only have one -omic assay, gene expression measures from microarrays.
+
+```{r,eval=FALSE}
+brca
+```
+
 As before, we prepare the data. I highly recommend separating the script that prepares the data from the one running the predictor for improved management, readability and debuggability.
 
-```{r,eval=TRUE}
+```{r,eval=FALSE}
 source("prepare_data.R")
 brca <- prepareDataForCBW(brca)
 ```
@@ -39,7 +45,7 @@ brca <- prepareDataForCBW(brca)
 Load the `netDx` package and initialize the `groupList` object, where we will store our grouping rules.
 Recall that `groupList` is a list-of-lists, with the top tier containing data layer names, and that the layer names must match `names(assays(brca))` or whatever your `MultiAssayExperiment` object is called.
 
-```{r,eval=TRUE}
+```{r,eval=FALSE}
 suppressWarnings(suppressMessages(require(netDx)))
 groupList <- list()
 ```
@@ -53,12 +59,12 @@ Whicever list you use can be pruned by constraining the min/max number of genes 
 
 There are two ways of providing pathway data to netDx:
 1. You can **download** a compilation of pathways from curated databases using the `fetchPathwayDefinitions()` function in netDx, like so:
-```{r,eval=TRUE}
+```{r,eval=FALSE}
 x <- fetchPathwayDefinitions("March",2021)
 x
 ```
 
-The above pathway set was downloaded from [download.baderlab.org/EM_Genesets](http://download.baderlab.org/EM_Genesets), which is a good resource for routinely-updated curated pathway definitions. Pathways are compiled from Reactome, Panther, NCI, MSigDB, etc., [REF], and data is contained in GMT format, a common format to represent gene-sets, such as pathways. You can see from the value of `x` that the file isn't downloaded to our working directory, but rather is stored in a BioConductor-specific location for files (file cache), using the BiocFileCache class. This way if we rerun the script, BioConductor will only download the file again if it has changed since our last download.
+The above pathway set was downloaded from [download.baderlab.org/EM_Genesets](http://download.baderlab.org/EM_Genesets), which is a good resource for routinely-updated curated pathway definitions. Pathways are compiled from Reactome, Panther, NCI, MSigDB, etc., [REF], and data is contained in [GMT format](https://software.broadinstitute.org/cancer/software/gsea/wiki/index.php/Data_formats#GMT:_Gene_Matrix_Transposed_file_format_.28.2A.gmt.29), a common format to represent gene-sets, such as pathways. You can see from the value of `x` that the file isn't downloaded to our working directory, but rather is stored in a BioConductor-specific location for files (file cache), using the [BiocFileCache](https://www.bioconductor.org/packages/release/bioc/html/BiocFileCache.html) class. This way if we rerun the script, BioConductor will only download the file again if it has changed since our last download.
 
 Here is an example of the GMT format:
 
@@ -68,14 +74,14 @@ knitr::include_graphics("images/GMT_screenshot.png")
 
 We then use `readPathways()` to read the pathways into a list format to provide the predictor with. So the full call looks like this:
 
-```{r,eval=TRUE}
+```{r,eval=FALSE}
 pathList <- readPathways(fetchPathwayDefinitions("March",2021))
 head(pathList)
 ```
 
 2. Alternatively, you can also provide a custom pathway set to netDx by reading in a GMT file, using the `readPathways()` function. In this example, I've downloaded a geneset of [pathways often dysregulated in cancer](http://www.gsea-msigdb.org/gsea/msigdb/collections.jsp#C7), set C6 from MSigDB (REF):
 
-```{r,eval=TRUE}
+```{r,eval=FALSE}
 #####TBA
 ###myGMTfile <- "supporting_files/c6.all.c7.4.symbols.gmt"
 ###file.exists(myGMTfile)
@@ -85,14 +91,14 @@ head(pathList)
 
 For this tutorial we will limit ourselves to the first set of pathways and use `groupList` to tell netDx to group transcriptomic data using pathways. 
 
-**NOTE: The pathway definition file should use the same identifier type as your patient data. For instance, if the genes in your transcriptomic data are represented using HGNC symbols, then your pathway definition file must also use HGNC symbols (e.g. *ID2S*), and not a different type of identifier, such as Ensembl IDs (which look like this: *ENSG00000010404*).**
+**NOTE: The pathway definition file should use the same identifier type as your patient data. For instance, if the genes in your transcriptomic data are represented using [HGNC symbols](https://www.genenames.org/tools/search/), then your pathway definition file must also use HGNC symbols (e.g. *ID2S*), and not a different type of identifier, such as Ensembl IDs (which look like this: *ENSG00000010404*).**
 
 
-```{r,eval=TRUE}
+```{r,eval=FALSE}
 groupList[["BRCA_mRNAArray-20160128"]] <- pathList 
 ```
 
-## Clinical data: Single variable features
+### Clinical: Single variables
 Models often include clinical variables such as demographic or disease-related features such as age, sex, or treatment regimen. In this example, we take two variables from the sample metadata, and include create one PSN *for each variable*.  
 
 So here, we map the following:
@@ -101,14 +107,14 @@ So here, we map the following:
 * `stage` to `STAGE`
 
 These variables must be present in the `colData()` slot:
-```{r,eval=TRUE}
+```{r,eval=FALSE}
 pheno <- colData(brca)
 head(pheno[,c("patient.age_at_initial_pathologic_diagnosis","STAGE")])
 ```
 
 We now add the entry into `groupList`. The entry for `clinical` is special because netDx will look for corresponding variables in the sample metadata table, `colData()`, rather than looking for "clinical"  within `assays(brca)`.
 
-```{r,eval=TRUE}
+```{r,eval=FALSE}
 groupList[["clinical"]] <- list(
       age="patient.age_at_initial_pathologic_diagnosis",
 	   stage="STAGE"
@@ -128,9 +134,9 @@ We will now make a different call to `makePSN_NamedMatrix()` but this time, requ
 
 This is achieved by calling the following code *(Do not paste this in, either)*:
 ```{r,eval=FALSE}
-   makePSN_NamedMatrix(,..., 
-                       simMetric="custom", customFunc=normDiff,
-                       writeProfiles=FALSE)
+makePSN_NamedMatrix(,..., 
+	simMetric="custom", customFunc=normDiff,
+	writeProfiles=FALSE)
 ```
 
 `normDiff` is a function provided in the `netDx` package, but the user may define custom similarity functions in this block of code and pass those to `makePSN_NamedMatrix()`, using the `customFunc` parameters; additionally set `simMetric` to `custom`.
@@ -142,25 +148,25 @@ Other presets provided by netDx include:
 * `normDiff`: Normalized difference; used with a single variable such as age
 * `avgNormDiff`: Average normalized difference; used with a vector
 
-When we're done, this is what the `makeNets` function look like. I realize this may be complicated and future versions of netDx will simplify this syntax.
+When we're done, this is what the `makeNets` function look like. 
 
-```{r,eval=TRUE}
+*Note: I realize this may be complicated. Future versions of netDx will simplify this syntax.*
+
+```{r,eval=FALSE}
 makeNets <- function(dataList, groupList, netDir,...) {
 	netList <- c() 
 
-	# for all layers except clinical data (here, mRNA data)
-	# use Pearson correlation
-	for (nm in setdiff(names(groupList),"clinical")) {
-		if (!is.null(groupList[[nm]])) { ## REMEMBER TO CHECK FOR NULL
+	# make RNA nets (Pearson correlation)
+	rna <- "BRCA_mRNAArray-20160128"
+	if (!is.null(groupList[[rna]])) { ## REMEMBER TO CHECK FOR NULL
 		netList <- makePSN_NamedMatrix(
-			dataList[[nm]],
-			rownames(dataList[[nm]]),
-			groupList[[nm]],
+			dataList[[rna]],
+			rownames(dataList[[rna]]),
+			groupList[[rna]],
 			netDir,
 			verbose=FALSE,
 			writeProfiles=TRUE,			## define Pearson similarity as before
 			...) 
-		}
 	}
 	
 	# make clinical nets (normalized difference)
@@ -179,7 +185,6 @@ makeNets <- function(dataList, groupList, netDir,...) {
 	netList <- c(unlist(netList),unlist(netList2))
 	return(netList)
 }
-
 ```
 
 ## Build predictor
@@ -192,11 +197,12 @@ We have:
 * created two PSN using clinical variables (`groupList$clinical`), and
 * defined our similarity metrics (`makeNets()`).
 
-Now we build our predictors. We use two train/test splits, score feature selection out of 2. For each split, selected features are those that score 1+ out of 2 or more.
+Now we build our predictors. For this tutorial, we use two train/test splits. For each split, we assign features a score between zero and two, and call features with score of 1+ "feature-selected".
 
-**Realistic parameters:** Reasonable values are  `numSplits=100L` (10 is a good start, just to see if you get signal), `featScoreMax=10L`, `featScoreMax=9L`.
+**Realistic parameters:** When running this with your project, reasonable values are  `numSplits=10L` (10 is a good start, just to see if you get signal, 100+ if firming up for publication), `featScoreMax=10L`, `featSelCutoff=9L`.
  
-```{r,eval=TRUE}
+```{r,eval=FALSE}
+t0 <- Sys.time()
 set.seed(42) # make results reproducible
 outDir <- paste(tempdir(),"pred_output",sep=getFileSep()) # use absolute path
 numSplits <- 2L
@@ -212,13 +218,16 @@ model <- suppressMessages(
 	   numCores=4L
 	   )
 )
+t1 <- Sys.time()
+print(t1-t0) # time taken
 ```
 
-Let's actually load data generated by reasonable parameters, e.g. `numSplits=10L`, `featScoreMax=10L`, `featSelCutoff=9L`, generated for this tutorial:
+The above settings were chosen to Let's actually load data generated by reasonable parameters, e.g. `numSplits=10L`, `featScoreMax=10L`, `featSelCutoff=9L`, generated for this tutorial:
 
 ```{r,eval=TRUE}
 outFile <- sprintf("%s/CBW_Lab2_full.rda",tempdir())
-download.file("https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/data_files/brca_pathways_full.rda", outFile)
+download.file("https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/brca_pathways_full.rda", 
+	destfile=outFile)
 lnames <- load(outFile)
 ```
 We can see the objects in the file using `lnames()`. 
@@ -228,7 +237,7 @@ As before, we get model results, using `getResults()` from our helper script, `h
 
 ```{r,eval=TRUE}
 source("helper.R")
-results <- getResults(brca,model,
+results <- getResults(brca,model_full,
 	featureSelCutoff=9L,
 	featureSelPct=0.9)
 ```
@@ -241,13 +250,13 @@ confusionMatrix(model_full)
 ## View top-scoring pathways with EnrichmentMap
 We will now visualize top-scoring pathways using EnrichmentMap.
 
-```{r,eval=TRUE}
+```{r,eval=FALSE}
 ###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],
 ###         groupClusters=TRUE, hideNodeLabels=TRUE)
 ```
 
 
 ## sessionInfo
-```{r,eval=TRUE}
+```{r,eval=FALSE}
 sessionInfo()
 ```
