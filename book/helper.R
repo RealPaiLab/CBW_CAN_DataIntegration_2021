@@ -109,27 +109,30 @@ return(list(
 
 #' wrapper to create input files for Enrichment Map
 #'
-#' @param res (list) output of buildPredictor() function
+#' @param model (list) output of buildPredictor() function
 #' @param featScores (list) keys are classes, values are matrices with feature scores for all 
 #' train/test splits. Output of runOverallFeatureSelection()
 #' @param pathwayList (list) output of readPathwayFile() used to make pathway-level features for predictor
 #' @param EMapMinScore (integer) minimum score for Enrichment Map
 #' @param EMapMaxScore (integer) maximum score for Enrichment Map
-#' @param featureSelPct (numeric between 0 and 1) percent of splits for which feature must have score in range
+#' @param EMapPctPass (numeric between 0 and 1) percent of splits for which feature must have score in range
 #'  [EMapMinScore,EMapMaxScore] to be included for EnrichmentMap visualization
 #' @return 
-makeInputForEnrichmentMap <- function(res,featScores,pathwayList,EMapMinScore=0L, EMapMaxSore=1L,
-    featureSelPct)
+makeInputForEnrichmentMap <- function(model,results,pathwayList,EMapMinScore=0L, EMapMaxSore=1L,
+    EMapPctPass=0.5,outDir)
 {
-message("* Getting EnrichmentMap input")
+    featScores <- results$featureScores
+
+message("* Creating input files for EnrichmentMap")
 Emap_res <- getEMapInput_many(featScores,
     pathwayList,
     minScore=EMapMinScore,
     maxScore=EMapMaxSore,
-    pctPass=featureSelPct,
-    res$inputNets,
+    pctPass=EMapPctPass,
+    model$inputNets,
     verbose=FALSE
 )
+
 gmtFiles <- list()
 nodeAttrFiles <- list()
 
@@ -153,6 +156,8 @@ for (g in names(Emap_res)) {
     }
 close(conn)
 }
+
+return(list(GMTfiles=gmtFiles,NodeStyles=nodeAttrFiles))
 }
 
 #' get the integrated patient similarity network made of selected features
@@ -216,7 +221,7 @@ createMultiAssayExperiment <- function(dataTables,pheno){
 confusionMatrix <- function(model) {
     require(plotrix)
 
-    nmList <- grep("Split",names(model))
+    nmList <- names(model)[grep("Split",names(model))]
     cl <- sort(unique(model$Split1$STATUS))
     conf <- list()
     mega <- NULL
@@ -231,15 +236,19 @@ confusionMatrix <- function(model) {
         mega <- round(mega*100,2)
         mega <- t(mega)
         metric <- "%% Accuracy"
-    
+        
+        tbl <- table(model$Split1$predictions$STATUS)
+        nm <- names(tbl); val <- as.integer(tbl)
+        ttl <- sprintf("%s\n(N=%i)",rownames(mega),val[match(rownames(mega),nm)])
+
     par(mar=c(4,8,2,2))
     color2D.matplot(mega,show.values=TRUE, border="white", 
         #cs1=c(1,1,1),cs2=c(1,0.5,0),cs3=c(0,0.5,0), 
         extremes=c(1,2),
         axes=FALSE,        
-        ylab="Actual class",xlab="Predicted class")
+        xlab="Predicted class",ylab="")
     axis(1,at=seq_len(ncol(mega))-0.5,labels=colnames(mega))
-    axis(2,at=seq_len(ncol(mega))-0.5,labels=rev(rownames(mega)),las=2)
+    axis(2,at=seq_len(ncol(mega))-0.5,labels=rev(ttl),las=2)
     title(sprintf("Confusion matrix: Accuracy (avg of %i splits)",length(conf)))
 
     return(list(splitWiseConfMatrix=conf, average=mega))

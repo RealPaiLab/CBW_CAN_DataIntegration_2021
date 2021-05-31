@@ -18,7 +18,7 @@ knitr::include_graphics("images/Lab2_design.jpg")
 
 Let's fetch the BRCA data using `curatedTCGAData` again, this time only the gene expression data. Remember, the clinical data we automatically get in the `colData()` slot returned.
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 suppressMessages(library(curatedTCGAData))
 brca <- suppressMessages(
    curatedTCGAData(
@@ -29,23 +29,22 @@ brca <- suppressMessages(
 
 Let's look at the data. Notice that we now only have one -omic assay, gene expression measures from microarrays.
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 brca
 ```
 
 As before, we prepare the data. I highly recommend separating the script that prepares the data from the one running the predictor for improved management, readability and debuggability.
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 source("prepare_data.R")
-brca <- prepareDataForCBW(brca)
+brca <- prepareDataForCBW(brca, setBinary=TRUE)
 ```
 
 ## Rules to create features (patient similarity networks)
-
 Load the `netDx` package and initialize the `groupList` object, where we will store our grouping rules.
 Recall that `groupList` is a list-of-lists, with the top tier containing data layer names, and that the layer names must match `names(assays(brca))` or whatever your `MultiAssayExperiment` object is called.
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 suppressWarnings(suppressMessages(require(netDx)))
 groupList <- list()
 ```
@@ -59,7 +58,7 @@ Whicever list you use can be pruned by constraining the min/max number of genes 
 
 There are two ways of providing pathway data to netDx:
 1. You can **download** a compilation of pathways from curated databases using the `fetchPathwayDefinitions()` function in netDx, like so:
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 x <- fetchPathwayDefinitions("March",2021)
 x
 ```
@@ -74,14 +73,14 @@ knitr::include_graphics("images/GMT_screenshot.png")
 
 We then use `readPathways()` to read the pathways into a list format to provide the predictor with. So the full call looks like this:
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 pathList <- readPathways(fetchPathwayDefinitions("March",2021))
 head(pathList)
 ```
 
 2. Alternatively, you can also provide a custom pathway set to netDx by reading in a GMT file, using the `readPathways()` function. In this example, I've downloaded a geneset of [pathways often dysregulated in cancer](http://www.gsea-msigdb.org/gsea/msigdb/collections.jsp#C7), set C6 from MSigDB (REF):
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 #####TBA
 ###myGMTfile <- "supporting_files/c6.all.c7.4.symbols.gmt"
 ###file.exists(myGMTfile)
@@ -94,7 +93,7 @@ For this tutorial we will limit ourselves to the first set of pathways and use `
 **NOTE: The pathway definition file should use the same identifier type as your patient data. For instance, if the genes in your transcriptomic data are represented using [HGNC symbols](https://www.genenames.org/tools/search/), then your pathway definition file must also use HGNC symbols (e.g. *ID2S*), and not a different type of identifier, such as Ensembl IDs (which look like this: *ENSG00000010404*).**
 
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 groupList[["BRCA_mRNAArray-20160128"]] <- pathList 
 ```
 
@@ -107,14 +106,14 @@ So here, we map the following:
 * `stage` to `STAGE`
 
 These variables must be present in the `colData()` slot:
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 pheno <- colData(brca)
 head(pheno[,c("patient.age_at_initial_pathologic_diagnosis","STAGE")])
 ```
 
 We now add the entry into `groupList`. The entry for `clinical` is special because netDx will look for corresponding variables in the sample metadata table, `colData()`, rather than looking for "clinical"  within `assays(brca)`.
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 groupList[["clinical"]] <- list(
       age="patient.age_at_initial_pathologic_diagnosis",
 	   stage="STAGE"
@@ -152,7 +151,7 @@ When we're done, this is what the `makeNets` function look like.
 
 *Note: I realize this may be complicated. Future versions of netDx will simplify this syntax.*
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 makeNets <- function(dataList, groupList, netDir,...) {
 	netList <- c() 
 
@@ -201,34 +200,35 @@ Now we build our predictors. For this tutorial, we use two train/test splits. Fo
 
 **Realistic parameters:** When running this with your project, reasonable values are  `numSplits=10L` (10 is a good start, just to see if you get signal, 100+ if firming up for publication), `featScoreMax=10L`, `featSelCutoff=9L`.
  
-```{r,eval=FALSE}
-t0 <- Sys.time()
-set.seed(42) # make results reproducible
-outDir <- paste(tempdir(),"pred_output",sep=getFileSep()) # use absolute path
-numSplits <- 2L
-model <- suppressMessages(
-   buildPredictor(
-	   dataList=brca,
-	   groupList=groupList,
-	   makeNetFunc=makeNets,
-	   outDir=outDir, 
-	   numSplits=numSplits, 
-	   featScoreMax=2L, 
-	   featSelCutoff=1L,
-	   numCores=4L
-	   )
-)
-t1 <- Sys.time()
-print(t1-t0) # time taken
+```{r,eval=TRUE}
+###t0 <- Sys.time()
+###set.seed(42) # make results reproducible
+###outDir <- paste(tempdir(),"pred_output",sep=getFileSep()) # use absolute path
+###numSplits <- 2L
+###model <- suppressMessages(
+###   buildPredictor(
+###	   dataList=brca,
+###	   groupList=groupList,
+###	   makeNetFunc=makeNets,
+###	   outDir=outDir, 
+###	   numSplits=numSplits, 
+###	   featScoreMax=2L, 
+###	   featSelCutoff=1L,
+###	   numCores=4L
+###	   )
+###)
+###t1 <- Sys.time()
+###print(t1-t0) # time taken
 ```
 
 The above settings were chosen to Let's actually load data generated by reasonable parameters, e.g. `numSplits=10L`, `featScoreMax=10L`, `featSelCutoff=9L`, generated for this tutorial:
 
 ```{r,eval=TRUE}
 outFile <- sprintf("%s/CBW_Lab2_full.rda",tempdir())
-download.file("https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/brca_pathways_full.rda", 
-	destfile=outFile)
-lnames <- load(outFile)
+lnames <- load("/home/spai/data/brca_binary_pathways.rda")
+#download.file("https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/brca_pathways_full.rda", 
+#	#destfile=outFile)
+#lnames <- load(outFile)
 ```
 We can see the objects in the file using `lnames()`. 
 
@@ -244,19 +244,64 @@ results <- getResults(brca,model_full,
 
 Let's examine our confusion matrix:
 ```{r,eval=TRUE}
-confusionMatrix(model_full)
+confMat <- confusionMatrix(model_full)
 ```
 
-## View top-scoring pathways with EnrichmentMap
-We will now visualize top-scoring pathways using EnrichmentMap.
+This function returns the confusion matrix for each split, as well as the average shown in the image above:
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
+summary(confMat)
+```
+
+## Visualize top pathways in Cytoscape
+
+We will now visualize top-scoring pathways using the Cytoscape visualization EnrichmentMap. Recall from the XXX module that an EnrichmentMap is a network visualization of related gene-sets, where each node is a pathway and edges connect similar pathways. 
+
+Let us say we only want to see pathways that scored in some target range for "most" of the trials; i.e. consistently high-scoring pathways.
+We quantify this by asking only for features that score [`EMapMinScore`,`EMapMaxScore`] for `EMapPctPass` fraction of trials.
+
+Here we ask for features scoring 7+ out of 10 for at least 70% of the train/test splits. 
+
+```{r,eval=TRUE}
+emap <- makeInputForEnrichmentMap (
+	model=model_full,
+	results=results,
+	pathwayList=pathList,
+	EMapMinScore=7L, 
+	EMapMaxSore=10L,
+	EMapPctPass=0.7,
+	outDir="/home/spai/data"
+)
+```
+This call will return paths to the output files, which you need to now download from AWS to your personal computer:
+
+```{r,eval=TRUE}
+emap
+```
+
+Download these now by opening your web browser to: http://<your student instance>. 
+
+Now let's use Cytoscape to create an EnrichmentMap.
+
+1. Go to Apps > EnrichmentMap.
+2. In the dialog box, click "**+**" on the top-left.
+3. In the right hand panel that opens, select "Analysis type: Generic/gProfiler/Enrichr"
+4. Change "GMT:" to the file you just downloaded: e.g. the file for Luminal.A. 
+5. In the bottom panel, click "Show Advanced Options".
+6. Bottom panel, right: set cutoff = 0.05; metric = Jaccard.
+7. Click "Build."
+
+You should now see a network like this
+
+**INSERT NETWORK IMAGE**
+
+```{r,eval=TRUE}
 ###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],
 ###         groupClusters=TRUE, hideNodeLabels=TRUE)
 ```
 
 
 ## sessionInfo
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 sessionInfo()
 ```
