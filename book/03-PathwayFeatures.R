@@ -27,7 +27,7 @@ knitr::include_graphics("images/GMT_screenshot.png")
 
 
 ## ----eval=TRUE------------------------------------------------------------------------------------------------------------------------------------------------------
-pathList <- readPathways(fetchPathwayDefinitions("March",2021))
+pathList <- readPathways(fetchPathwayDefinitions("January",2018))
 head(pathList)
 
 
@@ -142,15 +142,15 @@ results <- getResults(brca,model,
 ###
 ###
 ##### ----eval=TRUE------------------------------------------------------------------------------------------------------------------------------------------------------
-###emap <- makeInputForEnrichmentMap (
-###	model=model_full,
-###	results=results,
-###	pathwayList=pathList,
-###	EMapMinScore=7L, 
-###	EMapMaxSore=10L,
-###	EMapPctPass=0.7,
-###	outDir="/home/spai/data"
-###)
+emap <- makeInputForEnrichmentMap (
+	model=model_full,
+	results=results,
+	pathwayList=pathList,
+	EMapMinScore=7L, 
+	EMapMaxSore=10L,
+	EMapPctPass=0.7,
+	outDir="/home/spai/data"
+)
 ###
 
 ## ----eval=TRUE------------------------------------------------------------------------------------------------------------------------------------------------------
