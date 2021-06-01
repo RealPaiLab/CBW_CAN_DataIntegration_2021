@@ -388,29 +388,92 @@ This list contains:</p>
 <p>Now we get model output, including performance for various train/test splits and consistently high-scoring features. We’ve actually generated results using more real-world parameters, including 10 train/test splits and a greater dynamic range for feature scores (<code>featScoreMax=10L</code> and <code>featSelCutoff=9L</code>).</p>
 <p>Let’s load those for a better experience exploring results:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb21-1" aria-hidden="true" tabindex="-1"></a>outFile <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;%s/CBW_Lab1_full.rda&quot;</span>,<span class="fu">tempdir</span>())</span>
-<span id="cb21-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/gmt_pathway_2021/Lab1_10splits.rda&quot;</span>,</span>
+<span id="cb21-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab1_files/Lab1_10splits.rda&quot;</span>,</span>
 <span id="cb21-3"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">destfile=</span>outFile)</span>
 <span id="cb21-4"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb21-4" aria-hidden="true" tabindex="-1"></a>lnames <span class="ot">&lt;-</span> <span class="fu">load</span>(outFile)</span></code></pre></div>
 <p><code>helper.R</code> contains convenience functions to do this, which will be integrated into upcoming versions of netDx.</p>
 <p>In the function below, we define top-scoring features as those which score at least 2 in at least half of the train/test splits</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;helper.R&quot;</span>)</span>
-<span id="cb22-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb22-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">getResults</span>(brca,model,<span class="at">featureSelCutoff=</span>2L,</span>
-<span id="cb22-3"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">featureSelPct=</span><span class="fl">0.5</span>)</span></code></pre></div>
+<span id="cb22-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb22-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">getResults</span>(brca,model_full,<span class="at">featureSelCutoff=</span>9L,</span>
+<span id="cb22-3"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">featureSelPct=</span><span class="fl">0.9</span>)</span></code></pre></div>
+<pre><code>## Detected 10 splits and 3 classes</code></pre>
+<pre><code>## * Compiling feature scores and calling selected features</code></pre>
 <p><code>results</code> contains <code>performance</code>, <code>selectedFeatures</code> for each patient label, and the table of feature <code>scores</code>.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results)</span></code></pre></div>
+<pre><code>##                  Length Class  Mode
+## selectedFeatures 2      -none- list
+## featureScores    3      -none- list
+## performance      2      -none- list</code></pre>
 <p>Look at the performance:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb24-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>performance</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb27-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>performance</span></code></pre></div>
+<pre><code>## $meanAccuracy
+## [1] 0.7610799
+## 
+## $splitAccuracy
+##  [1] 0.7741935 0.7204301 0.7500000 0.7419355 0.7419355 0.8279570 0.7826087 0.8152174 0.7065217 0.7500000</code></pre>
 <p>Look at feature scores for all labels, across all train-test splits:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb25-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>featureScores</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb29-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>featureScores</span></code></pre></div>
+<pre><code>## $Luminal.A
+##                              Feature Split1 Split2 Split3 Split4 Split5 Split6 Split7 Split8 Split9 Split10
+## 1 BRCA_Methylation_methyl27-20160128      7      9      9     10      9      8      8      7     10      10
+## 2         BRCA_miRNASeqGene-20160128      9      5      6     10      5      6      6      9     10       7
+## 3            BRCA_mRNAArray-20160128     10     10     10     10     10     10     10     10     10      10
+## 4            BRCA_RPPAArray-20160128     10     10     10     10     10     10     10     10     10      10
+## 
+## $Basal.like
+##                              Feature Split1 Split2 Split3 Split4 Split5 Split6 Split7 Split8 Split9 Split10
+## 1 BRCA_Methylation_methyl27-20160128     10     10     10     10     10     10     10     10     10      10
+## 2         BRCA_miRNASeqGene-20160128     NA      4     NA      1      4      1     NA     NA      7       2
+## 3            BRCA_mRNAArray-20160128     10     10     10     10     10     10     10     10     10      10
+## 4            BRCA_RPPAArray-20160128     10     10     10     10     10     10     10     10     10      10
+## 
+## $Luminal.B
+##                              Feature Split1 Split2 Split3 Split4 Split5 Split6 Split7 Split8 Split9 Split10
+## 1 BRCA_Methylation_methyl27-20160128     10     10     10     10     10     10     10     10     10      10
+## 2            BRCA_mRNAArray-20160128     10     10     10     10     10     10     10     10     10      10
+## 3            BRCA_RPPAArray-20160128     10     10     10     10     10     10     10     10     10      10</code></pre>
 <p>And here are selected features, which are those scoring 2 out of 2 in at least half of the splits. This threshold is simply for illustration. In practice we would run at least 10 train/test splits (ideally 100+), and look for features that score 7+ out of 10 in &gt;70% splits.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb26-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>selectedFeatures</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb31-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>selectedFeatures</span></code></pre></div>
+<pre><code>## $featScores
+## $featScores$Luminal.A
+##                              Feature Split1 Split2 Split3 Split4 Split5 Split6 Split7 Split8 Split9 Split10
+## 1 BRCA_Methylation_methyl27-20160128      7      9      9     10      9      8      8      7     10      10
+## 2         BRCA_miRNASeqGene-20160128      9      5      6     10      5      6      6      9     10       7
+## 3            BRCA_mRNAArray-20160128     10     10     10     10     10     10     10     10     10      10
+## 4            BRCA_RPPAArray-20160128     10     10     10     10     10     10     10     10     10      10
+## 
+## $featScores$Basal.like
+##                              Feature Split1 Split2 Split3 Split4 Split5 Split6 Split7 Split8 Split9 Split10
+## 1 BRCA_Methylation_methyl27-20160128     10     10     10     10     10     10     10     10     10      10
+## 2         BRCA_miRNASeqGene-20160128     NA      4     NA      1      4      1     NA     NA      7       2
+## 3            BRCA_mRNAArray-20160128     10     10     10     10     10     10     10     10     10      10
+## 4            BRCA_RPPAArray-20160128     10     10     10     10     10     10     10     10     10      10
+## 
+## $featScores$Luminal.B
+##                              Feature Split1 Split2 Split3 Split4 Split5 Split6 Split7 Split8 Split9 Split10
+## 1 BRCA_Methylation_methyl27-20160128     10     10     10     10     10     10     10     10     10      10
+## 2            BRCA_mRNAArray-20160128     10     10     10     10     10     10     10     10     10      10
+## 3            BRCA_RPPAArray-20160128     10     10     10     10     10     10     10     10     10      10
+## 
+## 
+## $selectedFeatures
+## $selectedFeatures$Luminal.A
+## [1] &quot;BRCA_Methylation_methyl27-20160128&quot; &quot;BRCA_miRNASeqGene-20160128&quot;         &quot;BRCA_mRNAArray-20160128&quot;           
+## [4] &quot;BRCA_RPPAArray-20160128&quot;           
+## 
+## $selectedFeatures$Basal.like
+## [1] &quot;BRCA_Methylation_methyl27-20160128&quot; &quot;BRCA_miRNASeqGene-20160128&quot;         &quot;BRCA_mRNAArray-20160128&quot;           
+## [4] &quot;BRCA_RPPAArray-20160128&quot;           
+## 
+## $selectedFeatures$Luminal.B
+## [1] &quot;BRCA_Methylation_methyl27-20160128&quot; &quot;BRCA_mRNAArray-20160128&quot;            &quot;BRCA_RPPAArray-20160128&quot;</code></pre>
 <p>We finally get the integrated PSN and visualize it using a tSNE plot:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb27-1" aria-hidden="true" tabindex="-1"></a>psn <span class="ot">&lt;-</span> <span class="fu">getPSN</span>(brca,groupList,makeNets,results<span class="sc">$</span>selectedFeatures)</span>
-<span id="cb27-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-3"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb27-3" aria-hidden="true" tabindex="-1"></a>tsne <span class="ot">&lt;-</span> <span class="fu">tSNEPlotter</span>(</span>
-<span id="cb27-4"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb27-4" aria-hidden="true" tabindex="-1"></a>    psn<span class="sc">$</span>patientSimNetwork_unpruned, </span>
-<span id="cb27-5"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colData</span>(brca)</span>
-<span id="cb27-6"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb27-6" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb33-1" aria-hidden="true" tabindex="-1"></a>psn <span class="ot">&lt;-</span> <span class="fu">getPSN</span>(brca,groupList_full,makeNets_full,results<span class="sc">$</span>selectedFeatures)</span>
+<span id="cb33-2"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb33-3" aria-hidden="true" tabindex="-1"></a>tsne <span class="ot">&lt;-</span> <span class="fu">tSNEPlotter</span>(</span>
+<span id="cb33-4"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb33-4" aria-hidden="true" tabindex="-1"></a>    psn<span class="sc">$</span>patientSimNetwork_unpruned, </span>
+<span id="cb33-5"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colData</span>(brca)</span>
+<span id="cb33-6"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb33-6" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
 </div>
 </div>
 <div id="conclusion" class="section level2">
@@ -421,7 +484,7 @@ This list contains:</p>
 </div>
 <div id="sessioninfo" class="section level2">
 <h2>sessionInfo</h2>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="lab-1-build-3-way-patient-classifier-from-4-data-layers.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.0.5 (2021-03-31)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Ubuntu 20.04.2 LTS
@@ -445,58 +508,59 @@ This list contains:</p>
 ## [17] BiocGenerics_0.36.1        
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] uuid_0.1-4                    AnnotationHub_2.22.1          BiocFileCache_1.14.0         
-##   [4] NMF_0.23.0                    plyr_1.8.6                    igraph_1.2.6                 
-##   [7] RCy3_2.10.2                   lazyeval_0.2.2                splines_4.0.5                
-##  [10] entropy_1.3.0                 BiocParallel_1.24.1           rncl_0.8.4                   
-##  [13] gridBase_0.4-7                scater_1.18.6                 digest_0.6.27                
-##  [16] htmltools_0.5.1.1             foreach_1.5.1                 viridis_0.6.1                
-##  [19] fansi_0.4.2                   magrittr_2.0.1                memoise_2.0.0                
-##  [22] cluster_2.1.1                 doParallel_1.0.16             ROCR_1.0-11                  
-##  [25] limma_3.46.0                  annotate_1.68.0               R.utils_2.10.1               
-##  [28] prettyunits_1.1.1             jpeg_0.1-8.1                  colorspace_2.0-1             
-##  [31] blob_1.2.1                    rappdirs_0.3.3                xfun_0.23                    
-##  [34] dplyr_1.0.6                   jsonlite_1.7.2                crayon_1.4.1                 
-##  [37] RCurl_1.98-1.3                bigmemory.sri_0.1.3           graph_1.68.0                 
-##  [40] genefilter_1.72.1             phylobase_0.8.10              survival_3.2-10              
-##  [43] iterators_1.0.13              ape_5.5                       glue_1.4.2                   
-##  [46] registry_0.5-1                gtable_0.3.0                  zlibbioc_1.36.0              
-##  [49] XVector_0.30.0                DelayedArray_0.16.3           BiocSingular_1.6.0           
-##  [52] kernlab_0.9-29                Rhdf5lib_1.12.1               shape_1.4.6                  
-##  [55] SingleCellExperiment_1.12.0   HDF5Array_1.18.1              scales_1.1.1                 
-##  [58] DBI_1.1.1                     edgeR_3.32.1                  rngtools_1.5                 
-##  [61] Rcpp_1.0.6                    viridisLite_0.4.0             xtable_1.8-4                 
-##  [64] progress_1.2.2                bit_4.0.4                     rsvd_1.0.5                   
-##  [67] glmnet_4.1-1                  netSmooth_1.10.0              httr_1.4.2                   
-##  [70] RColorBrewer_1.1-2            ellipsis_0.3.2                pkgconfig_2.0.3              
-##  [73] XML_3.99-0.6                  R.methodsS3_1.8.1             scuttle_1.0.4                
-##  [76] sass_0.4.0                    dbplyr_2.1.1                  locfit_1.5-9.4               
-##  [79] utf8_1.2.1                    RJSONIO_1.3-1.4               later_1.2.0                  
-##  [82] howmany_0.3-1                 tidyselect_1.1.1              rlang_0.4.11                 
-##  [85] softImpute_1.4-1              reshape2_1.4.4                AnnotationDbi_1.52.0         
-##  [88] BiocVersion_3.12.0            munsell_0.5.0                 tools_4.0.5                  
-##  [91] cachem_1.0.5                  ExperimentHub_1.16.1          generics_0.1.0               
-##  [94] RSQLite_2.2.7                 ade4_1.7-16                   evaluate_0.14                
-##  [97] stringr_1.4.0                 fastmap_1.1.0                 yaml_2.2.1                   
-## [100] knitr_1.33                    bit64_4.0.5                   purrr_0.3.4                  
-## [103] nlme_3.1-152                  sparseMatrixStats_1.2.1       mime_0.10                    
-## [106] R.oo_1.24.0                   pracma_2.3.3                  xml2_1.3.2                   
-## [109] rstudioapi_0.13               compiler_4.0.5                interactiveDisplayBase_1.28.0
-## [112] beeswarm_0.3.1                curl_4.3.1                    tibble_3.1.2                 
-## [115] bslib_0.2.5.1                 RNeXML_2.4.5                  stringi_1.6.2                
-## [118] highr_0.9                     RSpectra_0.16-0               lattice_0.20-41              
-## [121] Matrix_1.3-2                  vctrs_0.3.8                   pillar_1.6.1                 
-## [124] lifecycle_1.0.0               rhdf5filters_1.2.1            BiocManager_1.30.15          
-## [127] jquerylib_0.1.4               combinat_0.0-8                zinbwave_1.12.0              
-## [130] BiocNeighbors_1.8.2           data.table_1.14.0             bitops_1.0-7                 
-## [133] irlba_2.3.3                   httpuv_1.6.1                  R6_2.5.0                     
-## [136] bookdown_0.22                 promises_1.2.0.1              gridExtra_2.3                
-## [139] vipor_0.4.5                   codetools_0.2-18              MASS_7.3-53.1                
-## [142] assertthat_0.2.1              pkgmaker_0.32.2               withr_2.4.2                  
-## [145] GenomeInfoDbData_1.2.4        locfdr_1.1-8                  hms_1.1.0                    
-## [148] grid_4.0.5                    beachmat_2.6.4                tidyr_1.1.3                  
-## [151] rmarkdown_2.8                 DelayedMatrixStats_1.12.3     shiny_1.6.0                  
-## [154] clusterExperiment_2.10.1      tinytex_0.31                  ggbeeswarm_0.6.0</code></pre>
+##   [1] utf8_1.2.1                    R.utils_2.10.1                tidyselect_1.1.1             
+##   [4] RSQLite_2.2.7                 AnnotationDbi_1.52.0          grid_4.0.5                   
+##   [7] combinat_0.0-8                BiocParallel_1.24.1           RNeXML_2.4.5                 
+##  [10] munsell_0.5.0                 codetools_0.2-18              withr_2.4.2                  
+##  [13] colorspace_2.0-1              highr_0.9                     knitr_1.33                   
+##  [16] uuid_0.1-4                    zinbwave_1.12.0               rstudioapi_0.13              
+##  [19] SingleCellExperiment_1.12.0   ROCR_1.0-11                   NMF_0.23.0                   
+##  [22] GenomeInfoDbData_1.2.4        bit64_4.0.5                   vctrs_0.3.8                  
+##  [25] generics_0.1.0                xfun_0.23                     BiocFileCache_1.14.0         
+##  [28] R6_2.5.0                      doParallel_1.0.16             ggbeeswarm_0.6.0             
+##  [31] netSmooth_1.10.0              rsvd_1.0.5                    RJSONIO_1.3-1.4              
+##  [34] locfit_1.5-9.4                bitops_1.0-7                  rhdf5filters_1.2.1           
+##  [37] cachem_1.0.5                  DelayedArray_0.16.3           assertthat_0.2.1             
+##  [40] promises_1.2.0.1              scales_1.1.1                  beeswarm_0.3.1               
+##  [43] gtable_0.3.0                  phylobase_0.8.10              beachmat_2.6.4               
+##  [46] rlang_0.4.11                  genefilter_1.72.1             splines_4.0.5                
+##  [49] lazyeval_0.2.2                BiocManager_1.30.15           yaml_2.2.1                   
+##  [52] reshape2_1.4.4                httpuv_1.6.1                  tools_4.0.5                  
+##  [55] bookdown_0.22                 gridBase_0.4-7                ellipsis_0.3.2               
+##  [58] jquerylib_0.1.4               RColorBrewer_1.1-2            Rcpp_1.0.6                   
+##  [61] plyr_1.8.6                    sparseMatrixStats_1.2.1       progress_1.2.2               
+##  [64] zlibbioc_1.36.0               purrr_0.3.4                   RCurl_1.98-1.3               
+##  [67] prettyunits_1.1.1             viridis_0.6.1                 cluster_2.1.1                
+##  [70] tinytex_0.31                  magrittr_2.0.1                data.table_1.14.0            
+##  [73] RSpectra_0.16-0               hms_1.1.0                     mime_0.10                    
+##  [76] evaluate_0.14                 xtable_1.8-4                  XML_3.99-0.6                 
+##  [79] jpeg_0.1-8.1                  gridExtra_2.3                 shape_1.4.6                  
+##  [82] compiler_4.0.5                scater_1.18.6                 tibble_3.1.2                 
+##  [85] RCy3_2.10.2                   crayon_1.4.1                  R.oo_1.24.0                  
+##  [88] htmltools_0.5.1.1             entropy_1.3.0                 later_1.2.0                  
+##  [91] tidyr_1.1.3                   howmany_0.3-1                 DBI_1.1.1                    
+##  [94] ExperimentHub_1.16.1          dbplyr_2.1.1                  MASS_7.3-53.1                
+##  [97] rappdirs_0.3.3                Matrix_1.3-2                  ade4_1.7-16                  
+## [100] R.methodsS3_1.8.1             igraph_1.2.6                  pkgconfig_2.0.3              
+## [103] bigmemory.sri_0.1.3           rncl_0.8.4                    registry_0.5-1               
+## [106] locfdr_1.1-8                  scuttle_1.0.4                 xml2_1.3.2                   
+## [109] foreach_1.5.1                 annotate_1.68.0               vipor_0.4.5                  
+## [112] bslib_0.2.5.1                 rngtools_1.5                  pkgmaker_0.32.2              
+## [115] XVector_0.30.0                stringr_1.4.0                 digest_0.6.27                
+## [118] pracma_2.3.3                  graph_1.68.0                  softImpute_1.4-1             
+## [121] rmarkdown_2.8                 edgeR_3.32.1                  DelayedMatrixStats_1.12.3    
+## [124] curl_4.3.1                    kernlab_0.9-29                shiny_1.6.0                  
+## [127] lifecycle_1.0.0               nlme_3.1-152                  jsonlite_1.7.2               
+## [130] clusterExperiment_2.10.1      Rhdf5lib_1.12.1               BiocNeighbors_1.8.2          
+## [133] viridisLite_0.4.0             limma_3.46.0                  fansi_0.4.2                  
+## [136] pillar_1.6.1                  lattice_0.20-41               fastmap_1.1.0                
+## [139] httr_1.4.2                    survival_3.2-10               interactiveDisplayBase_1.28.0
+## [142] glue_1.4.2                    png_0.1-7                     iterators_1.0.13             
+## [145] BiocVersion_3.12.0            glmnet_4.1-1                  bit_4.0.4                    
+## [148] stringi_1.6.2                 sass_0.4.0                    HDF5Array_1.18.1             
+## [151] blob_1.2.1                    BiocSingular_1.6.0            AnnotationHub_2.22.1         
+## [154] memoise_2.0.0                 dplyr_1.0.6                   irlba_2.3.3                  
+## [157] ape_5.5</code></pre>
 
 </div>
 </div>
