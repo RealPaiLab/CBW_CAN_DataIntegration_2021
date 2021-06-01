@@ -1,49 +1,75 @@
-3-phosphoinositide_degradation	3-phosphoinositide_degradation	SACM1L	INPP5F	OCRL	SYNJ2	SYNJ1	TPTE2	INPP4A	INPP4B	PTPMT1	MTMR14	INPP5E	INPPL1	PTEN	MTMR3	PIP4P2	INPP5B	PIP4P1	INPP5D	INPP5J	INPP5K
+Activation_of_dna_fragmentation_factor	Activation_of_dna_fragmentation_factor	Activation_of_dna_fragmentation_factor
+Activation_of_the_pre-replicative_complex	Activation_of_the_pre-replicative_complex	Activation_of_the_pre-replicative_complex
+Amine_compound_slc_transporters	Amine_compound_slc_transporters	Amine_compound_slc_transporters
+Apoptosis_induced_dna_fragmentation	Apoptosis_induced_dna_fragmentation	Apoptosis_induced_dna_fragmentation
 Biocarta_ace2_pathway	Biocarta_ace2_pathway	COL4A6	COL4A5	REN	AGTR2	ACE2	COL4A2	CMA1	COL4A1	COL4A4	COL4A3	AGTR1
-Biocarta_akapcentrosome_pathway	Biocarta_akapcentrosome_pathway	NUP85	CDC2	PPP2CA	AKAP9	PCNT	PRKAG1	PRKCE	PKN1	ARHA	PRKACG	MAP2
-Biocarta_arf_pathway	Biocarta_arf_pathway	MYC	RAC1	POLR1A	POLR1C	MDM2	POLR1D	TWIST1	TBX2	PIK3R1	RB1	PIK3CA	CDKN2A
+Biocarta_dnafragment_pathway	Biocarta_dnafragment_pathway	Biocarta_dnafragment_pathway
 Biocarta_gata3_pathway	Biocarta_gata3_pathway	IL4	GATA3	IL5	MAP2K3	MAPK14	PRKAR1B	NFATC2	PRKAR1A	NFATC1	PRKACG	IL13
-Biocarta_hsp27_pathway	Biocarta_hsp27_pathway	HEL-S-102	BCL2	TNFSF6	MAPKAPK2	TNF-alpha	ACTA1	MAPKAPK3	APAF1	HSPB2-C11orf52	CASP9	IL1A	CASP3
-Biocarta_longevity_pathway	Biocarta_longevity_pathway	GHR	GH1	IGF1	IGF1R	DKFZp564M2422	HRAS	HEL-S-44	SHC1	PIK3R1	FOXO3	PIK3CA
+Biocarta_her2_pathway	Biocarta_her2_pathway	IL6	GRB2	ERBB3	MAPK1	SOS1	GRIP1	ERBB2	IL6ST	HRAS	IL6R	SHC1	PIK3R1	STAT3	CARM1	RAF1	ERBB4	EP300	MAP2K1	MAPK3	PIK3CA	EGFR
 Biocarta_mcm_pathway	Biocarta_mcm_pathway	CDC6	MCM6	MCM2	KITLG	CDK2	CCNE1	CDKN1B	ORC1L	CDT1	MCM7	ORC2L	ORC6L	ORC3	MCM5
-Biocarta_mpr_pathway	Biocarta_mpr_pathway	CAP1	PAQR7	CDC2	PAQR5	MAPK1	HRAS	PGR	ADCY1	PIN1	ACTA1	PRKAR1B	MYT1	MAPK3	PRKAR1A	PRKACG	CCNB1	RPS6KA1
+Biocarta_mta3_pathway	Biocarta_mta3_pathway	MBD3	GREB1	HEL-S-162eP	HDAC1	PDZK1	TUBA4A	TUBA1A	HEL-S-130P	TUBA2	MTA3	HSPB2-C11orf52	HEL-S-87p	HEL-S-102	SNAI2	SNAI1
 Biocarta_p27_pathway	Biocarta_p27_pathway	TFDP1	CDK2	SKP2	CCNE1	CKS1B	RBX1	RB1	NEDD8	CDKN1B	UBE2M	SKP1
-Biocarta_plateletapp_pathway	Biocarta_plateletapp_pathway	COL4A6	SERPINE1	COL4A5	PLG	F11	APP	PLAT	COL4A2	COL4A1	COL4A4	COL4A3
-Biocarta_proteasome_pathway	Biocarta_proteasome_pathway	RPN1	UBE3A	UBE2A	UBE1	PSMA4	HEL-S-276	PSMB6	RPN2	PSMB2	PSMA2	PSMB3
-Biocarta_shh_pathway	Biocarta_shh_pathway	DYRK1A	DYRK1B	GLI3	SHH	SMO	PRKAR1B	SUFU	PTCH1	PRKAR1A	GSK3B	PRKACG
-Biocarta_tff_pathway	Biocarta_tff_pathway	GHR	GH1	GRB2	MAPK1	SOS1	ERBB2	TFF2	HRAS	SHC1	PIK3R1	ARHA	BAD	CTNNB1	TFF1	ITGB1	TFF3	CASP9	MAPK3	APAF1	PIK3CA	EGFR
+Biocarta_p35alzheimers_pathway	Biocarta_p35alzheimers_pathway	Biocarta_p35alzheimers_pathway
+Biotin_transport_and_metabolism	Biotin_transport_and_metabolism	Biotin_transport_and_metabolism
+Branched-chain_amino_acid_catabolism	Branched-chain_amino_acid_catabolism	Branched-chain_amino_acid_catabolism
 Cholesterol_biosynthesis_i	Cholesterol_biosynthesis_i	NSDHL	CYP51A1	MSMO1	HSD17B7	LBR	DHCR24	TM7SF2	SQLE	EBP	SC5D	DHCR7	LSS	FDFT1
-Cholesterol_biosynthesis_iii__via_desmosterol_	Cholesterol_biosynthesis_iii__via_desmosterol_	NSDHL	CYP51A1	MSMO1	HSD17B7	LBR	DHCR24	TM7SF2	SQLE	EBP	SC5D	DHCR7	LSS	FDFT1
 Cholesterol_biosynthesis_ii__via_24.25-dihydrolanosterol_	Cholesterol_biosynthesis_ii__via_24.25-dihydrolanosterol_	NSDHL	CYP51A1	MSMO1	HSD17B7	LBR	DHCR24	TM7SF2	SQLE	EBP	SC5D	DHCR7	LSS	FDFT1
+Cholesterol_biosynthesis_iii__via_desmosterol_	Cholesterol_biosynthesis_iii__via_desmosterol_	NSDHL	CYP51A1	MSMO1	HSD17B7	LBR	DHCR24	TM7SF2	SQLE	EBP	SC5D	DHCR7	LSS	FDFT1
+Clec7a__dectin-1__induces_nfat_activation	Clec7a__dectin-1__induces_nfat_activation	Clec7a__dectin-1__induces_nfat_activation
+Creatine_metabolism	Creatine_metabolism	Creatine_metabolism
+Cyp2e1_reactions	Cyp2e1_reactions	Cyp2e1_reactions
+Digestion	Digestion	Digestion
+Digestion_of_dietary_carbohydrate	Digestion_of_dietary_carbohydrate	Digestion_of_dietary_carbohydrate
+Dissolution_of_fibrin_clot	Dissolution_of_fibrin_clot	Dissolution_of_fibrin_clot
 Erbb_receptor_signaling_network	Erbb_receptor_signaling_network	NRG2	TGFA	EREG	BTC	EGFR	NRG3	NRG4	HBEGF	NRG1	EGF	ERBB3	AREG	HSP90AA1	ERBB4	ERBB2
+Fatty_acids	Fatty_acids	Fatty_acids
+Fatty_acyl-coa_biosynthesis	Fatty_acyl-coa_biosynthesis	Fatty_acyl-coa_biosynthesis
+Formation_of_senescence-associated_heterochromatin_foci__sahf_	Formation_of_senescence-associated_heterochromatin_foci__sahf_	Formation_of_senescence-associated_heterochromatin_foci__sahf_
 Foxa1_transcription_factor_network	Foxa1_transcription_factor_network	CDKN1B	AR	COL18A1	CEBPB	DSCAM	NCOA3	AP1B1	JUN	POU2F1	TFF1	FOS	SERPINA1	SFTPA2	PRDM15	C4BPB	CYP2C18	SFTPD	FOXA1	GCG	KLK3	NRIP1	NKX3-1	NR2F2	FOXA3	INS	PISD	FOXA2	NFIA	BRCA1	NDUFV3	NFIB	ATP5PF	NFIC	XBP1	CREBBP	SCGB1A1	VTN	ESR1	SFTPA1	SOD1	SP1	EP300	SHH	APOB
-Foxa2_and_foxa3_transcription_factor_networks	Foxa2_and_foxa3_transcription_factor_networks	CREB1	ACADVL	ALAS1	TAT	DLK1	CEBPB	SLC2A2	TTR	UCP2	NKX2-1	ACADM	HADH	PCK1	F2	IGFBP1	CPT1A	HMGCS1	PKLR	KCNJ11	FOXF1	ABCC8	PDX1	APOA1	HNF1A	NF1	FOXA1	CPT1C	G6PC	CPT1B	FOXA3	INS	GCK	FOXA2	BDH1	ALB	ALDOB	NR3C1	TFRC	CEBPA	HNF4A	SP1	CEBPD	AKT1	AFP
-Foxm1_transcription_factor_network	Foxm1_transcription_factor_network	RB1	CCND1	CDK1	GSK3A	NFATC3	MAP2K1	FOS	ETV5	SKP2	BRCA2	CCNA2	LAMA4	ONECUT1	TGFA	CCNB2	FOXM1	AURKB	CENPB	CREBBP	CENPA	CKS1B	NEK2	H2BC1	CCNB1	XRCC1	ESR1	CENPF	HSPA1B	MYC	CDK4	SP1	CHEK2	CDK2	MMP2	EP300	CCNE1	PLK1	BIRC5	CDC25B	CDKN2A	GAS1
-Gluconeogenesis_i	Gluconeogenesis_i	ENO3	VCAN	GPI	GAPDHS	PGK1	ME1	ME3	ME2	PGK2	PCK1	FBP1	FBP2	PGAM1	PGAM2	BPGM	GAPDH	ALDOB	ALDOA	MDH1	MDH2	ENO1	ENO2
+Gaba_synthesis._release._reuptake_and_degradation	Gaba_synthesis._release._reuptake_and_degradation	Gaba_synthesis._release._reuptake_and_degradation
+Glucuronidation	Glucuronidation	Glucuronidation
 Glutathione-mediated_detoxification_i	Glutathione-mediated_detoxification_i	GSTZ1	GSTA5	GSTA4	GSTA3	ANPEP	GSTA2	GSTA1	GGT1	GSTT2B	GSTM5	GSTM4	GSTK1	GSTM3	GGT7	GSTM2	GGT6	GSTM1	GSTO2	MGST3	GSTP1	MGST1	GGH	MGST2	GSTT1
 Glycolysis_i	Glycolysis_i	ENO3	VCAN	GPI	GAPDHS	PGK1	PGK2	FBP1	FBP2	PGAM1	PGAM2	BPGM	GAPDH	TPI1	ALDOB	ALDOA	PKLR	PFKL	PKM	PFKM	PFKP	ENO1	ENO2
-Hallmark_apical_surface	Hallmark_apical_surface	BRCA1	LYN	ADIPOR2	HEL-S-102	DCBLD2	PLAUR	IL2RG	THY1	IL2RB	GAS1	SRPX	PCSK9	CX3CL1	GSTM3	AKAP7	LYPD3	SLC2A4	GATA3	EFNA5	PKHD1	SCUBE1	FLOT2	ATP6V0A4	EPHB4	TMEM8B	SLC34A3	NTNG1	ATP8B1	B4GALT1	NCOA6	ADAM10	CD160	DKFZp781J074	SULF2	RTN4RL1	CROCC	MAL	GHRL	RHCG	MDGA1	APP
-Hallmark_estrogen_response_late	Hallmark_estrogen_response_late	DYNLT3	ITPK1	TOP2A	MYOF	TM4SF13	FOS	IL17RB	NCOR2	SLC7A5	CDC20	TFF3	TFF1	FOXC1	SLC24A3	TMPRSS3	BTG3	SEMA3B	ADD3	TOB1	PAPSS2	PDLIM3	RBBP8	GAL	ETFB	FLNB	MICB	CA12	FARP1	TPBG	KRT13	KLF4	hCG_1811773	DHRS2	KLK10	KRT19	CHPT1	TJP3	FRK	HEL110	TIAM1	PTGER3	S100A9	NAB2	CXCL14	ZFP36	TRIM29	UNC13B	METTL3	PLK4	CACNA2D2	DUSP2	PRLR	ALDH3A2	KIF20A	SORD	PKP3	LLGL2	RNASEH2A	IGSF1	PLAC1	MST160	ASS	ST14	STIL	XRCC3	CDC6	SFN	CYP4F11	TH	DLG5	NMU	GPER	PLXNB1	GLA	FGFR3	MOCS2	ST6GALNAC2	SNX10	SLC2A8	MDK	IMPA2	TPSAB1	JAK1	CHST8	ATP2B4	DCXR	FABP5	LSR	UGDH	DNAJC1	JDP1	SLC29A1	ASCL1	PERP	AGR2	GINS2	COX6C	BATF	MAPK13	SGK1	CXNC	KLNG	PTPN6	IGFBP4	HOMER2	PCP4	HSPA4L	SCARB1	HR	hD53	CELSR2	TFPI2	RAPGEFL1	SOX3	LARGE	BAG1	CCND1	RPS6KA2	CXCL12	MYB	ID2	CCN5	CISH	NPY1R	SERPINA1	PDZK1	OVOL2	SULT2B1	OLFM1	RAB31	SCNN1A	LAMC2	HRASLS3	SERPINA3	AREG	PPIF	PGR	IL6ST	FKBP4	SLC27A2	NBL1	PTGES	FKBP5	SLC26A2	SLC22A5	HEL-S-10	ACOX2	ARL3	HSPB8	ABHD2	SLC1A4	SLC9A3R1	CALCR	ALDH3B1	FDFT1	XBP1	TFAP2C	HEL-76	CD44	OPN3	WFS1	TNNC1	SIAH2	ABCA3	KCNK5b	HEL-S-29	BCL2	DHCR7	RET	CLIC3	NXT1	PRSS23	AFF1	CYP26B1	FAM102A	ANXA9	ISG20	ELOVL5
-Hallmark_peroxisome	Hallmark_peroxisome	RETSAT	TOP2A	PBR	CNBP	DHCR24	ACSL1	IDH1	DLG4	EPHX2	SLC35B2	SLC23A2	ABCD2	ABCD3	ECI2	DKFZp667O1614	LOC51064	HEL111	ABCB1	STS	HEL-S-53e	SMARCC1	NUDT19	CRAT	LONP2	MLYCD	ABCD1	ACOT8	ABCC8	ABCC5	DIO1	FACL4	CADM1	ACSL5	UGT2B17	SLC25A4	PEX2	CEL	GNPAT	SLC25A17	MSH2	PEX6	EHHADH	PEX5	ALDH9A1	CRABP2	SEMA3C	FDPS	CTBP1	HRAS	ABCB4	MVP	PEX11B	DHRS3	CRABP1	CACNA1B	ABCB9	HSD17B11	SULT2B1	CLN8	CLN6	HMGCL	ACOX1	HSD11B2	PRDX5	ATXN1	RDH11	ISOC1	HAO2	RXRG	HSD3B7	SLC27A2	FIS1	NR1i2	SIAH1	VPS4B	PEX13	ESR2	CDK7	FABP6	ALB	SCGB1A1	CTPS1	IDI1	HEL-S-44	ERCC3	PABPC1	ERCC1	FADS1	BCL10	PEX14	DKFZp564M2422	ELOVL5
-Hallmark_unfolded_protein_response	Hallmark_unfolded_protein_response	TUBB2A	EIF4A1	ASNS	SLC7A5	RRP9	DNAJC3	H2AX	DDIT4	KDELR3	NABP1	NHP2	CEBPG	HEL-S-125m	NOLC1	EIF2S1	HEL-S-89n	IARS	GOSR2	POP4	EIF4A3	IFIT1	EDC4	EXOSC5	RPS14	TATDN2	KHSRP	BANF1	CHAC1	TSPYL2	HEL-S-61	SEC31L1	IMP3	DNAJB9	SLC30A5	DKFZp434N1728	HEL-S-99n	DDX10	PDIA5	ERN1	MTHFD2	DKC1	ATF3	GEMIN4	ATP6V0D1	ATF4	SHC1	BAG3	EIF4EBP1	SSR1	FUS	EDEM1	EIF4E	LSM1	LSM4	CNOT4	CNOT2	SRPRA	HYOU1	ALDH18A1	DCP1A	EIF4G1	FKBP14	CKS1B	SERP1	TTC37	CEBPB	WIPI1	YWHAZ	DCP2	ERO1A	SKIV2L2	EXOC2	CXXC1	SDAD1	DKFZp686I0746	EIF4A2	EXOSC4	EXOSC10	EXOSC1	PAIP1	NFYA	NFYB	DKFZp781H1925	PSAT1	NOP56	SPCS3	XPOT	IGFBP1	STC2	SEC11A	SPCS1	SRPRB	SLC1A4	XBP1	WFS1	TARS1	VEGFA	PREB
-Hypoxic_and_oxygen_homeostasis_regulation_of_hif-1-alpha	Hypoxic_and_oxygen_homeostasis_regulation_of_hif-1-alpha	ELOB	HIF1AN	VHL	ELOC	EGLN1	HIF1A	EGLN3	COPS5	RACK1	EGLN2	NAA10	CUL2	HIF3A	TP53	RBX1	OS9	ARNT	HSP90AA1	CDKN2A
-Il27-mediated_signaling_events	Il27-mediated_signaling_events	STAT4	IL12B	JAK2	IL12RB1	STAT5A	STAT1	STAT3	IL18	TYK2	IL6	IL1B	GATA3	IL17A	TBX21	IL2	IFNG	IL6ST	JAK1	EBI3	IL27	IL27RA	IL12A	IL12RB2	STAT2	TNF	TGFB1
+Glycosphingolipid_metabolism	Glycosphingolipid_metabolism	Glycosphingolipid_metabolism
+Hedgehog_ligand_biogenesis	Hedgehog_ligand_biogenesis	Hedgehog_ligand_biogenesis
+Import_of_palmitoyl-coa_into_the_mitochondrial_matrix	Import_of_palmitoyl-coa_into_the_mitochondrial_matrix	Import_of_palmitoyl-coa_into_the_mitochondrial_matrix
+Insulin_receptor_recycling	Insulin_receptor_recycling	Insulin_receptor_recycling
+Interleukin-20_family_signaling	Interleukin-20_family_signaling	Interleukin-20_family_signaling
+Interleukin-27_signaling	Interleukin-27_signaling	Interleukin-27_signaling
+Interleukin-35_signalling	Interleukin-35_signalling	Interleukin-35_signalling
 Lkb1_signaling_events	Lkb1_signaling_events	YWHAB	SIK3	SIK1	SIK2	YWHAQ	SFN	CREB1	TSC2	YWHAG	MARK2	YWHAH	MTOR	RPTOR	AKT1S1	YWHAZ	PRKACA	MAPT	MLST8	TSC1	CDC37	SMAD4	ESR1	EZR	MYC	BRSK1	CTSD	BRSK2	CRTC2	SMARCD3	CAB39	TP53	PSEN2	STK11	MAP2	MARK4	HSP90AA1	STRADA	STRADB	YWHAE	ETV4	GSK3B	STK26
-Nad_salvage_pathway_ii	Nad_salvage_pathway_ii	NT5C3B	NT5E	NT5C1B	NMRK2	NMRK1	ACP6	ENPP1	PXYLP1	ENPP3	NUDT12	NMNAT1	NMNAT3	NMNAT2
-Ngf	Ngf	IRAK1	SP1	NCL	RPS6KA1	MAPK1	SH2B1	MAPK3	NTRK1	DKFZp434N101	MAP2K1	PRKCI	MAP2K2	SHC1	BAD	BRAF	PTPN11	FRS2	CREB1
-Pid_atm_pathway	Pid_atm_pathway	RNF8	SMC3	TP53BP1	RAP80	SMC1A	TERF2	HEL-S-71	RFWD2	RBBP8	H2AX	BLM	MDM2	HTATIP	NBN	CTBP1	HEL-S-1	ATM	MRE11A	RAD50	FANCD2	BRCA1	RAD17	RAD9A	TRIM28	MDC1	CHEK2	ABRAXAS1
-Pid_circadian_pathway	Pid_circadian_pathway	NONO	NR1D1	CSNK1E	NPAS2	PER2	PER1	CRY2	WDR5	CRY1	TIMELESS	BHLHB2	ATR	CHEK1
-Pid_delta_np63_pathway	Pid_delta_np63_pathway	SFN	NR1i1	TOP2A	GSK3B	NOTCH1	STXBP4	DKFZp451O0517	NRG1	RRAD	FBXW7	DLX5	DLX6	TBXT	PPP2R5A	HELLS	GPX2	TCF7L1	ADRM1	MDM2	KRT5	BRCA2	POU2F2	FOSL2	RUNX1	AXL	HES1	FASN	KRT14	RAB38	CEBPD	CDKN2A	ADA	WWP1	BDKRB2	ATM	ITCH	MRE11A	CCNB2	IL1A	TP63	PERP
+Metal_ion_slc_transporters	Metal_ion_slc_transporters	Metal_ion_slc_transporters
+Miscellaneous_substrates	Miscellaneous_substrates	Miscellaneous_substrates
+Mismatch_repair__mmr__directed_by_msh2_msh3__mutsbeta_	Mismatch_repair__mmr__directed_by_msh2_msh3__mutsbeta_	Mismatch_repair__mmr__directed_by_msh2_msh3__mutsbeta_
+Mmr	Mmr	Mmr
+Naplus_cl-_dependent_neurotransmitter_transporters	Naplus_cl-_dependent_neurotransmitter_transporters	Naplus_cl-_dependent_neurotransmitter_transporters
+Nuclear_receptor_transcription_pathway	Nuclear_receptor_transcription_pathway	Nuclear_receptor_transcription_pathway
+Opsins	Opsins	Opsins
+Organic_cation_anion_zwitterion_transport	Organic_cation_anion_zwitterion_transport	Organic_cation_anion_zwitterion_transport
+Ovarian_tumor_domain_proteases	Ovarian_tumor_domain_proteases	Ovarian_tumor_domain_proteases
+Peroxisomal_lipid_metabolism	Peroxisomal_lipid_metabolism	Peroxisomal_lipid_metabolism
+Phase_4_-_resting_membrane_potential	Phase_4_-_resting_membrane_potential	Phase_4_-_resting_membrane_potential
+Phase_ii_-_conjugation_of_compounds	Phase_ii_-_conjugation_of_compounds	Phase_ii_-_conjugation_of_compounds
 Pid_era_genomic_pathway	Pid_era_genomic_pathway	DKFZp761B2210	SRA1	PHB2	PDIA2	DSCAM	LMO4	SET	AP1B1	SAFB	LCOR	PGR	TRIM59	HDAC4	POU4F1	TFF1	PRDM15	POU4F2	ATP5J	CHUK	HSF2	NDUFV3	XBP1	NCOR1	ABCA3	EBAG9	UBA3	DDX54	ESR2	CEBPB	KLRC3	NR0B1	AXIN2	GREB1	HEL-S-130P	CCND1	CD82	NEDD8	HEL-S-62p	UBE2M	NR0B2	NCOA1	NCOR2	MED1	JUN	PRL	MYC	COL18A1	SMAD4	HDAC1	BRCA1	PCNA	EP300	HEL-S-44	CALCOCO1	MPG
 Pid_erbb_network_pathway	Pid_erbb_network_pathway	ERBB3	ERBB2	EGF	NRG1	NRG2	AREG	EREG	BTC	NRG3	ERBB4	NRG4	HBEGF	TGFA	EGFR
-Pid_hif1a_pathway	Pid_hif1a_pathway	COPS5	HIF1A	EGLN1	EGLN2	EGLN3	HIF3A	RBX1	OS9	ARD1A	TCEB1	CDKN2A	VHL	HIF1AN
 Pid_hnf3a_pathway	Pid_hnf3a_pathway	SERPINA1	INS	SFTPD	SFTPA2	C4BPB	DSCAM	DKFZp686I24235	NKX3-1	AP1B1	JUN	GCG	NR2F2	PISD	NFIA	NFIB	TFF1	PRDM15	SCGB1A1	ATP5J	NDUFV3	XBP1	VTN	KLK3	COL18A1	CREBBP	CEBPB	APOB	POU2F1	SP1	FOXA1	SHH	FOS	CDKN1B	BRCA1	FOXA3	FOXA2	EP300	HEL-S-44
-Pid_hnf3b_pathway	Pid_hnf3b_pathway	INS	CREB1	CEBPA	CEBPB	ACADVL	ALAS1	CEBPD	SLC2A2	NR3C1	HEL111	UCP2	NKX2-1	ACADM	NR2A1	PCK1	CPT1A	SP1	IGFBP1	G6PC	FOXA1	HMGCS1	PKLR	ABCC8	FOXF1	PDX1	APOA1	HNF1A	CPT1C	ALB	ALDOB	TCF2	NF1	FOXA3	FOXA2	AFP	DKFZp686O0451	GCK
-Pid_il27_pathway	Pid_il27_pathway	GATA3	IL27RA	IL6	STAT2	IFNG	IL6ST	IL17A	TYK2	STAT4	IL12RB1	STAT3	IL12B	IL12A	TBX21	STAT1	IL1B	JAK1	TNF-alpha	IL2	TGFB1	EBI3	IL18	IL27
-Plasma_membrane_estrogen_receptor_signaling	Plasma_membrane_estrogen_receptor_signaling	PELP1	GNA13	HBEGF	GNA14	SHC1	GNA15	SRC	PIK3CA	GNAQ	GNA11	NRAS	IGF1R	HRAS	PLCB2	GNG2	KRAS	ROCK2	PLCB3	GNB1	PLCB1	GNAI3	GRB2	GNAI1	GNAL	SOS1	MAPK11	STRN	ESR1	ESR2	NOS3	AKT1	MMP2	IGF1	MMP9	RHOA	BCAR1	GNAO1	GNAZ	PIK3R1	MSN	GNAI2
+Pid_lkb1_pathway	Pid_lkb1_pathway	STK11IP	STRADB	ETV4	SFN	STK26	CREB1	SIK1	SNF1LK2	HEL2	MLST8	GSK3B	TSC1	MYC	PRKAG1	SMARCD3	MTOR	SMAD4	EZR	YWHAQ	PSEN2	HEL-S-1	YWHAG	PRKAA1	PRKAA2	HEL-S-130P	YWHAZ	raptor	TSC2	CDC37	PRKAB1	BRSK1	CRTC2	CAB39	AKT1S1	STK11	KIAA0999	MAP2	MARK4	STRADA
+Pid_p38_gamma_delta_pathway	Pid_p38_gamma_delta_pathway	Pid_p38_gamma_delta_pathway
+Presynaptic_nicotinic_acetylcholine_receptors	Presynaptic_nicotinic_acetylcholine_receptors	Presynaptic_nicotinic_acetylcholine_receptors
 Purine_nucleotides__i_de_novo__i__biosynthesis_ii	Purine_nucleotides__i_de_novo__i__biosynthesis_ii	PAICS	GMPS	ADSS1	ADSS2	PPAT	PFAS	IMPDH1	IMPDH2	GART	ADSL	ATIC
-Regulation_of_nuclear_smad2_3_signaling	Regulation_of_nuclear_smad2_3_signaling	JUN	FOS	ATF2	CDKN1A	CITED1	ITGB5	SERPINE1	LAMC1	NR3C1	MED15	SIN3B	SIN3A	MYC	HNF4A	SNIP1	AKT1	EP300	PIAS4	TGIF1	NCOA1	IL10	NCOA2	PIAS3	MEF2C	TGIF2	FOXH1	TFE3	RUNX3	RUNX2	SAP30	RUNX1	AR	KAT2B	KAT2A	RBL1	CREB1	TFDP1	NCOR1	MYOD1	IRF7	ATF3	DLX1	HDAC2	CEBPB	CBFB	MAX	CTBP1	HDAC1	FOXG1	FOXO4	GATA3	FOXO3	FOXO1	RBBP4	GSC	SAP18	RBBP7	E2F4	IGHA1	E2F5	NKX2-5	SKIL	SMAD2	ZBTB17	HSPA8	SMAD4	CREBBP	CDKN2B	SMAD3	VDR	IFNB1	ESR1	SMAD7	SKI	IL5	COL1A2	CDK4	SP1	CDK2	SP3	TCF3	DCP1A
-Regulation_of_telomerase	Regulation_of_telomerase	CDKN1B	IFNAR2	CCND1	NFKB1	JUN	FOS	IL2	IRF1	TERF2	IFNG	ABL1	MAPK1	MAPK3	SIN3B	SIN3A	MYC	AKT1	NCL	BLM	PINX1	SMG6	TGFB1	E6	PARP2	SMG5	TINF2	SAP30	TERF1	DKC1	POT1	TERF2IP	PIF1	TNKS	WRN	ACD	WT1	PTGES3	ZNFX1	HUS1	MTOR	HNRNPC	HDAC2	RPS6KB1	MAX	RAD1	HDAC1	RAD9A	RBBP4	SAP18	RBBP7	MXD1	UBE3A	MRE11	NR2F2	NBN	EGFR	SMAD3	XRCC6	ESR1	XRCC5	EGF	SP1	RAD50	SP3	ATM	TERT	E2F1	HSP90AA1	YWHAE
-Signaling_events_mediated_by_hdac_class_ii	Signaling_events_mediated_by_hdac_class_ii	YWHAB	TUBA1B	HDAC5	HDAC3	GATA1	GATA2	BCL6	HDAC9	TUBB2A	CAMK4	HDAC6	HDAC7	HDAC4	RANBP2	UBE2I	XPO1	SUMO1	NCOR2	GNG2	RFXANK	RANGAP1	BCOR	ANKRA2	RAN	GNB1	ESR1	NR3C1	SRF	GRK2	MEF2C	HDAC10	HDAC11	HSP90AA1	YWHAE
+Reversible_hydration_of_carbon_dioxide	Reversible_hydration_of_carbon_dioxide	Reversible_hydration_of_carbon_dioxide
+Runx2_regulates_osteoblast_differentiation	Runx2_regulates_osteoblast_differentiation	Runx2_regulates_osteoblast_differentiation
+Sa_g1_and_s_phases	Sa_g1_and_s_phases	Sa_g1_and_s_phases
+Sa_reg_cascade_of_cyclin_expr	Sa_reg_cascade_of_cyclin_expr	Sa_reg_cascade_of_cyclin_expr
 Signaling_mediated_by_p38-gamma_and_p38-delta	Signaling_mediated_by_p38-gamma_and_p38-delta	EEF2K	MAP3K20	PKN1	MAPT	MAP2K6	CCND1	SNTA1	MAPK13	MAP2K3	STMN1	MAPK12
+Synthesis_of_ip2._ip._and_ins_in_the_cytosol	Synthesis_of_ip2._ip._and_ins_in_the_cytosol	Synthesis_of_ip2._ip._and_ins_in_the_cytosol
+Synthesis_of_ip3_and_ip4_in_the_cytosol	Synthesis_of_ip3_and_ip4_in_the_cytosol	Synthesis_of_ip3_and_ip4_in_the_cytosol
+Synthesis_of_leukotrienes__lt__and_eoxins__ex_	Synthesis_of_leukotrienes__lt__and_eoxins__ex_	Synthesis_of_leukotrienes__lt__and_eoxins__ex_
+Synthesis_of_pc	Synthesis_of_pc	Synthesis_of_pc
+Synthesis_of_pips_at_the_early_endosome_membrane	Synthesis_of_pips_at_the_early_endosome_membrane	Synthesis_of_pips_at_the_early_endosome_membrane
+Synthesis_of_pyrophosphates_in_the_cytosol	Synthesis_of_pyrophosphates_in_the_cytosol	Synthesis_of_pyrophosphates_in_the_cytosol
+Tfap2__ap-2__family_regulates_transcription_of_growth_factors_and_their_receptors	Tfap2__ap-2__family_regulates_transcription_of_growth_factors_and_their_receptors	Tfap2__ap-2__family_regulates_transcription_of_growth_factors_and_their_receptors
+Tp53_regulates_transcription_of_genes_involved_in_g1_cell_cycle_arrest	Tp53_regulates_transcription_of_genes_involved_in_g1_cell_cycle_arrest	Tp53_regulates_transcription_of_genes_involved_in_g1_cell_cycle_arrest
+Tp53_regulates_transcription_of_several_additional_cell_death_genes_whose_specific_roles_in_p53-dependent_apoptosis_remain_uncertain	Tp53_regulates_transcription_of_several_additional_cell_death_genes_whose_specific_roles_in_p53-dependent_apoptosis_remain_uncertain	Tp53_regulates_transcription_of_several_additional_cell_death_genes_whose_specific_roles_in_p53-dependent_apoptosis_remain_uncertain
 Validated_nuclear_estrogen_receptor_alpha_network	Validated_nuclear_estrogen_receptor_alpha_network	CCND1	STAT5A	JUN	HDAC4	NCOR2	NR0B1	MYC	CHUK	MED1	EP300	CTSD	NCOA1	NCOA2	COL18A1	CALCOCO1	CD82	NCOR1	MPG	SRA1	PHB2	DDX17	PDIA2	DSCAM	CEBPB	NCOA3	AP1B1	DDX54	AXIN2	HDAC1	SAFB	LCOR	PGR	TRIM59	TFF1	NCOA7	PRL	SET	ANP32A	PRDM15	LMO4	NEDD8	C3	MTA1	HSF2	PCNA	NRIP1	VTLGL1	APBB1	BRCA1	NDUFV3	ATP5PF	SMAD4	XBP1	KLRC3	ABCA3	GREB1	NR0B2	ESR1	POU4F1	ESR2	POU4F2	SOD1	UBA3	EBAG9	UBE2M
+Zinc_transporters	Zinc_transporters	Zinc_transporters
