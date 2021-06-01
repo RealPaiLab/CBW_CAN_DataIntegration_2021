@@ -1,3 +1,0 @@
-# Introduction {#intro}
-
-What the major lab exercises will cover. 
