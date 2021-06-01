@@ -292,7 +292,7 @@ When you're done, the Enrichment Map would look like this (below). The speech bu
 knitr::include_graphics("images/Lab2_EMap.jpg")
 ```
 
-You should be able to [download the Cytoscape session file here](https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/gmt_pathway_2021/LuminalA.cys) to see the finished result.
+You should be able to [download the Cytoscape session file here](https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/LuminalA.cys) to see the finished result.
 
  In practice, it can take a good portion of an hour to adjust the layout of the EnrichmentMap and often longer to explore the contents.  But at a glance you can see that the top pathway 
 
