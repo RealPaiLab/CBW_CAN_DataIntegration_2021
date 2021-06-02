@@ -186,7 +186,7 @@ for (nm in names(groupList)) {
 }
 
 message("* Making integrated PSN")
-psn <- suppressMessages(
+psn <- 
    plotIntegratedPatientNetwork(brca,
   groupList=g2, makeNetFunc=makeNets,
   aggFun=aggFun,
@@ -197,7 +197,6 @@ psn <- suppressMessages(
   showStats=FALSE,
   verbose=TRUE, 
   plotCytoscape=plotCytoscape)
-)
 
 return(psn)
 }
@@ -269,6 +268,8 @@ confusionMatrix <- function(model) {
 #' @importFrom RColorBrewer brewer.pal
 #' @export
 tSNEPlotter <- function(psn,pheno,...) {
+
+    require(ggplot2)
 message("* Making symmetric matrix")
 symmForm <- suppressMessages(makeSymmetric(psn))
 symmForm[which(is.na(symmForm))] <- .Machine$double.eps
@@ -289,7 +290,7 @@ message("* Plotting")
 colnames(dat) <- c("x","y")
 dat <- as.data.frame(dat,stringsAsFactors=TRUE)
 dat$status <- as.factor(st)
-p <- ggplot(dat,aes(x,y)) + geom_point(aes(colour=status))
+p <- ggplot2::ggplot(dat,aes(x,y)) + geom_point(aes(colour=status))
 p <- p + xlab("") + ylab("") + ggtitle("Integrated PSN - tSNE")
 print(p)
 
