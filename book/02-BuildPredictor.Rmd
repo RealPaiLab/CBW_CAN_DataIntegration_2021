@@ -207,9 +207,9 @@ Finally we call the function that runs the netDx predictor. We provide:
 The call below runs 2 train/test splits, to be able to run fast. 
 Within each split, it:
 
-* splits data into train/test using the default split of 80:20
-* score2 networks between 0 to 2 (i.e. `featScoreMax=2`)
-* uses networks that score >=1 out of 2 (`featSelCutoff`) to classify test samples for that split.
+* splits data into train/test using the default split of 80:20 (`trainProp=0.8`)
+* score networks between 0 to 2 (i.e. `featScoreMax=2L`)
+* uses networks that score >=1 out of 2 (`featSelCutoff=1L`) to classify test samples for that split.
 
 These are unrealistically low values set so the example will run fast. In practice a good starting point is `featScoreMax=10`, `featSelCutoff=9` and `numSplits=100`, but these parameters depend on the sample sizes in the dataset and heterogeneity of the samples.
  
@@ -272,7 +272,7 @@ In the function below, we define top-scoring features as those which score at le
 
 ```{r,eval=TRUE}
 source("helper.R")
-results <- getResults(brca,model_full,featureSelCutoff=9L,
+results <- getResults(brca,model=model_full,featureSelCutoff=9L,
 	featureSelPct=0.9)
 ```
 
@@ -315,11 +315,9 @@ tsne <- tSNEPlotter(
 
 ## Conclusion
 
-Congratulations! You have successfully classified three types of tumours by integrating four different -omic layers (transcriptomic, methylomic,proteomic and miRNA). 
+Congratulations! You have successfully classified three types of tumours by integrating four different -omic layers (transcriptomic, methylomic,proteomic and miRNA). We see there s
 
-But these features aren't really interpretable. Let's change that with our next tutorial.
-
-Best practices side note: We end this tutorial with a call to `sessionInfo()` which prints the complete environment information for your R session. This is standard output that should be reported to R package managers when you write in with a question, particularly if reporting an error or bug. Sometimes a particular underlying dependency package may be the cause of an error, or you may need to upgrade to a newer version of the package. By including this info in an email, you will allow the other person to better solve your issue. 
+*Best practices side note:* We end this tutorial with a call to `sessionInfo()` which prints the complete environment information for your R session. This is standard output that should be reported to R package managers when you write in with a question, particularly if reporting an error or bug. Sometimes a particular underlying dependency package may be the cause of an error, or you may need to upgrade to a newer version of the package. By including this info in an email, you will allow the other person to better solve your issue. 
 
 ## sessionInfo
 ```{r}

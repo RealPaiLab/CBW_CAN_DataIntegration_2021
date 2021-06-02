@@ -65,7 +65,7 @@ if (!is.null(pathwayList)){
 }
 
 return(list(
-    selectedFeatures=feats,
+    selectedFeatures=feats$selectedFeatures,
     featureScores=feats$featScores,
     performance=list(meanAccuracy=mean(acc),
                     splitAccuracy=acc)
@@ -97,9 +97,8 @@ if (cleanNames) {
     })
 }
 featSelNet <- lapply(featScores2, function(x) {
-    x <- callFeatSel(x, fsCutoff=1, fsPctPass=0)
+    x <- callFeatSel(x, fsCutoff=featureSelCutoff, fsPctPass=featureSelPct)
 })
-
 
 return(list(
     featScores=featScores2,
