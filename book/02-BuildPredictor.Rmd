@@ -272,7 +272,7 @@ In the function below, we define top-scoring features as those which score at le
 
 ```{r,eval=TRUE}
 source("helper.R")
-results <- getResults(brca,model=model_full,featureSelCutoff=9L,
+results <- getResults(brca,model_full,featureSelCutoff=9L,
 	featureSelPct=0.9)
 ```
 
