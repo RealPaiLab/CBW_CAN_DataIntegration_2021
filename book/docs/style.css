@@ -50,20 +50,6 @@ h1 {
   content: "";
 }
 
-.rmd-code {
-  padding: 0em 0em 0em 3em;
-  margin-bottom: 2px;
-  background:  /*#FFFF00*/  url("images/iconfinder_duplicate_3671686.png") left center/3em no-repeat /*!important*/;
-  border-style:solid;
-  border-color:none;
-  background:#8a9d90;
-}
-.rmd-code:before {
-  color: #e2fada;
-  font-size: 14px;
-  content: "Paste this block";
-}
-
 .rmd-original-history {
   padding: 0em 0em 0em 4em;
   margin-bottom: 2px;
@@ -77,6 +63,9 @@ h1 {
   content: "About";
 }
 
+.rmd-codeblock {
+  background:#ff6347
+}
 
 .rmd-troubleshooting {
   padding: 0em 0em 0em 4em;
@@ -89,10 +78,6 @@ h1 {
   color: #ff6347;
   font-size: 24px;
   content: "Troubleshooting";
-}
-
-.code{
-  background: #169c40
 }
 
 .rmd-tip {
