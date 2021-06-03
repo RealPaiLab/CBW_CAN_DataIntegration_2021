@@ -22,7 +22,7 @@ Here, we will again use breast cancer samples, and discriminate between Luminal 
  
  ```
 
-```{r, class.source="codeblock",echo=FALSE, fig.cap="Lab 2: Predictor design", echo=FALSE}
+```{r, class.source="codeblock",echo=FALSE, fig.cap="Lab 2 design: We will integrate clinical and gene expression data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity.", echo=FALSE}
 knitr::include_graphics("images/Lab2_design.jpg")
 ```
  
@@ -302,7 +302,7 @@ netDx can directly generate EnrichmentMaps on a locally-installed version of Cyt
 ###         groupClusters=TRUE, hideNodeLabels=TRUE)
 ```
 
-If you wanted to look at an EnrichmentMap anyway, you can download the input files shown in the output of the `emap` object above by opening your web browser to: `http://your student instance` and downloading the files from there. Then build an Enrichment map using Cytoscape on your laptop as discussed earlier in the Cancer Analysis workshop. 
+If you wanted to look at an EnrichmentMap anyway, you can download the input files shown in the output of the `emap` object above by opening your web browser to: `http://your-student-instance` and downloading the files from there. Then build an Enrichment map using Cytoscape on your laptop as discussed earlier in the Cancer Analysis workshop. 
 
 When you're done, the Enrichment Map for top pathways predictive of Luminal A status would look like this (below). The speech bubbles show pathway names within a couple top clusters.
 

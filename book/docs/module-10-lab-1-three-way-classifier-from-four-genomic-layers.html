@@ -337,9 +337,9 @@ netDx requires <code>ID</code> and <code>STATUS</code> columns in <code>colData(
 <span id="cb18-23"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#cb18-23" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb18-24"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#cb18-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">unlist</span>(netList)) <span class="do">## just leave this in </span></span>
 <span id="cb18-25"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#cb18-25" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<div class="rmd-note">
+<div class="rmd-design">
 <p>
-While netDx provides a high degree of flexibility in achieving your design of choice, it is up to the user to ensure that the design, i.e. the similarity metric and variable groupings, is appropriate for your application. Domain knowledge is almost likely required for good design.
+While netDx provides a high degree of flexibility in achieving your design of choice, it is up to the user to ensure that the design, i.e. choice of similarity metrics and variable groupings, is appropriate for your application. Domain knowledge is almost likely required for good design.
 </p>
 </div>
 </div>
@@ -363,7 +363,11 @@ Within each split, it:</p>
 <li>score networks between 0 to 2 (i.e. <code>featScoreMax=2L</code>)</li>
 <li>uses networks that score &gt;=1 out of 2 (<code>featSelCutoff=1L</code>) to classify test samples for that split.</li>
 </ul>
-<p>These are unrealistically low values set so the example will run fast. In practice a good starting point is <code>featScoreMax=10</code>, <code>featSelCutoff=9</code> and <code>numSplits=100</code>, but these parameters depend on the sample sizes in the dataset and heterogeneity of the samples.</p>
+<div class="rmd-design">
+<p>
+These are unrealistically low values set so the example will run fast. In practice a good starting point is <code>featScoreMax=10</code>, <code>featSelCutoff=9</code> and <code>numSplits=100</code>, but these parameters depend on the sample sizes in the dataset and heterogeneity of the samples.
+</p>
+</div>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb19-1"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># make results reproducible</span></span>
 <span id="cb19-2"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#cb19-2" aria-hidden="true" tabindex="-1"></a>outDir <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">tempdir</span>(),<span class="fu">randAlphanumString</span>(),</span>
 <span id="cb19-3"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;pred_output&quot;</span>,<span class="at">sep=</span><span class="fu">getFileSep</span>())</span>

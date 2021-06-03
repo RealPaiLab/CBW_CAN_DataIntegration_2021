@@ -208,8 +208,8 @@ makeNets <- function(dataList, groupList, netDir,...) {
 
 ```
 
-```{block,type="rmd-note"}
-While netDx provides a high degree of flexibility in achieving your design of choice, it is up to the user to ensure that the design, i.e. the similarity metric and variable groupings, is appropriate for your application. Domain knowledge is almost likely required for good design. 
+```{block,type="rmd-design"}
+While netDx provides a high degree of flexibility in achieving your design of choice, it is up to the user to ensure that the design, i.e. choice of similarity metrics and variable groupings, is appropriate for your application. Domain knowledge is almost likely required for good design. 
 ```
 
 ## Build predictor
@@ -231,8 +231,9 @@ Within each split, it:
 * score networks between 0 to 2 (i.e. `featScoreMax=2L`)
 * uses networks that score >=1 out of 2 (`featSelCutoff=1L`) to classify test samples for that split.
 
+```{block,type="rmd-design"}
 These are unrealistically low values set so the example will run fast. In practice a good starting point is `featScoreMax=10`, `featSelCutoff=9` and `numSplits=100`, but these parameters depend on the sample sizes in the dataset and heterogeneity of the samples.
- 
+``` 
  
 ```{r lab1-buildpredictor ,class.source="codeblock",eval=FALSE}
 set.seed(42) # make results reproducible

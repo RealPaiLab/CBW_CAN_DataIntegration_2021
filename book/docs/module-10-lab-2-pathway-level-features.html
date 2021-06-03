@@ -227,7 +227,7 @@ Note that while in this design we group gene expression measures into pathways, 
 </li>
 </ol>
 </div>
-<div class="figure"><span id="fig:unnamed-chunk-34"></span>
+<div class="figure"><span id="fig:unnamed-chunk-35"></span>
 <img src="images/Lab2_design.jpg" alt="Lab 2: Predictor design" width="874" />
 <p class="caption">
 Figure 2: Lab 2: Predictor design
@@ -269,7 +269,7 @@ This design changes model-building time to several hours, so avoid large gene se
 <span id="cb34-2"><a href="module-10-lab-2-pathway-level-features.html#cb34-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
 <p>The above pathway set was downloaded from <a href="http://download.baderlab.org/EM_Genesets">download.baderlab.org/EM_Genesets</a>, which is a good resource for routinely-updated curated pathway definitions. Pathways are compiled from Reactome, Panther, NCI, MSigDB, etc., [REF], and data is contained in <a href="https://software.broadinstitute.org/cancer/software/gsea/wiki/index.php/Data_formats#GMT:_Gene_Matrix_Transposed_file_format_.28.2A.gmt.29">GMT format</a>, a common format to represent gene-sets, such as pathways. You can see from the value of <code>x</code> that the file isn’t downloaded to our working directory, but rather is stored in a BioConductor-specific location for files (file cache), using the <a href="https://www.bioconductor.org/packages/release/bioc/html/BiocFileCache.html">BiocFileCache</a> class. This way if we rerun the script, BioConductor will only download the file again if it has changed since our last download.</p>
 <p>Here is an example of the GMT format:</p>
-<div class="figure"><span id="fig:unnamed-chunk-41"></span>
+<div class="figure"><span id="fig:unnamed-chunk-42"></span>
 <img src="images/GMT_screenshot.png" alt="Lab 2: Predictor design" width="937" />
 <p class="caption">
 Figure 3: Lab 2: Predictor design

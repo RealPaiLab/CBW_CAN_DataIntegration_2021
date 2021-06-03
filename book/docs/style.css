@@ -40,7 +40,7 @@ h1 {
 .rmd-caution {
   padding: 0em 0em 0em 3em;
   margin-bottom: 2px;
-  background:  #fcc6f1  url("images/iconfinder_attention_309101.png") left center/3em no-repeat /*!important*/;
+  background:  #ff9090  url("images/iconfinder_attention_309101.png") left center/3em no-repeat /*!important*/;
   /* background: url("images/iconfinder_attention_309101.png") left center/3em no-repeat*/  /*!important*/ 
 }
 .rmd-caution:before {
