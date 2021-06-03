@@ -63,10 +63,6 @@ h1 {
   content: "About";
 }
 
-.rmd-codeblock {
-  background:#ff6347
-}
-
 .rmd-troubleshooting {
   padding: 0em 0em 0em 4em;
   margin-bottom: 2px;
@@ -143,4 +139,11 @@ h1 {
 .rmd-question:before {
   color: #b478f5;
   font-size: 24px;
-  conten
+  content: "Question";
+}
+
+.watch-out {
+  background-color: lightpink !important;
+  border: 3px solid red;
+  font-weight: bold;
+}
