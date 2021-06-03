@@ -24,6 +24,8 @@ You can download course slides here **LINK TBA**
 
 We will have two lab exercises, where we build patient classifiers using multi-modal data integration, using netDx **ADD REFERENCES**.
 
+## Labs
+
 ### LAB 1: A gentle introduction 
 
 We will classify breast tumours as being one of three subtypes: Luminal A, Luminal B, and Basal-like. For this we will build a **three-way classifier** by integrating four types of -omic data: gene expression, miRNA, DNA methylation and proteomics. The design will be simple, using a single patient similarity network (feature) created from each layer. Similarity will be defined as pairwise Pearson correlation of profiles. Each network will use all measures from a given -omic data type (no filtering or grouping). 

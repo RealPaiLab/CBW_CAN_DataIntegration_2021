@@ -13,6 +13,10 @@ Here, we will again use breast cancer samples, and discriminate between Luminal 
  * Clinical variables: A feature (or patient similarity network;PSN) will be defined at the level of selected  *variables* (e.g. age); we will define similarity as *normalized difference*. 
  * Gene expression: Features will be defined at the level of ***pathways***; i.e. each feature groups only those genes corresponding to the pathway. Similarity is defined as pairwise *Pearson correlation*.
 
+ ```{block type="rmd-note"}
+ Note that while in this design we group gene expression measures into pathways, the same design can be used to group other types of data based on prior knowledge. For instance, measures from imaging data could be grouped by 
+ ```
+
 ```{r, class.source="codeblock",echo=FALSE, fig.cap="Lab 2: Predictor design", echo=FALSE}
 knitr::include_graphics("images/Lab2_design.jpg")
 ```
