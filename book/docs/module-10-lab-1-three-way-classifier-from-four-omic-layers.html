@@ -308,6 +308,9 @@ netDx requires “ID” and “STATUS” columns in <code>colData(…)</code>.
 <ul>
 <li><code>dataList</code>,<code>groupList</code>, and <code>netDir</code> as input variables. The residual <code>...</code> parameter is to pass additional variables to <code>makePSN_NamedMatrix()</code>, notably number of cores for parallel processing (<code>numCores</code>).</li>
 </ul>
+<div class="rmd-code">
+
+</div>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb18-1" aria-hidden="true" tabindex="-1"></a>makeNets <span class="ot">&lt;-</span> <span class="cf">function</span>(dataList, groupList, netDir,...) {</span>
 <span id="cb18-2"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb18-2" aria-hidden="true" tabindex="-1"></a>    netList <span class="ot">&lt;-</span> <span class="fu">c</span>() <span class="co"># initialize before is.null() check</span></span>
 <span id="cb18-3"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb18-3" aria-hidden="true" tabindex="-1"></a>    </span>
@@ -333,7 +336,7 @@ netDx requires “ID” and “STATUS” columns in <code>colData(…)</code>.
 <span id="cb18-23"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb18-23" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb18-24"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb18-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">unlist</span>(netList)) <span class="do">## just leave this in </span></span>
 <span id="cb18-25"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb18-25" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<div class="rmd-caution">
+<div class="rmd-note">
 <p>
 While netDx provides a high degree of flexibility in achieving your design of choice, it is up to the user to ensure that the design, i.e. the similarity metric and variable groupings, is appropriate for your application. Domain knowledge is almost likely required for good design.
 </p>
@@ -488,26 +491,27 @@ We end this tutorial with a call to <code>sessionInfo()</code> which prints the 
 ##  [65] purrr_0.3.4                   RCurl_1.98-1.3                prettyunits_1.1.1             viridis_0.6.1                
 ##  [69] cluster_2.1.1                 tinytex_0.31                  magrittr_2.0.1                data.table_1.14.0            
 ##  [73] RSpectra_0.16-0               hms_1.1.0                     mime_0.10                     evaluate_0.14                
-##  [77] xtable_1.8-4                  XML_3.99-0.6                  gridExtra_2.3                 shape_1.4.6                  
-##  [81] compiler_4.0.5                scater_1.18.6                 tibble_3.1.2                  RCy3_2.10.2                  
-##  [85] crayon_1.4.1                  R.oo_1.24.0                   htmltools_0.5.1.1             entropy_1.3.0                
-##  [89] later_1.2.0                   tidyr_1.1.3                   howmany_0.3-1                 DBI_1.1.1                    
-##  [93] ExperimentHub_1.16.1          dbplyr_2.1.1                  MASS_7.3-53.1                 rappdirs_0.3.3               
-##  [97] Matrix_1.3-2                  ade4_1.7-16                   R.methodsS3_1.8.1             igraph_1.2.6                 
-## [101] pkgconfig_2.0.3               bigmemory.sri_0.1.3           rncl_0.8.4                    registry_0.5-1               
-## [105] locfdr_1.1-8                  scuttle_1.0.4                 xml2_1.3.2                    foreach_1.5.1                
-## [109] annotate_1.68.0               vipor_0.4.5                   bslib_0.2.5.1                 rngtools_1.5                 
-## [113] pkgmaker_0.32.2               XVector_0.30.0                stringr_1.4.0                 digest_0.6.27                
-## [117] pracma_2.3.3                  graph_1.68.0                  softImpute_1.4-1              rmarkdown_2.8                
-## [121] edgeR_3.32.1                  DelayedMatrixStats_1.12.3     curl_4.3.1                    kernlab_0.9-29               
-## [125] shiny_1.6.0                   lifecycle_1.0.0               nlme_3.1-152                  jsonlite_1.7.2               
-## [129] clusterExperiment_2.10.1      Rhdf5lib_1.12.1               BiocNeighbors_1.8.2           viridisLite_0.4.0            
-## [133] limma_3.46.0                  fansi_0.4.2                   pillar_1.6.1                  lattice_0.20-41              
-## [137] fastmap_1.1.0                 httr_1.4.2                    survival_3.2-10               interactiveDisplayBase_1.28.0
-## [141] glue_1.4.2                    iterators_1.0.13              BiocVersion_3.12.0            glmnet_4.1-1                 
-## [145] bit_4.0.4                     stringi_1.6.2                 sass_0.4.0                    HDF5Array_1.18.1             
-## [149] blob_1.2.1                    BiocSingular_1.6.0            AnnotationHub_2.22.1          memoise_2.0.0                
-## [153] dplyr_1.0.6                   irlba_2.3.3                   ape_5.5</code></pre>
+##  [77] xtable_1.8-4                  XML_3.99-0.6                  jpeg_0.1-8.1                  gridExtra_2.3                
+##  [81] shape_1.4.6                   compiler_4.0.5                scater_1.18.6                 tibble_3.1.2                 
+##  [85] RCy3_2.10.2                   crayon_1.4.1                  R.oo_1.24.0                   htmltools_0.5.1.1            
+##  [89] entropy_1.3.0                 later_1.2.0                   tidyr_1.1.3                   howmany_0.3-1                
+##  [93] DBI_1.1.1                     ExperimentHub_1.16.1          dbplyr_2.1.1                  MASS_7.3-53.1                
+##  [97] rappdirs_0.3.3                Matrix_1.3-2                  ade4_1.7-16                   R.methodsS3_1.8.1            
+## [101] igraph_1.2.6                  pkgconfig_2.0.3               bigmemory.sri_0.1.3           rncl_0.8.4                   
+## [105] registry_0.5-1                locfdr_1.1-8                  scuttle_1.0.4                 xml2_1.3.2                   
+## [109] foreach_1.5.1                 annotate_1.68.0               vipor_0.4.5                   bslib_0.2.5.1                
+## [113] rngtools_1.5                  pkgmaker_0.32.2               XVector_0.30.0                stringr_1.4.0                
+## [117] digest_0.6.27                 pracma_2.3.3                  graph_1.68.0                  softImpute_1.4-1             
+## [121] rmarkdown_2.8                 edgeR_3.32.1                  DelayedMatrixStats_1.12.3     curl_4.3.1                   
+## [125] kernlab_0.9-29                shiny_1.6.0                   lifecycle_1.0.0               nlme_3.1-152                 
+## [129] jsonlite_1.7.2                clusterExperiment_2.10.1      Rhdf5lib_1.12.1               BiocNeighbors_1.8.2          
+## [133] viridisLite_0.4.0             limma_3.46.0                  fansi_0.4.2                   pillar_1.6.1                 
+## [137] lattice_0.20-41               fastmap_1.1.0                 httr_1.4.2                    survival_3.2-10              
+## [141] interactiveDisplayBase_1.28.0 glue_1.4.2                    png_0.1-7                     iterators_1.0.13             
+## [145] BiocVersion_3.12.0            glmnet_4.1-1                  bit_4.0.4                     stringi_1.6.2                
+## [149] sass_0.4.0                    HDF5Array_1.18.1              blob_1.2.1                    BiocSingular_1.6.0           
+## [153] AnnotationHub_2.22.1          memoise_2.0.0                 dplyr_1.0.6                   irlba_2.3.3                  
+## [157] ape_5.5</code></pre>
 
 </div>
 </div>

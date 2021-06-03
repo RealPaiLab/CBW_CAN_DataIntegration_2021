@@ -42,12 +42,26 @@ h1 {
   margin-bottom: 2px;
   background:  /*#FFFF00*/  url("images/iconfinder_attention_309101.png") left center/3em no-repeat /*!important*/;
   border-style:solid;
-  border-color:#ff6347;
+  background:#f9ada0;
 }
 .rmd-caution:before {
   color: #ff6347;
   font-size: 24px;
   content: "";
+}
+
+.rmd-code {
+  padding: 0em 0em 0em 3em;
+  margin-bottom: 2px;
+  background:  /*#FFFF00*/  url("images/iconfinder_attention_309101.png") left center/3em no-repeat /*!important*/;
+  border-style:solid;
+  background:#8a9d90;
+}
+.rmd-code:before {
+  color: #302827;
+  font-size: 24px;
+  background:  /*#FFFF00*/  url("images/iconfinder_duplicate_3671686.png") left center/3em no-repeat /*!important*/;
+  content: "Paste this:";
 }
 
 .rmd-original-history {
@@ -81,12 +95,12 @@ h1 {
 .rmd-tip {
   padding: 0em 0em 0em 3em;
   margin-bottom: 2px;
-  background:  #f2f1a2  url("images/iconfinder_idea_309059.png") left center/3em no-repeat /*!important*/;
+  background:  #fefff4  url("images/iconfinder_idea_309059.png") left center/3em no-repeat /*!important*/;
   border-style:solid;
-  border-color: #f2f1a2;
+  border-color: #fefff4;
 }
 .rmd-tip:before {
-  color: #a2aef2;
+  color: #b68d04;
   font-size: 24px;
   content: "Tip";
 }
@@ -100,7 +114,7 @@ h1 {
   border-color: #9ad4fe;
 }
 .rmd-note:before {
-  color: #fcf403;
+  color: #332d54;
   font-size: 24px;
   content: "Note";
 }

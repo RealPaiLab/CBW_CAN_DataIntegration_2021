@@ -170,6 +170,8 @@ netDx requires that this function have:
 
 * `dataList`,`groupList`, and `netDir` as input variables. The residual `...` parameter is to pass additional variables to `makePSN_NamedMatrix()`, notably number of cores for parallel processing (`numCores`). 
 
+```{block,type="rmd-code"}
+```
 ```{r, eval=FALSE}
 makeNets <- function(dataList, groupList, netDir,...) {
 	netList <- c() # initialize before is.null() check
@@ -199,7 +201,7 @@ makeNets <- function(dataList, groupList, netDir,...) {
 
 ```
 
-```{block,type="rmd-caution"}
+```{block,type="rmd-note"}
 While netDx provides a high degree of flexibility in achieving your design of choice, it is up to the user to ensure that the design, i.e. the similarity metric and variable groupings, is appropriate for your application. Domain knowledge is almost likely required for good design. 
 ```
 
