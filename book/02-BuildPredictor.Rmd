@@ -95,7 +95,7 @@ brca <- prepareDataForCBW(brca)
 
 Notice that we now have `ID` and `STATUS` columns in the sample metadata table. 
 
-```{block,type="rmd-caution"}
+```{block,type="rmd-tip"}
 netDx requires "ID" and "STATUS" columns in `colData(...)`.
 ```
 
