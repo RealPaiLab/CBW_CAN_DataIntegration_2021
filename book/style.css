@@ -49,18 +49,15 @@ h1 {
   content: "";
 }
 
-.rmd-original-history {
-  padding: 0em 0em 0em 4em;
-  margin-bottom: 2px;
-  background:  /*#FFFF00*/  url("images/cc_icon.png") left center/3em no-repeat /*!important*/;
-  border-style:solid;
-  border-color:#000000;
+.rmd-design{
+  background: #b58fce  url("images/iconfinder_art-tools_1291734.png") left center/3em no-repeat /*!important*/; 
 }
-.rmd-original-history:before {
-  color: #ff6347;
+.rmd-design:before {
+  color: #6b13a5;
   font-size: 24px;
-  content: "About";
+  content: "Design notes";
 }
+
 
 .rmd-troubleshooting {
   padding: 0em 0em 0em 4em;
