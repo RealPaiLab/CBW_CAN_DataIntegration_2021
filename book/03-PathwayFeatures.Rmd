@@ -31,7 +31,7 @@ knitr::include_graphics("images/Lab2_design.jpg")
 Let's fetch the BRCA data using `curatedTCGAData` again, this time only the gene expression data. Remember, the clinical data we automatically get in the `colData()` slot returned.
 
 
-```{r, class.source="codeblock", class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock", class.source="codeblock",eval=TRUE}
 suppressMessages(library(curatedTCGAData))
 brca <- suppressMessages(
    curatedTCGAData(
@@ -42,13 +42,13 @@ brca <- suppressMessages(
 
 Let's look at the data. Notice that we now only have one -omic assay, gene expression measures from microarrays.
 
-```{r, class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock",eval=TRUE}
 brca
 ```
 
 As before, we prepare the data. I highly recommend separating the script that prepares the data from the one running the predictor for improved management, readability and debuggability.
 
-```{r, class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock",eval=TRUE}
 source("prepare_data.R")
 brca <- prepareDataForCBW(brca, setBinary=TRUE)
 ```
@@ -57,7 +57,7 @@ brca <- prepareDataForCBW(brca, setBinary=TRUE)
 Load the `netDx` package and initialize the `groupList` object, where we will store our grouping rules.
 Recall that `groupList` is a list-of-lists, with the top tier containing data layer names, and that the layer names must match `names(assays(brca))` or whatever your `MultiAssayExperiment` object is called.
 
-```{r, class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock",eval=TRUE}
 suppressWarnings(suppressMessages(require(netDx)))
 groupList <- list()
 ```
@@ -74,7 +74,7 @@ Whicever list you use can be pruned by constraining the min/max number of genes 
 
 There are two ways of providing pathway data to netDx:
 1. You can **download** a compilation of pathways from curated databases using the `fetchPathwayDefinitions()` function in netDx, like so:
-```{r, class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock",eval=TRUE}
 x <- fetchPathwayDefinitions("March",2021)
 x
 ```
@@ -89,16 +89,18 @@ knitr::include_graphics("images/GMT_screenshot.png")
 
 We then use `readPathways()` to read the pathways into a list format to provide the predictor with. So the full call looks like this:
 
-```{r, class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock",eval=TRUE}
 pathList <- readPathways(fetchPathwayDefinitions("March",2021))
 head(pathList)
 ```
 
 2. Alternatively, you can also provide a custom pathway set to netDx by reading in a GMT file, using the `readPathways()` function. In this example, I've downloaded a geneset of [pathways often dysregulated in cancer](http://www.gsea-msigdb.org/gsea/msigdb/collections.jsp#C7), set C6 from MSigDB (REF):
 
-```{r, class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock",eval=TRUE}
 gmtFile <- sprintf("%s2/cancer_pathways.gmt",tempdir())
-if (!file.exists(sprintf("%s2",tempdir()))) dir.create(sprintf("%s2",tempdir()))
+if (!file.exists(sprintf("%s2",tempdir()))) {
+	dir.create(sprintf("%s2",tempdir()))
+}
 download.file("https://raw.githubusercontent.com/RealPaiLab/CBW_CAN_DataIntegration_2021/master/supporting_files/c6.all.v7.4.symbols.gmt",gmtFile)
 x <- readPathways(gmtFile)
 x[1:3]
@@ -110,7 +112,7 @@ For this tutorial we will limit ourselves to the first set of pathways and use `
 The pathway definition file should use the same identifier type as your patient data. For instance, if the genes in your transcriptomic data are represented using [HGNC symbols](https://www.genenames.org/tools/search/), then your pathway definition file must also use HGNC symbols (e.g. *ID2S*), and not a different type of identifier, such as Ensembl IDs (which look like this: *ENSG00000010404*).
 ```
 
-```{r, class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock",eval=TRUE}
 groupList[["BRCA_mRNAArray-20160128"]] <- pathList 
 ```
 
@@ -123,14 +125,14 @@ So here, we map the following:
 * `stage` to `STAGE`
 
 These variables must be present in the `colData()` slot:
-```{r, class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock",eval=TRUE}
 pheno <- colData(brca)
 head(pheno[,c("patient.age_at_initial_pathologic_diagnosis","STAGE")])
 ```
 
 We now add the entry into `groupList`. The entry for `clinical` is special because netDx will look for corresponding variables in the sample metadata table, `colData()`, rather than looking for "clinical"  within `assays(brca)`.
 
-```{r, class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock",eval=TRUE}
 groupList[["clinical"]] <- list(
       age="patient.age_at_initial_pathologic_diagnosis",
 	   stage="STAGE"
@@ -141,13 +143,12 @@ We now tell netDx what similarity metric to use
 
 This is `makeNets()` just as we had seen in the previous exercise, which provides `netDx` with a custom function to generate similarity networks (i.e. features). We previously used the following code to create PSN based on Pearson correlation: 
 
-***(Do not paste this in)***
 ```{r, class.source="codeblock",eval=FALSE}
 makePSN_NamedMatrix(..., writeProfiles=TRUE,...)`
 ```
 We will now make a different call to `makePSN_NamedMatrix()` but this time, requesting the use of the normalized difference similarity metric. 
 
-This is achieved by calling the following code ***(Do not paste this in, either)***:
+This is achieved by calling the following code:
 ```{r, class.source="codeblock",eval=FALSE}
 makePSN_NamedMatrix(,..., 
 	simMetric="custom", customFunc=normDiff,
@@ -167,7 +168,7 @@ When we're done, this is what the `makeNets` function look like.
 
 *Note: I realize this may be complicated. Future versions of netDx will simplify this syntax.*
 
-```{r, class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock",eval=TRUE}
 makeNets <- function(dataList, groupList, netDir,...) {
 	netList <- c() 
 
@@ -216,7 +217,7 @@ Now we build our predictors. For this tutorial, we use two train/test splits. Fo
 
 **Realistic parameters:** When running this with your project, reasonable values are  `numSplits=10L` (10 is a good start, just to see if you get signal, 100+ if firming up for publication), `featScoreMax=10L`, `featSelCutoff=9L`.
  
-```{r lab2-buildpredictor,class.source="codeblock",eval=FALSE}
+```{r lab2-buildpredictor,class.source="codeblock",eval=TRUE}
 t0 <- Sys.time()
 set.seed(42) # make results reproducible
 outDir <- paste(sprintf("%s2",tempdir()),"pred_output",sep=getFileSep()) # use absolute path
@@ -240,7 +241,7 @@ print(t1-t0) # time taken
 
 The above settings were chosen to Let's actually load data generated by reasonable parameters, e.g. `numSplits=10L`, `featScoreMax=10L`, `featSelCutoff=9L`, generated for this tutorial:
 
-```{r lab2-getresults, class.source="codeblock", eval=FALSE}
+```{r lab2-getresults, class.source="codeblock", eval=TRUE}
 outFile <- sprintf("%s2/CBW_Lab2_full.rda",tempdir())
 download.file("https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/brca_binary_pathways.rda",
 	destfile=outFile)
@@ -251,7 +252,7 @@ We can see the objects in the file using `lnames()`.
 ## Examine results
 As before, we get model results, using `getResults()` from our helper script, `helper.R`. 
 
-```{r, class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock",eval=TRUE}
 source("helper.R")
 results <- getResults(brca,model_full,
 	featureSelCutoff=9L,
@@ -259,13 +260,13 @@ results <- getResults(brca,model_full,
 ```
 
 Let's examine our confusion matrix:
-```{r, class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock",eval=TRUE}
 confMat <- confusionMatrix(model_full)
 ```
 
 This function returns the confusion matrix for each split, as well as the average shown in the image above:
 
-```{r, class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock",eval=TRUE}
 summary(confMat)
 ```
 
@@ -278,7 +279,7 @@ We quantify this by asking only for features that score [`EMapMinScore`,`EMapMax
 
 Here we ask for features scoring 7+ out of 10 for at least 70% of the train/test splits. 
 
-```{r lab2-makeemapinput ,eval=FALSE}
+```{r lab2-makeemapinput ,eval=TRUE}
 emap <- makeInputForEnrichmentMap (
 	model=model_full,
 	results=results,
@@ -291,13 +292,13 @@ emap <- makeInputForEnrichmentMap (
 ```
 This call will return paths to the output files, which you need to now download from AWS to your personal computer:
 
-```{r, class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock",eval=TRUE}
 emap
 ```
 
 netDx can directly generate EnrichmentMaps on a locally-installed version of Cytosape using [RCy3](https://bioconductor.org/packages/release/bioc/html/RCy3.html). RCy3 allows programmatic control of Cytoscape from within R, so that visualizations such as EnrichmentMap can be programmatically created. This step needs a local copy of Cytoscape installed, so it won't work on the lab AWS instance. Try it on your laptop after the lab.
 
-```{r, class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock",eval=TRUE}
 ###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],
 ###         groupClusters=TRUE, hideNodeLabels=TRUE)
 ```
@@ -316,10 +317,12 @@ You can also [download the Cytoscape session file here](https://github.com/RealP
  (1) In practice, it can take a good portion of an hour to adjust the layout of the EnrichmentMap, and often longer to explore the contents. The automatically-generated pathway theme labels are often revised upon looking closer inspection of the pathways within.
 ```
 
+That's it!
 
+You've successfully generated a predictor using pathway-level features from gene expression and defined custom similarity metrics for clinical data. This completes our lab exercises for Module 10.
 
 
 ## sessionInfo
-```{r, class.source="codeblock",eval=FALSE}
+```{r, class.source="codeblock",eval=TRUE}
 sessionInfo()
 ```
