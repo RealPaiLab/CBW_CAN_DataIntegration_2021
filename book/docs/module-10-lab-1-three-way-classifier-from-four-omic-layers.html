@@ -252,7 +252,7 @@ Note that the new release of BioConductor (3.13) actually allows users to fetch 
 <p>Notice that we now have <code>ID</code> and <code>STATUS</code> columns in the sample metadata table.</p>
 <div class="rmd-caution">
 <p>
-netDx requires “ID” and “STATUS” columns in <code>colData(…)</code>.
+netDx requires <code>ID</code> and <code>STATUS</code> columns in <code>colData(…)</code>. Be sure to define these in the code you use to prepare the data. Otherwise the function to build the predictor will return an error.
 </p>
 </div>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb12-1"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb12-1" aria-hidden="true" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">colData</span>(brca)</span>

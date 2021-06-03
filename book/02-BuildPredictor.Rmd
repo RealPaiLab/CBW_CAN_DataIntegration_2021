@@ -96,7 +96,9 @@ brca <- prepareDataForCBW(brca)
 Notice that we now have `ID` and `STATUS` columns in the sample metadata table. 
 
 ```{block,type="rmd-caution"}
-netDx requires "ID" and "STATUS" columns in `colData(...)`.
+
+netDx requires `ID` and `STATUS` columns in `colData(...)`. Be sure to define these in the code you use to prepare the data. Otherwise the function to build the predictor will return an error.
+
 ```
 
 ```{r, class.source="codeblock",eval=FALSE}
