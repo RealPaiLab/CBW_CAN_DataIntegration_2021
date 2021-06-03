@@ -170,7 +170,7 @@ netDx requires that this function have:
 
 * `dataList`,`groupList`, and `netDir` as input variables. The residual `...` parameter is to pass additional variables to `makePSN_NamedMatrix()`, notably number of cores for parallel processing (`numCores`). 
 
-```{r,out.width="50%"}
+```{r,out.width="5%",echo=FALSE}
 knitr::include_graphics("images/iconfinder_duplicate_3671686.png")
 ```
 ```{r, eval=FALSE}
