@@ -1,8 +1,8 @@
-## ----echo=FALSE, fig.cap="Lab 2: Predictor design"---------------
+## ----echo=FALSE, fig.cap="Lab 2: Predictor design"---------------------------------------------------------------------------------------------------
 knitr::include_graphics("images/Lab2_design.jpg")
 
 
-## ----load-data,eval=TRUE-----------------------------------------
+## ----load-data,eval=TRUE-----------------------------------------------------------------------------------------------------------------------------
 suppressMessages(library(curatedTCGAData))
 brca <- suppressMessages(
    curatedTCGAData(
@@ -11,68 +11,69 @@ brca <- suppressMessages(
 	)
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 brca
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 source("prepare_data.R")
 brca <- prepareDataForCBW(brca, setBinary=TRUE)
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 suppressWarnings(suppressMessages(require(netDx)))
 groupList <- list()
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 x <- fetchPathwayDefinitions("March",2021)
 x
 
 
-## ----echo=FALSE, fig.cap="Lab 2: Predictor design"---------------
+## ----echo=FALSE, fig.cap="Lab 2: Predictor design"---------------------------------------------------------------------------------------------------
 knitr::include_graphics("images/GMT_screenshot.png")
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 pathList <- readPathways(fetchPathwayDefinitions("March",2021))
 head(pathList)
 
 
-## ----eval=TRUE---------------------------------------------------
-gmtFile <- sprintf("%s/cancer_pathways.gmt",tempdir())
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
+gmtFile <- sprintf("%s2/cancer_pathways.gmt",tempdir())
+if (!file.exists(sprintf("%s2",tempdir()))) dir.create(sprintf("%s2",tempdir()))
 download.file("https://raw.githubusercontent.com/RealPaiLab/CBW_CAN_DataIntegration_2021/master/supporting_files/c6.all.v7.4.symbols.gmt",gmtFile)
 x <- readPathways(gmtFile)
 x[1:3]
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 groupList[["BRCA_mRNAArray-20160128"]] <- pathList 
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 pheno <- colData(brca)
 head(pheno[,c("patient.age_at_initial_pathologic_diagnosis","STAGE")])
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 groupList[["clinical"]] <- list(
       age="patient.age_at_initial_pathologic_diagnosis",
 	   stage="STAGE"
 )
 
 
-## ----eval=FALSE--------------------------------------------------
+## ----eval=FALSE--------------------------------------------------------------------------------------------------------------------------------------
 ## makePSN_NamedMatrix(..., writeProfiles=TRUE,...)`
 
 
-## ----eval=FALSE--------------------------------------------------
+## ----eval=FALSE--------------------------------------------------------------------------------------------------------------------------------------
 ## makePSN_NamedMatrix(,...,
 ## 	simMetric="custom", customFunc=normDiff,
 ## 	writeProfiles=FALSE)
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 makeNets <- function(dataList, groupList, netDir,...) {
 	netList <- c() 
 
@@ -107,10 +108,11 @@ makeNets <- function(dataList, groupList, netDir,...) {
 }
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 t0 <- Sys.time()
 set.seed(42) # make results reproducible
-outDir <- paste(tempdir(),"pred_output",sep=getFileSep()) # use absolute path
+outDir <- paste(sprintf("%s2",tempdir()),"pred_output",sep=getFileSep()) # use absolute path
+if (file.exists(outDir)) unlink(outDir,recursive=TRUE)
 numSplits <- 2L
 model <- suppressMessages(
    buildPredictor(
@@ -128,33 +130,33 @@ t1 <- Sys.time()
 print(t1-t0) # time taken
 
 
-## ----eval=TRUE---------------------------------------------------
-outFile <- sprintf("%s/CBW_Lab2_full.rda",tempdir())
-download.file("https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/gmt_pathway_2021/brca_binary_pathways.rda",
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
+outFile <- sprintf("%s2/CBW_Lab2_full.rda",tempdir())
+download.file("https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/brca_binary_pathways.rda",
 	destfile=outFile)
 lnames <- load(outFile)
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 source("helper.R")
 results <- getResults(brca,model_full,
 	featureSelCutoff=9L,
 	featureSelPct=0.9)
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 confMat <- confusionMatrix(model_full)
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 summary(confMat)
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 emap <- makeInputForEnrichmentMap (
 	model=model_full,
 	results=results,
-	pathwayList=pathList_full,
+	pathwayList=pathList,
 	EMapMinScore=7L, 
 	EMapMaxSore=10L,
 	EMapPctPass=0.7,
@@ -162,19 +164,19 @@ emap <- makeInputForEnrichmentMap (
 )
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 emap
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 ###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],
 ###         groupClusters=TRUE, hideNodeLabels=TRUE)
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 knitr::include_graphics("images/Lab2_EMap.jpg")
 
 
-## ----eval=TRUE---------------------------------------------------
+## ----eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------
 sessionInfo()
 
