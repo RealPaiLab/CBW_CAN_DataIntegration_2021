@@ -217,7 +217,7 @@ Figure 2: Lab 2: Predictor design
 <div id="get-and-prepare-data-1" class="section level2">
 <h2>Get and prepare data</h2>
 <p>Let’s fetch the BRCA data using <code>curatedTCGAData</code> again, this time only the gene expression data. Remember, the clinical data we automatically get in the <code>colData()</code> slot returned.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="module-10-lab-2-pathway-level-features.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(curatedTCGAData))</span>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r code"><code class="sourceCode r"><span id="cb30-1"><a href="module-10-lab-2-pathway-level-features.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(curatedTCGAData))</span>
 <span id="cb30-2"><a href="module-10-lab-2-pathway-level-features.html#cb30-2" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
 <span id="cb30-3"><a href="module-10-lab-2-pathway-level-features.html#cb30-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">curatedTCGAData</span>(</span>
 <span id="cb30-4"><a href="module-10-lab-2-pathway-level-features.html#cb30-4" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;BRCA&quot;</span>,<span class="fu">c</span>(<span class="st">&quot;mRNAArray&quot;</span>),</span>
