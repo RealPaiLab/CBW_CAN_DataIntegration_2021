@@ -214,10 +214,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <div class="rmd-note">
 <p>
-Note that while in this design we group gene expression measures into pathways, the same design can be used to group other types of data based on prior knowledge. For instance, measures from imaging data could be grouped by
+Note that while in this design we group gene expression measures into pathways, the same design can be used to group other types of data based on prior knowledge. For instance, measures from imaging data could be grouped by prior knowledge of correlated networks of regions of interest subserving specific functions.
 </p>
 </div>
-<div class="figure"><span id="fig:unnamed-chunk-34"></span>
+<div class="rmd-note">
+<p>
+In practice I recommend running a predictor design with 2-3 different sets of pathway definitions, and comparing the predictive pathway themes. For instance, it could be useful to compare results from using all curated pathways, to just domain-specific ones.
+</p>
+<p>
+Feature design is something of an art, and the choice of pathways depends on what your goals with building the predictor are. Are you looking to prioritize a known set of biological processes or interested in general discovery? These are tradeoffs.
+</p>
+<p>
+At the very least I would recommend running with all curated pathways as a baseline, because you may generate novel hypotheses.
+</p>
+</div>
+<div class="figure"><span id="fig:unnamed-chunk-35"></span>
 <img src="images/Lab2_design.jpg" alt="Lab 2: Predictor design" width="874" />
 <p class="caption">
 Figure 2: Lab 2: Predictor design
@@ -259,7 +270,7 @@ This design changes model-building time to several hours, so avoid large gene se
 <span id="cb34-2"><a href="module-10-lab-2-pathway-level-features.html#cb34-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
 <p>The above pathway set was downloaded from <a href="http://download.baderlab.org/EM_Genesets">download.baderlab.org/EM_Genesets</a>, which is a good resource for routinely-updated curated pathway definitions. Pathways are compiled from Reactome, Panther, NCI, MSigDB, etc., [REF], and data is contained in <a href="https://software.broadinstitute.org/cancer/software/gsea/wiki/index.php/Data_formats#GMT:_Gene_Matrix_Transposed_file_format_.28.2A.gmt.29">GMT format</a>, a common format to represent gene-sets, such as pathways. You can see from the value of <code>x</code> that the file isn’t downloaded to our working directory, but rather is stored in a BioConductor-specific location for files (file cache), using the <a href="https://www.bioconductor.org/packages/release/bioc/html/BiocFileCache.html">BiocFileCache</a> class. This way if we rerun the script, BioConductor will only download the file again if it has changed since our last download.</p>
 <p>Here is an example of the GMT format:</p>
-<div class="figure"><span id="fig:unnamed-chunk-41"></span>
+<div class="figure"><span id="fig:unnamed-chunk-42"></span>
 <img src="images/GMT_screenshot.png" alt="Lab 2: Predictor design" width="937" />
 <p class="caption">
 Figure 3: Lab 2: Predictor design
@@ -405,7 +416,7 @@ We have:</p>
 </div>
 <div id="visualize-top-pathways-in-cytoscape" class="section level2">
 <h2>Visualize top pathways in Cytoscape</h2>
-<p>We will now visualize top-scoring pathways using the Cytoscape visualization EnrichmentMap. Recall from the XXX module that an EnrichmentMap is a network visualization of related gene-sets, where each node is a pathway and edges connect similar pathways.</p>
+<p>We will now visualize top-scoring pathways using the Cytoscape visualization EnrichmentMap. Recall from Module 8 that an EnrichmentMap is a network visualization of related gene-sets, where each node is a pathway and edges connect similar pathways.</p>
 <p>Let us say we only want to see pathways that scored in some target range for “most” of the trials; i.e. consistently high-scoring pathways.
 We quantify this by asking only for features that score [<code>EMapMinScore</code>,<code>EMapMaxScore</code>] for <code>EMapPctPass</code> fraction of trials.</p>
 <p>Here we ask for features scoring 7+ out of 10 for at least 70% of the train/test splits.</p>
@@ -420,15 +431,20 @@ We quantify this by asking only for features that score [<code>EMapMinScore</cod
 <span id="cb48-9"><a href="module-10-lab-2-pathway-level-features.html#cb48-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>This call will return paths to the output files, which you need to now download from AWS to your personal computer:</p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb49-1"><a href="module-10-lab-2-pathway-level-features.html#cb49-1" aria-hidden="true" tabindex="-1"></a>emap</span></code></pre></div>
-<p>netDx can directly generate EnrichmentMaps on a locally-installed version of Cytosape using RCy3 (<strong>LINK</strong>).
-This step needs a local copy of Cytoscape installed, so it won’t work on the AWS instance.</p>
+<p>netDx can directly generate EnrichmentMaps on a locally-installed version of Cytosape using <a href="https://bioconductor.org/packages/release/bioc/html/RCy3.html">RCy3</a>. RCy3 allows programmatic control of Cytoscape from within R, so that visualizations such as EnrichmentMap can be programmatically created. This step needs a local copy of Cytoscape installed, so it won’t work on the lab AWS instance. Try it on your laptop after the lab.</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb50-1"><a href="module-10-lab-2-pathway-level-features.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="do">###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],</span></span>
 <span id="cb50-2"><a href="module-10-lab-2-pathway-level-features.html#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="do">###         groupClusters=TRUE, hideNodeLabels=TRUE)</span></span></code></pre></div>
-<p>If you wanted to look at one anyway, you can download the input files shown in <code>emap</code> by opening your web browser to: <code>http://your student instance&gt;</code>. Then build an Enrichment map using Cytoscape on your laptop as discussed earlier in the Cancer Analysis workshop.</p>
-<p>When you’re done, the Enrichment Map would look like this (below). The speech bubbles show pathway names within a couple top clusters.</p>
+<p>If you wanted to look at an EnrichmentMap anyway, you can download the input files shown in the output of the <code>emap</code> object above by opening your web browser to: <code>http://your student instance</code> and downloading the files from there. Then build an Enrichment map using Cytoscape on your laptop as discussed earlier in the Cancer Analysis workshop.</p>
+<p>When you’re done, the Enrichment Map for top pathways predictive of Luminal A status would look like this (below). The speech bubbles show pathway names within a couple top clusters.</p>
 <p><img src="images/Lab2_EMap.jpg" width="140%" /></p>
-<p>You should be able to <a href="https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/LuminalA.cys">download the Cytoscape session file here</a> to see the finished result.</p>
-<p>In practice, it can take a good portion of an hour to adjust the layout of the EnrichmentMap and often longer to explore the contents. But at a glance you can see that the top pathway</p>
+<p>You can also <a href="https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/LuminalA.cys">download the Cytoscape session file here</a> to see the finished result.</p>
+<div class="rmd-note">
+<ol style="list-style-type: decimal">
+<li>
+In practice, it can take a good portion of an hour to adjust the layout of the EnrichmentMap, and often longer to explore the contents. The automatically-generated pathway theme labels are often revised upon looking closer inspection of the pathways within.
+</li>
+</ol>
+</div>
 </div>
 <div id="sessioninfo-1" class="section level2">
 <h2>sessionInfo</h2>

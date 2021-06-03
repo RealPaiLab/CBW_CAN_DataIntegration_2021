@@ -14,7 +14,14 @@ Here, we will again use breast cancer samples, and discriminate between Luminal 
  * Gene expression: Features will be defined at the level of ***pathways***; i.e. each feature groups only those genes corresponding to the pathway. Similarity is defined as pairwise *Pearson correlation*.
 
  ```{block type="rmd-note"}
- Note that while in this design we group gene expression measures into pathways, the same design can be used to group other types of data based on prior knowledge. For instance, measures from imaging data could be grouped by 
+ Note that while in this design we group gene expression measures into pathways, the same design can be used to group other types of data based on prior knowledge. For instance, measures from imaging data could be grouped by prior knowledge of correlated networks of regions of interest subserving specific functions. 
+ ```
+```{block type="rmd-note"}
+ In practice I recommend running a predictor design with 2-3 different sets of pathway definitions, and comparing the predictive pathway themes. For instance, it could be useful to compare results from using all curated pathways, to just domain-specific ones. 
+ 
+ Feature design is something of an art, and the choice of pathways depends on what your goals with building the predictor are. Are you looking to prioritize a known set of biological processes or interested in general discovery? These are tradeoffs. 
+
+ At the very least I would recommend running with all curated pathways as a baseline, because you may generate novel hypotheses.  
  ```
 
 ```{r, class.source="codeblock",echo=FALSE, fig.cap="Lab 2: Predictor design", echo=FALSE}
@@ -266,7 +273,7 @@ summary(confMat)
 
 ## Visualize top pathways in Cytoscape
 
-We will now visualize top-scoring pathways using the Cytoscape visualization EnrichmentMap. Recall from the XXX module that an EnrichmentMap is a network visualization of related gene-sets, where each node is a pathway and edges connect similar pathways. 
+We will now visualize top-scoring pathways using the Cytoscape visualization EnrichmentMap. Recall from Module 8 that an EnrichmentMap is a network visualization of related gene-sets, where each node is a pathway and edges connect similar pathways. 
 
 Let us say we only want to see pathways that scored in some target range for "most" of the trials; i.e. consistently high-scoring pathways.
 We quantify this by asking only for features that score [`EMapMinScore`,`EMapMaxScore`] for `EMapPctPass` fraction of trials.
@@ -290,25 +297,28 @@ This call will return paths to the output files, which you need to now download 
 emap
 ```
 
-netDx can directly generate EnrichmentMaps on a locally-installed version of Cytosape using RCy3 (**LINK**). 
-This step needs a local copy of Cytoscape installed, so it won't work on the AWS instance. 
+netDx can directly generate EnrichmentMaps on a locally-installed version of Cytosape using [RCy3](https://bioconductor.org/packages/release/bioc/html/RCy3.html). RCy3 allows programmatic control of Cytoscape from within R, so that visualizations such as EnrichmentMap can be programmatically created. This step needs a local copy of Cytoscape installed, so it won't work on the lab AWS instance. Try it on your laptop after the lab.
 
 ```{r, class.source="codeblock",eval=FALSE}
 ###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],
 ###         groupClusters=TRUE, hideNodeLabels=TRUE)
 ```
 
-If you wanted to look at one anyway, you can download the input files shown in `emap` by opening your web browser to: `http://your student instance>`.  Then build an Enrichment map using Cytoscape on your laptop as discussed earlier in the Cancer Analysis workshop. 
+If you wanted to look at an EnrichmentMap anyway, you can download the input files shown in the output of the `emap` object above by opening your web browser to: `http://your student instance` and downloading the files from there. Then build an Enrichment map using Cytoscape on your laptop as discussed earlier in the Cancer Analysis workshop. 
 
-When you're done, the Enrichment Map would look like this (below). The speech bubbles show pathway names within a couple top clusters.
+When you're done, the Enrichment Map for top pathways predictive of Luminal A status would look like this (below). The speech bubbles show pathway names within a couple top clusters.
 
 ```{r echo=FALSE, out.width="140%"}
 knitr::include_graphics("images/Lab2_EMap.jpg")
 ```
 
-You should be able to [download the Cytoscape session file here](https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/LuminalA.cys) to see the finished result.
+You can also [download the Cytoscape session file here](https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/LuminalA.cys) to see the finished result. 
 
- In practice, it can take a good portion of an hour to adjust the layout of the EnrichmentMap and often longer to explore the contents.  But at a glance you can see that the top pathway 
+```{block,type="rmd-note"}
+ (1) In practice, it can take a good portion of an hour to adjust the layout of the EnrichmentMap, and often longer to explore the contents. The automatically-generated pathway theme labels are often revised upon looking closer inspection of the pathways within.
+```
+
+
 
 
 ## sessionInfo
