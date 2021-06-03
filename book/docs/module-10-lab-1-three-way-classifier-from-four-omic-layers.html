@@ -215,28 +215,36 @@ Figure 1: Lab 2: Predictor design
 </div>
 <div id="get-and-prepare-data" class="section level2">
 <h2>Get and prepare data</h2>
-<p>In this example, we use curated multi-modal data from The Cancer Genome Atlas, gotten from the BioConductor <code>curatedTCGAData</code> package. Data for all cancer types profiled in TCGA are available through this package; <a href="https://bioconductor.org/packages/release/data/experiment/vignettes/curatedTCGAData/inst/doc/curatedTCGAData.html">see this tutorial for details</a>.</p>
+<p>In this example, we use curated multi-modal data from The Cancer Genome Atlas, gotten from the BioConductor <code>curatedTCGAData</code> package. Data for all cancer types profiled in TCGA are available through this package; <a href="https://bioconductor.org/packages/release/data/experiment/vignettes/curatedTCGAData/inst/doc/curatedTCGAData.html">see this tutorial for details</a>.
+<img src="images/iconfinder_duplicate_3671686.png" width="3%" /></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(curatedTCGAData))</span></code></pre></div>
 <p>Let’s take a look at the available data for breast cancer, without downloading any (set <code>dry.run=TRUE</code>).
-Note that the new release of BioConductor (3.13) actually allows users to fetch one of two versions of TCGA data.</p>
+Note that the new release of BioConductor (3.13) actually allows users to fetch one of two versions of TCGA data.
+<img src="images/iconfinder_duplicate_3671686.png" width="3%" /></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">curatedTCGAData</span>(<span class="at">diseaseCode=</span><span class="st">&quot;BRCA&quot;</span>, <span class="at">assays=</span><span class="st">&quot;*&quot;</span>,<span class="at">dry.run=</span><span class="cn">TRUE</span>)</span></code></pre></div>
-<p>Now let’s actually download the data, getting just the four layers we need:</p>
+<p>Now let’s actually download the data, getting just the four layers we need:
+<img src="images/iconfinder_duplicate_3671686.png" width="3%" /></p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb6-1" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">curatedTCGAData</span>(<span class="st">&quot;BRCA&quot;</span>,</span>
 <span id="cb6-2"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb6-2" aria-hidden="true" tabindex="-1"></a>                                         <span class="fu">c</span>(<span class="st">&quot;mRNAArray&quot;</span>,<span class="st">&quot;Methylation_methyl27&quot;</span>, </span>
 <span id="cb6-3"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb6-3" aria-hidden="true" tabindex="-1"></a>                                         <span class="st">&quot;RPPAArray&quot;</span>,<span class="st">&quot;miRNASeqGene&quot;</span>),</span>
 <span id="cb6-4"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb6-4" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">dry.run=</span><span class="cn">FALSE</span>))</span></code></pre></div>
 <p>This call returns a <code>MultiAssayExperiment</code> object. Recall that this is a container for storing multiple assays performed on the same set of samples. <a href="https://bioconductor.org/packages/release/bioc/vignettes/MultiAssayExperiment/inst/doc/QuickStartMultiAssay.html">See this tutorial</a> to learn more.</p>
-<p>Let’s briefly explore the <code>brca</code> <code>MultiAssayExperiment</code> object.</p>
+<p>Let’s briefly explore the <code>brca</code> <code>MultiAssayExperiment</code> object.
+<img src="images/iconfinder_duplicate_3671686.png" width="3%" /></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb7-1" aria-hidden="true" tabindex="-1"></a>brca</span></code></pre></div>
-<p><code>assays()</code> returns a <code>list</code> with all -omic data associated with this object.</p>
+<p><code>assays()</code> returns a <code>list</code> with all -omic data associated with this object.<br />
+<img src="images/iconfinder_duplicate_3671686.png" width="3%" /></p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">assays</span>(brca))</span></code></pre></div>
-<p><code>names()</code> shows the datatypes in each slot of <code>assays()</code>:</p>
+<p><code>names()</code> shows the datatypes in each slot of <code>assays()</code>:
+<img src="images/iconfinder_duplicate_3671686.png" width="3%" /></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(<span class="fu">assays</span>(brca))</span></code></pre></div>
 <p>So miRNA data is in slot 1, gene expression in slot 2, etc.,</p>
-<p>We can subset the data to see what it looks like. Let’s do that for the miRNA data, looking at just the first five measures</p>
+<p>We can subset the data to see what it looks like. Let’s do that for the miRNA data, looking at just the first five measures
+<img src="images/iconfinder_duplicate_3671686.png" width="3%" /></p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb10-1" aria-hidden="true" tabindex="-1"></a>mir <span class="ot">&lt;-</span> <span class="fu">assays</span>(brca)[[<span class="st">&quot;BRCA_miRNASeqGene-20160128&quot;</span>]]</span>
 <span id="cb10-2"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mir[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code></pre></div>
-<p>Patient metadata is contained in the <code>colData()</code> slot. Rows contain data for each patient and columns contain measures such as clinical characteristics:</p>
+<p>Patient metadata is contained in the <code>colData()</code> slot. Rows contain data for each patient and columns contain measures such as clinical characteristics:
+<img src="images/iconfinder_duplicate_3671686.png" width="3%" /></p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb11-1" aria-hidden="true" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">colData</span>(brca)</span>
 <span id="cb11-2"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(pheno)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>]</span>
 <span id="cb11-3"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code></pre></div>
@@ -247,7 +255,8 @@ Note that the new release of BioConductor (3.13) actually allows users to fetch 
 <li>creating an <code>ID</code> column in <code>colData(brca)</code>, which contains unique patient IDs</li>
 <li>creating a <code>STATUS</code> column in <code>colData(brca)</code> which contains the patient labels (i.e what we want netDx to classify).</li>
 </ul>
-<p>In practice you would prepare the dataset once and save it to file, then separately load it before running netDx; i.e. decouple data processing and running the predictor. The data processing code has been moved into a supporting file, <code>prepare_data.R</code>. You can explore it after the lab to see how some things are achieved (e.g. removing duplicate samples). For now, let’s just run it.</p>
+<p>In practice you would prepare the dataset once and save it to file, then separately load it before running netDx; i.e. decouple data processing and running the predictor. The data processing code has been moved into a supporting file, <code>prepare_data.R</code>. You can explore it after the lab to see how some things are achieved (e.g. removing duplicate samples). For now, let’s just run it.
+<img src="images/iconfinder_duplicate_3671686.png" width="3%" /></p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;prepare_data.R&quot;</span>)</span>
 <span id="cb12-2"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb12-2" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">prepareDataForCBW</span>(brca)</span></code></pre></div>
 <p>Notice that we now have <code>ID</code> and <code>STATUS</code> columns in the sample metadata table.</p>
@@ -256,6 +265,7 @@ Note that the new release of BioConductor (3.13) actually allows users to fetch 
 netDx requires “ID” and “STATUS” columns in <code>colData(…)</code>.
 </p>
 </div>
+<p><img src="images/iconfinder_duplicate_3671686.png" width="3%" /></p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb13-1" aria-hidden="true" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">colData</span>(brca)</span>
 <span id="cb13-2"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno[,<span class="fu">c</span>(<span class="st">&quot;ID&quot;</span>,<span class="st">&quot;STATUS&quot;</span>)])</span>
 <span id="cb13-3"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(pheno<span class="sc">$</span>STATUS,<span class="at">useNA=</span><span class="st">&quot;always&quot;</span>)  <span class="co"># good practice: useNA=&quot;always&quot; shows missing values</span></span></code></pre></div>
@@ -274,12 +284,14 @@ netDx requires “ID” and “STATUS” columns in <code>colData(…)</code>.
 <li><code>makeNets()</code>: an R function telling netDx what similarity metric to use for each data layer</li>
 </ul>
 <p>Let’s start by loading the <code>netDx</code> package.</p>
+<p><img src="images/iconfinder_duplicate_3671686.png" width="3%" /></p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressWarnings</span>(<span class="fu">suppressMessages</span>(<span class="fu">require</span>(netDx)))</span></code></pre></div>
 <p>Let’s set up each of the input arguments one by one.</p>
 <div id="grouplist" class="section level3">
 <h3>groupList</h3>
 <p><strong>What is this:</strong> <code>groupList</code> tells netDx how to group measures within a layer, to generate a PSN. Measures could be individual genes, proteins, CpG bases (in DNA methylation data), clinical variables, etc.,</p>
 <p>In this simple example we just create a single PSN for each datatype, containing all measures from that datatype.</p>
+<p><img src="images/iconfinder_duplicate_3671686.png" width="3%" /></p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb15-1" aria-hidden="true" tabindex="-1"></a>expr <span class="ot">&lt;-</span> <span class="fu">assays</span>(brca)</span>
 <span id="cb15-2"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb15-2" aria-hidden="true" tabindex="-1"></a>groupList <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
 <span id="cb15-3"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(expr)) { <span class="co"># loop over all layers</span></span>
@@ -296,6 +308,7 @@ netDx requires “ID” and “STATUS” columns in <code>colData(…)</code>.
 <p>Let’s take a look at <code>groupList</code>. Here is the first tier:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(groupList)</span></code></pre></div>
 <p>And the second tier:</p>
+<p><img src="images/iconfinder_duplicate_3671686.png" width="3%" /></p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(groupList[[<span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>]])</span>
 <span id="cb17-2"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(groupList[[<span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>]][[<span class="dv">1</span>]])</span>
 <span id="cb17-3"><a href="module-10-lab-1-three-way-classifier-from-four-omic-layers.html#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(groupList[[<span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>]][[<span class="dv">1</span>]])</span></code></pre></div>

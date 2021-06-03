@@ -91,6 +91,9 @@ h1 {
   content: "Troubleshooting";
 }
 
+.code{
+  background: #169c40
+}
 
 .rmd-tip {
   padding: 0em 0em 0em 3em;
