@@ -171,6 +171,7 @@ netDx requires that this function have:
 * `dataList`,`groupList`, and `netDir` as input variables. The residual `...` parameter is to pass additional variables to `makePSN_NamedMatrix()`, notably number of cores for parallel processing (`numCores`). 
 
 ```{block,type="rmd-code"}
+
 ```
 ```{r, eval=FALSE}
 makeNets <- function(dataList, groupList, netDir,...) {
