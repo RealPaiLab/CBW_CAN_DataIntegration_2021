@@ -50,7 +50,9 @@ h1 {
 }
 
 .rmd-design{
-  background: #b58fce  url("images/iconfinder_art-tools_1291734.png") left center/3em no-repeat /*!important*/; 
+  padding: 0em 0em 0em 3em;
+  margin-bottom: 2px;
+  background: #b58fce  url("images/iconfinder_art-tools_1291734.png") left top/3em no-repeat /*!important*/; 
 }
 .rmd-design:before {
   color: #6b13a5;
