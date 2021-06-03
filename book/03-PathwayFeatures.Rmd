@@ -83,7 +83,7 @@ The above pathway set was downloaded from [download.baderlab.org/EM_Genesets](ht
 
 Here is an example of the GMT format:
 
-```{r, class.source="codeblock",echo=FALSE, fig.cap="Lab 2: Predictor design"}
+```{r, class.source="codeblock",echo=FALSE, fig.cap="Lab 2: Example of GMT file format."}
 knitr::include_graphics("images/GMT_screenshot.png")
 ```
 
@@ -306,7 +306,7 @@ If you wanted to look at an EnrichmentMap anyway, you can download the input fil
 
 When you're done, the Enrichment Map for top pathways predictive of Luminal A status would look like this (below). The speech bubbles show pathway names within a couple top clusters.
 
-```{r echo=FALSE, out.width="140%"}
+```{r echo=FALSE, out.width="140%",  fig.cap="Lab 2: EnrichmentMap for top-scoring pathways predictive of Luminal A status. Nodes show pathways scoring 7+ out of 10 in over 70% of train/test splits. Edges connect pathways with shared genes. Yellow bubbles show pathway clusters, labelled by a AutoAnnotate. Node fills indicate top score in 70%+ of the splits. Speech bubbles show pathways in example clusters."}
 knitr::include_graphics("images/Lab2_EMap.jpg")
 ```
 

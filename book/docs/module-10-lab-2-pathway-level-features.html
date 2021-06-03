@@ -228,9 +228,9 @@ Note that while in this design we group gene expression measures into pathways, 
 </ol>
 </div>
 <div class="figure"><span id="fig:unnamed-chunk-35"></span>
-<img src="images/Lab2_design.jpg" alt="Lab 2: Predictor design" width="874" />
+<img src="images/Lab2_design.jpg" alt="Lab 2 design: We will integrate clinical and gene expression data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity." width="874" />
 <p class="caption">
-Figure 2: Lab 2: Predictor design
+Figure 2: Lab 2 design: We will integrate clinical and gene expression data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity.
 </p>
 </div>
 </div>
@@ -270,9 +270,9 @@ This design changes model-building time to several hours, so avoid large gene se
 <p>The above pathway set was downloaded from <a href="http://download.baderlab.org/EM_Genesets">download.baderlab.org/EM_Genesets</a>, which is a good resource for routinely-updated curated pathway definitions. Pathways are compiled from Reactome, Panther, NCI, MSigDB, etc., [REF], and data is contained in <a href="https://software.broadinstitute.org/cancer/software/gsea/wiki/index.php/Data_formats#GMT:_Gene_Matrix_Transposed_file_format_.28.2A.gmt.29">GMT format</a>, a common format to represent gene-sets, such as pathways. You can see from the value of <code>x</code> that the file isn’t downloaded to our working directory, but rather is stored in a BioConductor-specific location for files (file cache), using the <a href="https://www.bioconductor.org/packages/release/bioc/html/BiocFileCache.html">BiocFileCache</a> class. This way if we rerun the script, BioConductor will only download the file again if it has changed since our last download.</p>
 <p>Here is an example of the GMT format:</p>
 <div class="figure"><span id="fig:unnamed-chunk-42"></span>
-<img src="images/GMT_screenshot.png" alt="Lab 2: Predictor design" width="937" />
+<img src="images/GMT_screenshot.png" alt="Lab 2: Example of GMT file format." width="937" />
 <p class="caption">
-Figure 3: Lab 2: Predictor design
+Figure 3: Lab 2: Example of GMT file format.
 </p>
 </div>
 <p>We then use <code>readPathways()</code> to read the pathways into a list format to provide the predictor with. So the full call looks like this:</p>
@@ -433,9 +433,14 @@ We quantify this by asking only for features that score [<code>EMapMinScore</cod
 <p>netDx can directly generate EnrichmentMaps on a locally-installed version of Cytosape using <a href="https://bioconductor.org/packages/release/bioc/html/RCy3.html">RCy3</a>. RCy3 allows programmatic control of Cytoscape from within R, so that visualizations such as EnrichmentMap can be programmatically created. This step needs a local copy of Cytoscape installed, so it won’t work on the lab AWS instance. Try it on your laptop after the lab.</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb50-1"><a href="module-10-lab-2-pathway-level-features.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="do">###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],</span></span>
 <span id="cb50-2"><a href="module-10-lab-2-pathway-level-features.html#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="do">###         groupClusters=TRUE, hideNodeLabels=TRUE)</span></span></code></pre></div>
-<p>If you wanted to look at an EnrichmentMap anyway, you can download the input files shown in the output of the <code>emap</code> object above by opening your web browser to: <code>http://your student instance</code> and downloading the files from there. Then build an Enrichment map using Cytoscape on your laptop as discussed earlier in the Cancer Analysis workshop.</p>
+<p>If you wanted to look at an EnrichmentMap anyway, you can download the input files shown in the output of the <code>emap</code> object above by opening your web browser to: <code>http://your-student-instance</code> and downloading the files from there. Then build an Enrichment map using Cytoscape on your laptop as discussed earlier in the Cancer Analysis workshop.</p>
 <p>When you’re done, the Enrichment Map for top pathways predictive of Luminal A status would look like this (below). The speech bubbles show pathway names within a couple top clusters.</p>
-<p><img src="images/Lab2_EMap.jpg" width="140%" /></p>
+<div class="figure"><span id="fig:unnamed-chunk-57"></span>
+<img src="images/Lab2_EMap.jpg" alt="Lab 2: EnrichmentMap for top-scoring pathways predictive of Luminal A status. Nodes show pathways scoring 7+ out of 10 in over 70% of train/test splits. Edges connect pathways with shared genes. Yellow bubbles show pathway clusters, labelled by a AutoAnnotate. Node fills indicate top score in 70%+ of the splits. Speech bubbles show pathways in example clusters." width="140%" />
+<p class="caption">
+Figure 4: Lab 2: EnrichmentMap for top-scoring pathways predictive of Luminal A status. Nodes show pathways scoring 7+ out of 10 in over 70% of train/test splits. Edges connect pathways with shared genes. Yellow bubbles show pathway clusters, labelled by a AutoAnnotate. Node fills indicate top score in 70%+ of the splits. Speech bubbles show pathways in example clusters.
+</p>
+</div>
 <p>You can also <a href="https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/LuminalA.cys">download the Cytoscape session file here</a> to see the finished result.</p>
 <div class="rmd-note">
 <ol style="list-style-type: decimal">
