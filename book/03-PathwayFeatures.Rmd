@@ -302,7 +302,7 @@ If you wanted to look at one anyway, you can download the input files shown in `
 
 When you're done, the Enrichment Map would look like this (below). The speech bubbles show pathway names within a couple top clusters.
 
-```{r echo=FALSE}
+```{r echo=FALSE, out.width="140%"}
 knitr::include_graphics("images/Lab2_EMap.jpg")
 ```
 
