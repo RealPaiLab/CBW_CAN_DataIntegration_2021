@@ -217,24 +217,24 @@ Figure 2: Lab 2: Predictor design
 <div id="get-and-prepare-data-1" class="section level2">
 <h2>Get and prepare data</h2>
 <p>Let’s fetch the BRCA data using <code>curatedTCGAData</code> again, this time only the gene expression data. Remember, the clinical data we automatically get in the <code>colData()</code> slot returned.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="module-10-lab-2-pathway-level-features.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(curatedTCGAData))</span>
-<span id="cb30-2"><a href="module-10-lab-2-pathway-level-features.html#cb30-2" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
-<span id="cb30-3"><a href="module-10-lab-2-pathway-level-features.html#cb30-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">curatedTCGAData</span>(</span>
-<span id="cb30-4"><a href="module-10-lab-2-pathway-level-features.html#cb30-4" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;BRCA&quot;</span>,<span class="fu">c</span>(<span class="st">&quot;mRNAArray&quot;</span>),</span>
-<span id="cb30-5"><a href="module-10-lab-2-pathway-level-features.html#cb30-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">dry.run=</span><span class="cn">FALSE</span>)</span>
-<span id="cb30-6"><a href="module-10-lab-2-pathway-level-features.html#cb30-6" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="module-10-lab-2-pathway-level-features.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(curatedTCGAData))</span>
+<span id="cb31-2"><a href="module-10-lab-2-pathway-level-features.html#cb31-2" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
+<span id="cb31-3"><a href="module-10-lab-2-pathway-level-features.html#cb31-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">curatedTCGAData</span>(</span>
+<span id="cb31-4"><a href="module-10-lab-2-pathway-level-features.html#cb31-4" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;BRCA&quot;</span>,<span class="fu">c</span>(<span class="st">&quot;mRNAArray&quot;</span>),</span>
+<span id="cb31-5"><a href="module-10-lab-2-pathway-level-features.html#cb31-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">dry.run=</span><span class="cn">FALSE</span>)</span>
+<span id="cb31-6"><a href="module-10-lab-2-pathway-level-features.html#cb31-6" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
 <p>Let’s look at the data. Notice that we now only have one -omic assay, gene expression measures from microarrays.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="module-10-lab-2-pathway-level-features.html#cb31-1" aria-hidden="true" tabindex="-1"></a>brca</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="module-10-lab-2-pathway-level-features.html#cb32-1" aria-hidden="true" tabindex="-1"></a>brca</span></code></pre></div>
 <p>As before, we prepare the data. I highly recommend separating the script that prepares the data from the one running the predictor for improved management, readability and debuggability.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="module-10-lab-2-pathway-level-features.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;prepare_data.R&quot;</span>)</span>
-<span id="cb32-2"><a href="module-10-lab-2-pathway-level-features.html#cb32-2" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">prepareDataForCBW</span>(brca, <span class="at">setBinary=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="module-10-lab-2-pathway-level-features.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;prepare_data.R&quot;</span>)</span>
+<span id="cb33-2"><a href="module-10-lab-2-pathway-level-features.html#cb33-2" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">prepareDataForCBW</span>(brca, <span class="at">setBinary=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="make-rules-to-create-psns" class="section level2">
 <h2>Make rules to create PSNs</h2>
 <p>Load the <code>netDx</code> package and initialize the <code>groupList</code> object, where we will store our grouping rules.
 Recall that <code>groupList</code> is a list-of-lists, with the top tier containing data layer names, and that the layer names must match <code>names(assays(brca))</code> or whatever your <code>MultiAssayExperiment</code> object is called.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="module-10-lab-2-pathway-level-features.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressWarnings</span>(<span class="fu">suppressMessages</span>(<span class="fu">require</span>(netDx)))</span>
-<span id="cb33-2"><a href="module-10-lab-2-pathway-level-features.html#cb33-2" aria-hidden="true" tabindex="-1"></a>groupList <span class="ot">&lt;-</span> <span class="fu">list</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="module-10-lab-2-pathway-level-features.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressWarnings</span>(<span class="fu">suppressMessages</span>(<span class="fu">require</span>(netDx)))</span>
+<span id="cb34-2"><a href="module-10-lab-2-pathway-level-features.html#cb34-2" aria-hidden="true" tabindex="-1"></a>groupList <span class="ot">&lt;-</span> <span class="fu">list</span>()</span></code></pre></div>
 <div id="rna-pathway-features" class="section level3">
 <h3>RNA: Pathway features</h3>
 <p>Let’s group genes into <em>pathway-level features</em>, i.e. instead of one PSN for transcriptomic data, we create one PSN for each <em>pathway</em>. So if you had a pathway set with 2,000 curated pathways, <strong>this would generate 2,000 input PSN</strong>.</p>
@@ -245,8 +245,8 @@ This design changes model-building time to several hours, so avoid large gene se
 </div>
 <p>There are two ways of providing pathway data to netDx:
 1. You can <strong>download</strong> a compilation of pathways from curated databases using the <code>fetchPathwayDefinitions()</code> function in netDx, like so:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="module-10-lab-2-pathway-level-features.html#cb34-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">fetchPathwayDefinitions</span>(<span class="st">&quot;March&quot;</span>,<span class="dv">2021</span>)</span>
-<span id="cb34-2"><a href="module-10-lab-2-pathway-level-features.html#cb34-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="module-10-lab-2-pathway-level-features.html#cb35-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">fetchPathwayDefinitions</span>(<span class="st">&quot;March&quot;</span>,<span class="dv">2021</span>)</span>
+<span id="cb35-2"><a href="module-10-lab-2-pathway-level-features.html#cb35-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
 <p>The above pathway set was downloaded from <a href="http://download.baderlab.org/EM_Genesets">download.baderlab.org/EM_Genesets</a>, which is a good resource for routinely-updated curated pathway definitions. Pathways are compiled from Reactome, Panther, NCI, MSigDB, etc., [REF], and data is contained in <a href="https://software.broadinstitute.org/cancer/software/gsea/wiki/index.php/Data_formats#GMT:_Gene_Matrix_Transposed_file_format_.28.2A.gmt.29">GMT format</a>, a common format to represent gene-sets, such as pathways. You can see from the value of <code>x</code> that the file isn’t downloaded to our working directory, but rather is stored in a BioConductor-specific location for files (file cache), using the <a href="https://www.bioconductor.org/packages/release/bioc/html/BiocFileCache.html">BiocFileCache</a> class. This way if we rerun the script, BioConductor will only download the file again if it has changed since our last download.</p>
 <p>Here is an example of the GMT format:</p>
 <div class="figure"><span id="fig:unnamed-chunk-37"></span>
@@ -256,23 +256,23 @@ Figure 3: Lab 2: Predictor design
 </p>
 </div>
 <p>We then use <code>readPathways()</code> to read the pathways into a list format to provide the predictor with. So the full call looks like this:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="module-10-lab-2-pathway-level-features.html#cb35-1" aria-hidden="true" tabindex="-1"></a>pathList <span class="ot">&lt;-</span> <span class="fu">readPathways</span>(<span class="fu">fetchPathwayDefinitions</span>(<span class="st">&quot;March&quot;</span>,<span class="dv">2021</span>))</span>
-<span id="cb35-2"><a href="module-10-lab-2-pathway-level-features.html#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pathList)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="module-10-lab-2-pathway-level-features.html#cb36-1" aria-hidden="true" tabindex="-1"></a>pathList <span class="ot">&lt;-</span> <span class="fu">readPathways</span>(<span class="fu">fetchPathwayDefinitions</span>(<span class="st">&quot;March&quot;</span>,<span class="dv">2021</span>))</span>
+<span id="cb36-2"><a href="module-10-lab-2-pathway-level-features.html#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pathList)</span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>Alternatively, you can also provide a custom pathway set to netDx by reading in a GMT file, using the <code>readPathways()</code> function. In this example, I’ve downloaded a geneset of <a href="http://www.gsea-msigdb.org/gsea/msigdb/collections.jsp#C7">pathways often dysregulated in cancer</a>, set C6 from MSigDB (REF):</li>
 </ol>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="module-10-lab-2-pathway-level-features.html#cb36-1" aria-hidden="true" tabindex="-1"></a>gmtFile <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;%s2/cancer_pathways.gmt&quot;</span>,<span class="fu">tempdir</span>())</span>
-<span id="cb36-2"><a href="module-10-lab-2-pathway-level-features.html#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%s2&quot;</span>,<span class="fu">tempdir</span>()))) <span class="fu">dir.create</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%s2&quot;</span>,<span class="fu">tempdir</span>()))</span>
-<span id="cb36-3"><a href="module-10-lab-2-pathway-level-features.html#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://raw.githubusercontent.com/RealPaiLab/CBW_CAN_DataIntegration_2021/master/supporting_files/c6.all.v7.4.symbols.gmt&quot;</span>,gmtFile)</span>
-<span id="cb36-4"><a href="module-10-lab-2-pathway-level-features.html#cb36-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">readPathways</span>(gmtFile)</span>
-<span id="cb36-5"><a href="module-10-lab-2-pathway-level-features.html#cb36-5" aria-hidden="true" tabindex="-1"></a>x[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="module-10-lab-2-pathway-level-features.html#cb37-1" aria-hidden="true" tabindex="-1"></a>gmtFile <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;%s2/cancer_pathways.gmt&quot;</span>,<span class="fu">tempdir</span>())</span>
+<span id="cb37-2"><a href="module-10-lab-2-pathway-level-features.html#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%s2&quot;</span>,<span class="fu">tempdir</span>()))) <span class="fu">dir.create</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%s2&quot;</span>,<span class="fu">tempdir</span>()))</span>
+<span id="cb37-3"><a href="module-10-lab-2-pathway-level-features.html#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://raw.githubusercontent.com/RealPaiLab/CBW_CAN_DataIntegration_2021/master/supporting_files/c6.all.v7.4.symbols.gmt&quot;</span>,gmtFile)</span>
+<span id="cb37-4"><a href="module-10-lab-2-pathway-level-features.html#cb37-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">readPathways</span>(gmtFile)</span>
+<span id="cb37-5"><a href="module-10-lab-2-pathway-level-features.html#cb37-5" aria-hidden="true" tabindex="-1"></a>x[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code></pre></div>
 <p>For this tutorial we will limit ourselves to the first set of pathways and use <code>groupList</code> to tell netDx to group transcriptomic data using pathways.</p>
 <div class="rmd-caution">
 <p>
 The pathway definition file should use the same identifier type as your patient data. For instance, if the genes in your transcriptomic data are represented using <a href="https://www.genenames.org/tools/search/">HGNC symbols</a>, then your pathway definition file must also use HGNC symbols (e.g. <em>ID2S</em>), and not a different type of identifier, such as Ensembl IDs (which look like this: <em>ENSG00000010404</em>).
 </p>
 </div>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="module-10-lab-2-pathway-level-features.html#cb37-1" aria-hidden="true" tabindex="-1"></a>groupList[[<span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>]] <span class="ot">&lt;-</span> pathList </span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="module-10-lab-2-pathway-level-features.html#cb38-1" aria-hidden="true" tabindex="-1"></a>groupList[[<span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>]] <span class="ot">&lt;-</span> pathList </span></code></pre></div>
 </div>
 <div id="clinical-single-variables" class="section level3">
 <h3>Clinical: Single variables</h3>
@@ -283,22 +283,22 @@ The pathway definition file should use the same identifier type as your patient 
 <li><code>stage</code> to <code>STAGE</code></li>
 </ul>
 <p>These variables must be present in the <code>colData()</code> slot:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="module-10-lab-2-pathway-level-features.html#cb38-1" aria-hidden="true" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">colData</span>(brca)</span>
-<span id="cb38-2"><a href="module-10-lab-2-pathway-level-features.html#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno[,<span class="fu">c</span>(<span class="st">&quot;patient.age_at_initial_pathologic_diagnosis&quot;</span>,<span class="st">&quot;STAGE&quot;</span>)])</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="module-10-lab-2-pathway-level-features.html#cb39-1" aria-hidden="true" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">colData</span>(brca)</span>
+<span id="cb39-2"><a href="module-10-lab-2-pathway-level-features.html#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno[,<span class="fu">c</span>(<span class="st">&quot;patient.age_at_initial_pathologic_diagnosis&quot;</span>,<span class="st">&quot;STAGE&quot;</span>)])</span></code></pre></div>
 <p>We now add the entry into <code>groupList</code>. The entry for <code>clinical</code> is special because netDx will look for corresponding variables in the sample metadata table, <code>colData()</code>, rather than looking for “clinical” within <code>assays(brca)</code>.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="module-10-lab-2-pathway-level-features.html#cb39-1" aria-hidden="true" tabindex="-1"></a>groupList[[<span class="st">&quot;clinical&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb39-2"><a href="module-10-lab-2-pathway-level-features.html#cb39-2" aria-hidden="true" tabindex="-1"></a>      <span class="at">age=</span><span class="st">&quot;patient.age_at_initial_pathologic_diagnosis&quot;</span>,</span>
-<span id="cb39-3"><a href="module-10-lab-2-pathway-level-features.html#cb39-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">stage=</span><span class="st">&quot;STAGE&quot;</span></span>
-<span id="cb39-4"><a href="module-10-lab-2-pathway-level-features.html#cb39-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="module-10-lab-2-pathway-level-features.html#cb40-1" aria-hidden="true" tabindex="-1"></a>groupList[[<span class="st">&quot;clinical&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb40-2"><a href="module-10-lab-2-pathway-level-features.html#cb40-2" aria-hidden="true" tabindex="-1"></a>      <span class="at">age=</span><span class="st">&quot;patient.age_at_initial_pathologic_diagnosis&quot;</span>,</span>
+<span id="cb40-3"><a href="module-10-lab-2-pathway-level-features.html#cb40-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">stage=</span><span class="st">&quot;STAGE&quot;</span></span>
+<span id="cb40-4"><a href="module-10-lab-2-pathway-level-features.html#cb40-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>We now tell netDx what similarity metric to use</p>
 <p>This is <code>makeNets()</code> just as we had seen in the previous exercise, which provides <code>netDx</code> with a custom function to generate similarity networks (i.e. features). We previously used the following code to create PSN based on Pearson correlation:</p>
 <p><strong><em>(Do not paste this in)</em></strong></p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="module-10-lab-2-pathway-level-features.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">makePSN_NamedMatrix</span>(..., <span class="at">writeProfiles=</span><span class="cn">TRUE</span>,...)<span class="st">`</span></span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="module-10-lab-2-pathway-level-features.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">makePSN_NamedMatrix</span>(..., <span class="at">writeProfiles=</span><span class="cn">TRUE</span>,...)<span class="st">`</span></span></code></pre></div>
 <p>We will now make a different call to <code>makePSN_NamedMatrix()</code> but this time, requesting the use of the normalized difference similarity metric.</p>
 <p>This is achieved by calling the following code <strong><em>(Do not paste this in, either)</em></strong>:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="module-10-lab-2-pathway-level-features.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">makePSN_NamedMatrix</span>(,..., </span>
-<span id="cb41-2"><a href="module-10-lab-2-pathway-level-features.html#cb41-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">simMetric=</span><span class="st">&quot;custom&quot;</span>, <span class="at">customFunc=</span>normDiff,</span>
-<span id="cb41-3"><a href="module-10-lab-2-pathway-level-features.html#cb41-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">writeProfiles=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="module-10-lab-2-pathway-level-features.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">makePSN_NamedMatrix</span>(,..., </span>
+<span id="cb42-2"><a href="module-10-lab-2-pathway-level-features.html#cb42-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">simMetric=</span><span class="st">&quot;custom&quot;</span>, <span class="at">customFunc=</span>normDiff,</span>
+<span id="cb42-3"><a href="module-10-lab-2-pathway-level-features.html#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">writeProfiles=</span><span class="cn">FALSE</span>)</span></code></pre></div>
 <p><code>normDiff</code> is a function provided in the <code>netDx</code> package, but the user may define custom similarity functions in this block of code and pass those to <code>makePSN_NamedMatrix()</code>, using the <code>customFunc</code> parameters; additionally set <code>simMetric</code> to <code>custom</code>.</p>
 <p>Other presets provided by netDx include:</p>
 <ul>
@@ -309,38 +309,38 @@ The pathway definition file should use the same identifier type as your patient 
 </ul>
 <p>When we’re done, this is what the <code>makeNets</code> function look like.</p>
 <p><em>Note: I realize this may be complicated. Future versions of netDx will simplify this syntax.</em></p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="module-10-lab-2-pathway-level-features.html#cb42-1" aria-hidden="true" tabindex="-1"></a>makeNets <span class="ot">&lt;-</span> <span class="cf">function</span>(dataList, groupList, netDir,...) {</span>
-<span id="cb42-2"><a href="module-10-lab-2-pathway-level-features.html#cb42-2" aria-hidden="true" tabindex="-1"></a>    netList <span class="ot">&lt;-</span> <span class="fu">c</span>() </span>
-<span id="cb42-3"><a href="module-10-lab-2-pathway-level-features.html#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-4"><a href="module-10-lab-2-pathway-level-features.html#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># make RNA nets (Pearson correlation)</span></span>
-<span id="cb42-5"><a href="module-10-lab-2-pathway-level-features.html#cb42-5" aria-hidden="true" tabindex="-1"></a>    rna <span class="ot">&lt;-</span> <span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span></span>
-<span id="cb42-6"><a href="module-10-lab-2-pathway-level-features.html#cb42-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(groupList[[rna]])) { <span class="do">## REMEMBER TO CHECK FOR NULL</span></span>
-<span id="cb42-7"><a href="module-10-lab-2-pathway-level-features.html#cb42-7" aria-hidden="true" tabindex="-1"></a>        netList <span class="ot">&lt;-</span> <span class="fu">makePSN_NamedMatrix</span>(</span>
-<span id="cb42-8"><a href="module-10-lab-2-pathway-level-features.html#cb42-8" aria-hidden="true" tabindex="-1"></a>            dataList[[rna]],</span>
-<span id="cb42-9"><a href="module-10-lab-2-pathway-level-features.html#cb42-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rownames</span>(dataList[[rna]]),</span>
-<span id="cb42-10"><a href="module-10-lab-2-pathway-level-features.html#cb42-10" aria-hidden="true" tabindex="-1"></a>            groupList[[rna]],</span>
-<span id="cb42-11"><a href="module-10-lab-2-pathway-level-features.html#cb42-11" aria-hidden="true" tabindex="-1"></a>            netDir,</span>
-<span id="cb42-12"><a href="module-10-lab-2-pathway-level-features.html#cb42-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">verbose=</span><span class="cn">FALSE</span>,</span>
-<span id="cb42-13"><a href="module-10-lab-2-pathway-level-features.html#cb42-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">writeProfiles=</span><span class="cn">TRUE</span>,         <span class="do">## define Pearson similarity as before</span></span>
-<span id="cb42-14"><a href="module-10-lab-2-pathway-level-features.html#cb42-14" aria-hidden="true" tabindex="-1"></a>            ...) </span>
-<span id="cb42-15"><a href="module-10-lab-2-pathway-level-features.html#cb42-15" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb42-16"><a href="module-10-lab-2-pathway-level-features.html#cb42-16" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb42-17"><a href="module-10-lab-2-pathway-level-features.html#cb42-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># make clinical nets (normalized difference)</span></span>
-<span id="cb42-18"><a href="module-10-lab-2-pathway-level-features.html#cb42-18" aria-hidden="true" tabindex="-1"></a>    netList2 <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb42-19"><a href="module-10-lab-2-pathway-level-features.html#cb42-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(groupList[[<span class="st">&quot;clinical&quot;</span>]])) {</span>
-<span id="cb42-20"><a href="module-10-lab-2-pathway-level-features.html#cb42-20" aria-hidden="true" tabindex="-1"></a>    netList2 <span class="ot">&lt;-</span> <span class="fu">makePSN_NamedMatrix</span>(</span>
-<span id="cb42-21"><a href="module-10-lab-2-pathway-level-features.html#cb42-21" aria-hidden="true" tabindex="-1"></a>        dataList<span class="sc">$</span>clinical, </span>
-<span id="cb42-22"><a href="module-10-lab-2-pathway-level-features.html#cb42-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">rownames</span>(dataList<span class="sc">$</span>clinical),</span>
-<span id="cb42-23"><a href="module-10-lab-2-pathway-level-features.html#cb42-23" aria-hidden="true" tabindex="-1"></a>        groupList[[<span class="st">&quot;clinical&quot;</span>]],netDir,</span>
-<span id="cb42-24"><a href="module-10-lab-2-pathway-level-features.html#cb42-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">simMetric=</span><span class="st">&quot;custom&quot;</span>,<span class="at">customFunc=</span>normDiff, <span class="do">### Notice simMetric &amp; customFunc</span></span>
-<span id="cb42-25"><a href="module-10-lab-2-pathway-level-features.html#cb42-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">writeProfiles=</span><span class="cn">FALSE</span>,</span>
-<span id="cb42-26"><a href="module-10-lab-2-pathway-level-features.html#cb42-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">sparsify=</span><span class="cn">TRUE</span>,</span>
-<span id="cb42-27"><a href="module-10-lab-2-pathway-level-features.html#cb42-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">verbose=</span><span class="cn">FALSE</span>,</span>
-<span id="cb42-28"><a href="module-10-lab-2-pathway-level-features.html#cb42-28" aria-hidden="true" tabindex="-1"></a>        ...)</span>
-<span id="cb42-29"><a href="module-10-lab-2-pathway-level-features.html#cb42-29" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb42-30"><a href="module-10-lab-2-pathway-level-features.html#cb42-30" aria-hidden="true" tabindex="-1"></a>    netList <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">unlist</span>(netList),<span class="fu">unlist</span>(netList2))</span>
-<span id="cb42-31"><a href="module-10-lab-2-pathway-level-features.html#cb42-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(netList)</span>
-<span id="cb42-32"><a href="module-10-lab-2-pathway-level-features.html#cb42-32" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="module-10-lab-2-pathway-level-features.html#cb43-1" aria-hidden="true" tabindex="-1"></a>makeNets <span class="ot">&lt;-</span> <span class="cf">function</span>(dataList, groupList, netDir,...) {</span>
+<span id="cb43-2"><a href="module-10-lab-2-pathway-level-features.html#cb43-2" aria-hidden="true" tabindex="-1"></a>    netList <span class="ot">&lt;-</span> <span class="fu">c</span>() </span>
+<span id="cb43-3"><a href="module-10-lab-2-pathway-level-features.html#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="module-10-lab-2-pathway-level-features.html#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># make RNA nets (Pearson correlation)</span></span>
+<span id="cb43-5"><a href="module-10-lab-2-pathway-level-features.html#cb43-5" aria-hidden="true" tabindex="-1"></a>    rna <span class="ot">&lt;-</span> <span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span></span>
+<span id="cb43-6"><a href="module-10-lab-2-pathway-level-features.html#cb43-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(groupList[[rna]])) { <span class="do">## REMEMBER TO CHECK FOR NULL</span></span>
+<span id="cb43-7"><a href="module-10-lab-2-pathway-level-features.html#cb43-7" aria-hidden="true" tabindex="-1"></a>        netList <span class="ot">&lt;-</span> <span class="fu">makePSN_NamedMatrix</span>(</span>
+<span id="cb43-8"><a href="module-10-lab-2-pathway-level-features.html#cb43-8" aria-hidden="true" tabindex="-1"></a>            dataList[[rna]],</span>
+<span id="cb43-9"><a href="module-10-lab-2-pathway-level-features.html#cb43-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rownames</span>(dataList[[rna]]),</span>
+<span id="cb43-10"><a href="module-10-lab-2-pathway-level-features.html#cb43-10" aria-hidden="true" tabindex="-1"></a>            groupList[[rna]],</span>
+<span id="cb43-11"><a href="module-10-lab-2-pathway-level-features.html#cb43-11" aria-hidden="true" tabindex="-1"></a>            netDir,</span>
+<span id="cb43-12"><a href="module-10-lab-2-pathway-level-features.html#cb43-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">verbose=</span><span class="cn">FALSE</span>,</span>
+<span id="cb43-13"><a href="module-10-lab-2-pathway-level-features.html#cb43-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">writeProfiles=</span><span class="cn">TRUE</span>,         <span class="do">## define Pearson similarity as before</span></span>
+<span id="cb43-14"><a href="module-10-lab-2-pathway-level-features.html#cb43-14" aria-hidden="true" tabindex="-1"></a>            ...) </span>
+<span id="cb43-15"><a href="module-10-lab-2-pathway-level-features.html#cb43-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb43-16"><a href="module-10-lab-2-pathway-level-features.html#cb43-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb43-17"><a href="module-10-lab-2-pathway-level-features.html#cb43-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># make clinical nets (normalized difference)</span></span>
+<span id="cb43-18"><a href="module-10-lab-2-pathway-level-features.html#cb43-18" aria-hidden="true" tabindex="-1"></a>    netList2 <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb43-19"><a href="module-10-lab-2-pathway-level-features.html#cb43-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(groupList[[<span class="st">&quot;clinical&quot;</span>]])) {</span>
+<span id="cb43-20"><a href="module-10-lab-2-pathway-level-features.html#cb43-20" aria-hidden="true" tabindex="-1"></a>    netList2 <span class="ot">&lt;-</span> <span class="fu">makePSN_NamedMatrix</span>(</span>
+<span id="cb43-21"><a href="module-10-lab-2-pathway-level-features.html#cb43-21" aria-hidden="true" tabindex="-1"></a>        dataList<span class="sc">$</span>clinical, </span>
+<span id="cb43-22"><a href="module-10-lab-2-pathway-level-features.html#cb43-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">rownames</span>(dataList<span class="sc">$</span>clinical),</span>
+<span id="cb43-23"><a href="module-10-lab-2-pathway-level-features.html#cb43-23" aria-hidden="true" tabindex="-1"></a>        groupList[[<span class="st">&quot;clinical&quot;</span>]],netDir,</span>
+<span id="cb43-24"><a href="module-10-lab-2-pathway-level-features.html#cb43-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">simMetric=</span><span class="st">&quot;custom&quot;</span>,<span class="at">customFunc=</span>normDiff, <span class="do">### Notice simMetric &amp; customFunc</span></span>
+<span id="cb43-25"><a href="module-10-lab-2-pathway-level-features.html#cb43-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">writeProfiles=</span><span class="cn">FALSE</span>,</span>
+<span id="cb43-26"><a href="module-10-lab-2-pathway-level-features.html#cb43-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">sparsify=</span><span class="cn">TRUE</span>,</span>
+<span id="cb43-27"><a href="module-10-lab-2-pathway-level-features.html#cb43-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">verbose=</span><span class="cn">FALSE</span>,</span>
+<span id="cb43-28"><a href="module-10-lab-2-pathway-level-features.html#cb43-28" aria-hidden="true" tabindex="-1"></a>        ...)</span>
+<span id="cb43-29"><a href="module-10-lab-2-pathway-level-features.html#cb43-29" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb43-30"><a href="module-10-lab-2-pathway-level-features.html#cb43-30" aria-hidden="true" tabindex="-1"></a>    netList <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">unlist</span>(netList),<span class="fu">unlist</span>(netList2))</span>
+<span id="cb43-31"><a href="module-10-lab-2-pathway-level-features.html#cb43-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(netList)</span>
+<span id="cb43-32"><a href="module-10-lab-2-pathway-level-features.html#cb43-32" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="build-predictor-1" class="section level2">
@@ -355,43 +355,43 @@ We have:</p>
 </ul>
 <p>Now we build our predictors. For this tutorial, we use two train/test splits. For each split, we assign features a score between zero and two, and call features with score of 1+ “feature-selected.”</p>
 <p><strong>Realistic parameters:</strong> When running this with your project, reasonable values are <code>numSplits=10L</code> (10 is a good start, just to see if you get signal, 100+ if firming up for publication), <code>featScoreMax=10L</code>, <code>featSelCutoff=9L</code>.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="module-10-lab-2-pathway-level-features.html#cb43-1" aria-hidden="true" tabindex="-1"></a>t0 <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb43-2"><a href="module-10-lab-2-pathway-level-features.html#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># make results reproducible</span></span>
-<span id="cb43-3"><a href="module-10-lab-2-pathway-level-features.html#cb43-3" aria-hidden="true" tabindex="-1"></a>outDir <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%s2&quot;</span>,<span class="fu">tempdir</span>()),<span class="st">&quot;pred_output&quot;</span>,<span class="at">sep=</span><span class="fu">getFileSep</span>()) <span class="co"># use absolute path</span></span>
-<span id="cb43-4"><a href="module-10-lab-2-pathway-level-features.html#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(outDir)) <span class="fu">unlink</span>(outDir,<span class="at">recursive=</span><span class="cn">TRUE</span>)</span>
-<span id="cb43-5"><a href="module-10-lab-2-pathway-level-features.html#cb43-5" aria-hidden="true" tabindex="-1"></a>numSplits <span class="ot">&lt;-</span> 2L</span>
-<span id="cb43-6"><a href="module-10-lab-2-pathway-level-features.html#cb43-6" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
-<span id="cb43-7"><a href="module-10-lab-2-pathway-level-features.html#cb43-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">buildPredictor</span>(</span>
-<span id="cb43-8"><a href="module-10-lab-2-pathway-level-features.html#cb43-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">dataList=</span>brca,</span>
-<span id="cb43-9"><a href="module-10-lab-2-pathway-level-features.html#cb43-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">groupList=</span>groupList,</span>
-<span id="cb43-10"><a href="module-10-lab-2-pathway-level-features.html#cb43-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">makeNetFunc=</span>makeNets,</span>
-<span id="cb43-11"><a href="module-10-lab-2-pathway-level-features.html#cb43-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">outDir=</span>outDir, </span>
-<span id="cb43-12"><a href="module-10-lab-2-pathway-level-features.html#cb43-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">numSplits=</span>numSplits, </span>
-<span id="cb43-13"><a href="module-10-lab-2-pathway-level-features.html#cb43-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">featScoreMax=</span>2L, </span>
-<span id="cb43-14"><a href="module-10-lab-2-pathway-level-features.html#cb43-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">featSelCutoff=</span>1L,</span>
-<span id="cb43-15"><a href="module-10-lab-2-pathway-level-features.html#cb43-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">numCores=</span>4L</span>
-<span id="cb43-16"><a href="module-10-lab-2-pathway-level-features.html#cb43-16" aria-hidden="true" tabindex="-1"></a>       )</span>
-<span id="cb43-17"><a href="module-10-lab-2-pathway-level-features.html#cb43-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb43-18"><a href="module-10-lab-2-pathway-level-features.html#cb43-18" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb43-19"><a href="module-10-lab-2-pathway-level-features.html#cb43-19" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(t1<span class="sc">-</span>t0) <span class="co"># time taken</span></span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="module-10-lab-2-pathway-level-features.html#cb44-1" aria-hidden="true" tabindex="-1"></a>t0 <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb44-2"><a href="module-10-lab-2-pathway-level-features.html#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># make results reproducible</span></span>
+<span id="cb44-3"><a href="module-10-lab-2-pathway-level-features.html#cb44-3" aria-hidden="true" tabindex="-1"></a>outDir <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%s2&quot;</span>,<span class="fu">tempdir</span>()),<span class="st">&quot;pred_output&quot;</span>,<span class="at">sep=</span><span class="fu">getFileSep</span>()) <span class="co"># use absolute path</span></span>
+<span id="cb44-4"><a href="module-10-lab-2-pathway-level-features.html#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(outDir)) <span class="fu">unlink</span>(outDir,<span class="at">recursive=</span><span class="cn">TRUE</span>)</span>
+<span id="cb44-5"><a href="module-10-lab-2-pathway-level-features.html#cb44-5" aria-hidden="true" tabindex="-1"></a>numSplits <span class="ot">&lt;-</span> 2L</span>
+<span id="cb44-6"><a href="module-10-lab-2-pathway-level-features.html#cb44-6" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
+<span id="cb44-7"><a href="module-10-lab-2-pathway-level-features.html#cb44-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">buildPredictor</span>(</span>
+<span id="cb44-8"><a href="module-10-lab-2-pathway-level-features.html#cb44-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">dataList=</span>brca,</span>
+<span id="cb44-9"><a href="module-10-lab-2-pathway-level-features.html#cb44-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">groupList=</span>groupList,</span>
+<span id="cb44-10"><a href="module-10-lab-2-pathway-level-features.html#cb44-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">makeNetFunc=</span>makeNets,</span>
+<span id="cb44-11"><a href="module-10-lab-2-pathway-level-features.html#cb44-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">outDir=</span>outDir, </span>
+<span id="cb44-12"><a href="module-10-lab-2-pathway-level-features.html#cb44-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">numSplits=</span>numSplits, </span>
+<span id="cb44-13"><a href="module-10-lab-2-pathway-level-features.html#cb44-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">featScoreMax=</span>2L, </span>
+<span id="cb44-14"><a href="module-10-lab-2-pathway-level-features.html#cb44-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">featSelCutoff=</span>1L,</span>
+<span id="cb44-15"><a href="module-10-lab-2-pathway-level-features.html#cb44-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">numCores=</span>4L</span>
+<span id="cb44-16"><a href="module-10-lab-2-pathway-level-features.html#cb44-16" aria-hidden="true" tabindex="-1"></a>       )</span>
+<span id="cb44-17"><a href="module-10-lab-2-pathway-level-features.html#cb44-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb44-18"><a href="module-10-lab-2-pathway-level-features.html#cb44-18" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb44-19"><a href="module-10-lab-2-pathway-level-features.html#cb44-19" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(t1<span class="sc">-</span>t0) <span class="co"># time taken</span></span></code></pre></div>
 <p>The above settings were chosen to Let’s actually load data generated by reasonable parameters, e.g. <code>numSplits=10L</code>, <code>featScoreMax=10L</code>, <code>featSelCutoff=9L</code>, generated for this tutorial:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="module-10-lab-2-pathway-level-features.html#cb44-1" aria-hidden="true" tabindex="-1"></a>outFile <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;%s2/CBW_Lab2_full.rda&quot;</span>,<span class="fu">tempdir</span>())</span>
-<span id="cb44-2"><a href="module-10-lab-2-pathway-level-features.html#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/brca_binary_pathways.rda&quot;</span>,</span>
-<span id="cb44-3"><a href="module-10-lab-2-pathway-level-features.html#cb44-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">destfile=</span>outFile)</span>
-<span id="cb44-4"><a href="module-10-lab-2-pathway-level-features.html#cb44-4" aria-hidden="true" tabindex="-1"></a>lnames <span class="ot">&lt;-</span> <span class="fu">load</span>(outFile)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="module-10-lab-2-pathway-level-features.html#cb45-1" aria-hidden="true" tabindex="-1"></a>outFile <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;%s2/CBW_Lab2_full.rda&quot;</span>,<span class="fu">tempdir</span>())</span>
+<span id="cb45-2"><a href="module-10-lab-2-pathway-level-features.html#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/brca_binary_pathways.rda&quot;</span>,</span>
+<span id="cb45-3"><a href="module-10-lab-2-pathway-level-features.html#cb45-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">destfile=</span>outFile)</span>
+<span id="cb45-4"><a href="module-10-lab-2-pathway-level-features.html#cb45-4" aria-hidden="true" tabindex="-1"></a>lnames <span class="ot">&lt;-</span> <span class="fu">load</span>(outFile)</span></code></pre></div>
 <p>We can see the objects in the file using <code>lnames()</code>.</p>
 </div>
 <div id="examine-output" class="section level2">
 <h2>Examine output</h2>
 <p>As before, we get model results, using <code>getResults()</code> from our helper script, <code>helper.R</code>.</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="module-10-lab-2-pathway-level-features.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;helper.R&quot;</span>)</span>
-<span id="cb45-2"><a href="module-10-lab-2-pathway-level-features.html#cb45-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">getResults</span>(brca,model_full,</span>
-<span id="cb45-3"><a href="module-10-lab-2-pathway-level-features.html#cb45-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">featureSelCutoff=</span>9L,</span>
-<span id="cb45-4"><a href="module-10-lab-2-pathway-level-features.html#cb45-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">featureSelPct=</span><span class="fl">0.9</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="module-10-lab-2-pathway-level-features.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;helper.R&quot;</span>)</span>
+<span id="cb46-2"><a href="module-10-lab-2-pathway-level-features.html#cb46-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">getResults</span>(brca,model_full,</span>
+<span id="cb46-3"><a href="module-10-lab-2-pathway-level-features.html#cb46-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">featureSelCutoff=</span>9L,</span>
+<span id="cb46-4"><a href="module-10-lab-2-pathway-level-features.html#cb46-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">featureSelPct=</span><span class="fl">0.9</span>)</span></code></pre></div>
 <p>Let’s examine our confusion matrix:</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="module-10-lab-2-pathway-level-features.html#cb46-1" aria-hidden="true" tabindex="-1"></a>confMat <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(model_full)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="module-10-lab-2-pathway-level-features.html#cb47-1" aria-hidden="true" tabindex="-1"></a>confMat <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(model_full)</span></code></pre></div>
 <p>This function returns the confusion matrix for each split, as well as the average shown in the image above:</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="module-10-lab-2-pathway-level-features.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(confMat)</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="module-10-lab-2-pathway-level-features.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(confMat)</span></code></pre></div>
 </div>
 <div id="visualize-top-pathways-in-cytoscape" class="section level2">
 <h2>Visualize top pathways in Cytoscape</h2>
@@ -399,30 +399,30 @@ We have:</p>
 <p>Let us say we only want to see pathways that scored in some target range for “most” of the trials; i.e. consistently high-scoring pathways.
 We quantify this by asking only for features that score [<code>EMapMinScore</code>,<code>EMapMaxScore</code>] for <code>EMapPctPass</code> fraction of trials.</p>
 <p>Here we ask for features scoring 7+ out of 10 for at least 70% of the train/test splits.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="module-10-lab-2-pathway-level-features.html#cb48-1" aria-hidden="true" tabindex="-1"></a>emap <span class="ot">&lt;-</span> <span class="fu">makeInputForEnrichmentMap</span> (</span>
-<span id="cb48-2"><a href="module-10-lab-2-pathway-level-features.html#cb48-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">model=</span>model_full,</span>
-<span id="cb48-3"><a href="module-10-lab-2-pathway-level-features.html#cb48-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">results=</span>results,</span>
-<span id="cb48-4"><a href="module-10-lab-2-pathway-level-features.html#cb48-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">pathwayList=</span>pathList,</span>
-<span id="cb48-5"><a href="module-10-lab-2-pathway-level-features.html#cb48-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">EMapMinScore=</span>7L, </span>
-<span id="cb48-6"><a href="module-10-lab-2-pathway-level-features.html#cb48-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">EMapMaxSore=</span>10L,</span>
-<span id="cb48-7"><a href="module-10-lab-2-pathway-level-features.html#cb48-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">EMapPctPass=</span><span class="fl">0.7</span>,</span>
-<span id="cb48-8"><a href="module-10-lab-2-pathway-level-features.html#cb48-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">outDir=</span><span class="st">&quot;/home/spai/data&quot;</span> <span class="do">### SP: CHANGE TO WORKSPACE ON AWS</span></span>
-<span id="cb48-9"><a href="module-10-lab-2-pathway-level-features.html#cb48-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="module-10-lab-2-pathway-level-features.html#cb49-1" aria-hidden="true" tabindex="-1"></a>emap <span class="ot">&lt;-</span> <span class="fu">makeInputForEnrichmentMap</span> (</span>
+<span id="cb49-2"><a href="module-10-lab-2-pathway-level-features.html#cb49-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">model=</span>model_full,</span>
+<span id="cb49-3"><a href="module-10-lab-2-pathway-level-features.html#cb49-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">results=</span>results,</span>
+<span id="cb49-4"><a href="module-10-lab-2-pathway-level-features.html#cb49-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">pathwayList=</span>pathList,</span>
+<span id="cb49-5"><a href="module-10-lab-2-pathway-level-features.html#cb49-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">EMapMinScore=</span>7L, </span>
+<span id="cb49-6"><a href="module-10-lab-2-pathway-level-features.html#cb49-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">EMapMaxSore=</span>10L,</span>
+<span id="cb49-7"><a href="module-10-lab-2-pathway-level-features.html#cb49-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">EMapPctPass=</span><span class="fl">0.7</span>,</span>
+<span id="cb49-8"><a href="module-10-lab-2-pathway-level-features.html#cb49-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">outDir=</span><span class="st">&quot;/home/spai/data&quot;</span> <span class="do">### SP: CHANGE TO WORKSPACE ON AWS</span></span>
+<span id="cb49-9"><a href="module-10-lab-2-pathway-level-features.html#cb49-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>This call will return paths to the output files, which you need to now download from AWS to your personal computer:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="module-10-lab-2-pathway-level-features.html#cb49-1" aria-hidden="true" tabindex="-1"></a>emap</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="module-10-lab-2-pathway-level-features.html#cb50-1" aria-hidden="true" tabindex="-1"></a>emap</span></code></pre></div>
 <p>netDx can directly generate EnrichmentMaps on a locally-installed version of Cytosape using RCy3 (<strong>LINK</strong>).
 This step needs a local copy of Cytoscape installed, so it won’t work on the AWS instance.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="module-10-lab-2-pathway-level-features.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="do">###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],</span></span>
-<span id="cb50-2"><a href="module-10-lab-2-pathway-level-features.html#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="do">###         groupClusters=TRUE, hideNodeLabels=TRUE)</span></span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="module-10-lab-2-pathway-level-features.html#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="do">###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],</span></span>
+<span id="cb51-2"><a href="module-10-lab-2-pathway-level-features.html#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="do">###         groupClusters=TRUE, hideNodeLabels=TRUE)</span></span></code></pre></div>
 <p>If you wanted to look at one anyway, you can download the input files shown in <code>emap</code> by opening your web browser to: <code>http://your student instance&gt;</code>. Then build an Enrichment map using Cytoscape on your laptop as discussed earlier in the Cancer Analysis workshop.</p>
 <p>When you’re done, the Enrichment Map would look like this (below). The speech bubbles show pathway names within a couple top clusters.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="module-10-lab-2-pathway-level-features.html#cb51-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;images/Lab2_EMap.jpg&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="module-10-lab-2-pathway-level-features.html#cb52-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;images/Lab2_EMap.jpg&quot;</span>)</span></code></pre></div>
 <p>You should be able to <a href="https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/LuminalA.cys">download the Cytoscape session file here</a> to see the finished result.</p>
 <p>In practice, it can take a good portion of an hour to adjust the layout of the EnrichmentMap and often longer to explore the contents. But at a glance you can see that the top pathway</p>
 </div>
 <div id="sessioninfo-1" class="section level2">
 <h2>sessionInfo</h2>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="module-10-lab-2-pathway-level-features.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="module-10-lab-2-pathway-level-features.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 
 </div>
 </div>
