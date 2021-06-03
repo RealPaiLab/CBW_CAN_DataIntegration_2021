@@ -78,9 +78,7 @@ h1 {
 .rmd-tip {
   padding: 0em 0em 0em 3em;
   margin-bottom: 2px;
-  background:  #fefff4  url("images/iconfinder_idea_309059.png") left center/3em no-repeat /*!important*/;
-  border-style:solid;
-  border-color: #fefff4;
+  background:  #d1ebfe  url("images/iconfinder_idea_309059.png") left center/3em no-repeat /*!important*/;
 }
 .rmd-tip:before {
   color: #b68d04;
