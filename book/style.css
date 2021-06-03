@@ -142,8 +142,7 @@ h1 {
   content: "Question";
 }
 
-.watch-out {
-  background-color: lightpink !important;
-  border: 3px solid red;
+.codeblock {
+  background-color: rgb(255, 251, 225) !important;
   font-weight: bold;
 }

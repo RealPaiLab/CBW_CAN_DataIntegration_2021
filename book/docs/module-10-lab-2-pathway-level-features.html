@@ -217,14 +217,7 @@ Figure 2: Lab 2: Predictor design
 <div id="get-and-prepare-data-1" class="section level2">
 <h2>Get and prepare data</h2>
 <p>Let’s fetch the BRCA data using <code>curatedTCGAData</code> again, this time only the gene expression data. Remember, the clinical data we automatically get in the <code>colData()</code> slot returned.</p>
-<style type="text/css">
-.watch-out {
-  background-color: lightpink !important;
-  border: 3px solid red;
-  font-weight: bold;
-}
-</style>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r watch-out"><code class="sourceCode r"><span id="cb30-1"><a href="module-10-lab-2-pathway-level-features.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(curatedTCGAData))</span>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb30-1"><a href="module-10-lab-2-pathway-level-features.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(curatedTCGAData))</span>
 <span id="cb30-2"><a href="module-10-lab-2-pathway-level-features.html#cb30-2" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
 <span id="cb30-3"><a href="module-10-lab-2-pathway-level-features.html#cb30-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">curatedTCGAData</span>(</span>
 <span id="cb30-4"><a href="module-10-lab-2-pathway-level-features.html#cb30-4" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;BRCA&quot;</span>,<span class="fu">c</span>(<span class="st">&quot;mRNAArray&quot;</span>),</span>
@@ -256,7 +249,7 @@ This design changes model-building time to several hours, so avoid large gene se
 <span id="cb34-2"><a href="module-10-lab-2-pathway-level-features.html#cb34-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
 <p>The above pathway set was downloaded from <a href="http://download.baderlab.org/EM_Genesets">download.baderlab.org/EM_Genesets</a>, which is a good resource for routinely-updated curated pathway definitions. Pathways are compiled from Reactome, Panther, NCI, MSigDB, etc., [REF], and data is contained in <a href="https://software.broadinstitute.org/cancer/software/gsea/wiki/index.php/Data_formats#GMT:_Gene_Matrix_Transposed_file_format_.28.2A.gmt.29">GMT format</a>, a common format to represent gene-sets, such as pathways. You can see from the value of <code>x</code> that the file isn’t downloaded to our working directory, but rather is stored in a BioConductor-specific location for files (file cache), using the <a href="https://www.bioconductor.org/packages/release/bioc/html/BiocFileCache.html">BiocFileCache</a> class. This way if we rerun the script, BioConductor will only download the file again if it has changed since our last download.</p>
 <p>Here is an example of the GMT format:</p>
-<div class="figure"><span id="fig:unnamed-chunk-52"></span>
+<div class="figure"><span id="fig:unnamed-chunk-51"></span>
 <img src="images/GMT_screenshot.png" alt="Lab 2: Predictor design" width="937" />
 <p class="caption">
 Figure 3: Lab 2: Predictor design
