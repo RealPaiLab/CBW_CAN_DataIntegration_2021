@@ -21,7 +21,7 @@ knitr::include_graphics("images/Lab2_design.jpg")
 
 Let's fetch the BRCA data using `curatedTCGAData` again, this time only the gene expression data. Remember, the clinical data we automatically get in the `colData()` slot returned.
 
-```{r class.source="code",eval=FALSE}
+```{r class.source="code",eval=TRUE}
 suppressMessages(library(curatedTCGAData))
 brca <- suppressMessages(
    curatedTCGAData(
