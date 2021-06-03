@@ -232,7 +232,7 @@ Within each split, it:
 * uses networks that score >=1 out of 2 (`featSelCutoff=1L`) to classify test samples for that split.
 
 ```{block,type="rmd-design"}
-These are unrealistically low values set so the example will run fast. In practice a good starting point is `featScoreMax=10`, `featSelCutoff=9` and `numSplits=100`, but these parameters depend on the sample sizes in the dataset and heterogeneity of the samples.
+These are unrealistically low values set so the example will run fast. In practice a good starting point is `featScoreMax=10`, `featSelCutoff=9` and `numSplits=10L`, but these parameters depend on the sample sizes in the dataset and heterogeneity of the samples.
 ``` 
  
 ```{r lab1-buildpredictor ,class.source="codeblock",eval=TRUE}

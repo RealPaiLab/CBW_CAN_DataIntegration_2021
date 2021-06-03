@@ -69,7 +69,7 @@ Let's group genes into *pathway-level features*, i.e. instead of one PSN for tra
 
 ```{block,type="rmd-caution"}
 This design changes model-building time to several hours, so avoid large gene sets (e.g. the full set of ~44,000 Gene Ontology terms, or even ~29,000 GO Biological Process terms). A reasonable start is a compilation of pathways from all curated pathway databases, as in below. 
-Whicever list you use can be pruned by constraining the min/max number of genes in a set, but the size is something to keep in mind.
+Whichever list you use can be pruned by constraining the min/max number of genes in a set, but the size is something to keep in mind.
 ```
 
 There are two ways of providing pathway data to netDx:
