@@ -48,7 +48,7 @@ source("prepare_data.R")
 brca <- prepareDataForCBW(brca, setBinary=TRUE)
 ```
 
-## Make rules to create PSNs
+## Create feature design rules
 Load the `netDx` package and initialize the `groupList` object, where we will store our grouping rules.
 Recall that `groupList` is a list-of-lists, with the top tier containing data layer names, and that the layer names must match `names(assays(brca))` or whatever your `MultiAssayExperiment` object is called.
 
@@ -243,7 +243,7 @@ lnames <- load(outFile)
 ```
 We can see the objects in the file using `lnames()`. 
 
-## Examine output
+## Examine results
 As before, we get model results, using `getResults()` from our helper script, `helper.R`. 
 
 ```{r, class.source="codeblock",eval=FALSE}
@@ -302,7 +302,7 @@ If you wanted to look at one anyway, you can download the input files shown in `
 
 When you're done, the Enrichment Map would look like this (below). The speech bubbles show pathway names within a couple top clusters.
 
-```{r, class.source="codeblock",eval=FALSE}
+```{r echo=FALSE}
 knitr::include_graphics("images/Lab2_EMap.jpg")
 ```
 

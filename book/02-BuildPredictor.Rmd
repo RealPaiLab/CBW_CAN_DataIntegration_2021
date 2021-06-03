@@ -13,7 +13,7 @@ For this we will use data from the  The Cancer Genome Atlas, and will integrate 
 * proteomic measures from XXX, and 
 * miRNA sequencing 
 
-```{r, class.source="codeblock",echo=TRUE, fig.cap="Lab 2: Predictor design",echo=FALSE}
+```{r, class.source="codeblock",echo=TRUE, fig.cap="Lab 1 design: We will integrate four layers of genomic data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity. ",echo=FALSE}
 knitr::include_graphics("images/Lab1_design.jpg")
 ```
 

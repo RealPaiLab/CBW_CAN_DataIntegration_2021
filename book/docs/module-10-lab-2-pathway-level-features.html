@@ -136,7 +136,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">CBW CAN Multi-modal Data Integration</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Multi-modal Data Integration ( June 2021 )</a>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Multi-modal Data Integration (June 2021)</a>
 <ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-materials"><i class="fa fa-check"></i>Course materials</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#labs"><i class="fa fa-check"></i>Labs</a>
@@ -167,13 +167,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#introduction-1"><i class="fa fa-check"></i>Introduction</a></li>
 <li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#get-and-prepare-data-1"><i class="fa fa-check"></i>Get and prepare data</a></li>
-<li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#make-rules-to-create-psns"><i class="fa fa-check"></i>Make rules to create PSNs</a>
+<li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#create-feature-design-rules-1"><i class="fa fa-check"></i>Create feature design rules</a>
 <ul>
 <li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#rna-pathway-features"><i class="fa fa-check"></i>RNA: Pathway features</a></li>
 <li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#clinical-single-variables"><i class="fa fa-check"></i>Clinical: Single variables</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#build-predictor-1"><i class="fa fa-check"></i>Build predictor</a></li>
-<li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#examine-output"><i class="fa fa-check"></i>Examine output</a></li>
+<li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#examine-results-1"><i class="fa fa-check"></i>Examine results</a></li>
 <li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#visualize-top-pathways-in-cytoscape"><i class="fa fa-check"></i>Visualize top pathways in Cytoscape</a></li>
 <li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#sessioninfo-1"><i class="fa fa-check"></i>sessionInfo</a></li>
 </ul></li>
@@ -239,8 +239,8 @@ Figure 2: Lab 2: Predictor design
 <div class="sourceCode" id="cb32"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb32-1"><a href="module-10-lab-2-pathway-level-features.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;prepare_data.R&quot;</span>)</span>
 <span id="cb32-2"><a href="module-10-lab-2-pathway-level-features.html#cb32-2" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">prepareDataForCBW</span>(brca, <span class="at">setBinary=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
-<div id="make-rules-to-create-psns" class="section level2">
-<h2>Make rules to create PSNs</h2>
+<div id="create-feature-design-rules-1" class="section level2">
+<h2>Create feature design rules</h2>
 <p>Load the <code>netDx</code> package and initialize the <code>groupList</code> object, where we will store our grouping rules.
 Recall that <code>groupList</code> is a list-of-lists, with the top tier containing data layer names, and that the layer names must match <code>names(assays(brca))</code> or whatever your <code>MultiAssayExperiment</code> object is called.</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb33-1"><a href="module-10-lab-2-pathway-level-features.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressWarnings</span>(<span class="fu">suppressMessages</span>(<span class="fu">require</span>(netDx)))</span>
@@ -391,8 +391,8 @@ We have:</p>
 <span id="cb44-4"><a href="module-10-lab-2-pathway-level-features.html#cb44-4" aria-hidden="true" tabindex="-1"></a>lnames <span class="ot">&lt;-</span> <span class="fu">load</span>(outFile)</span></code></pre></div>
 <p>We can see the objects in the file using <code>lnames()</code>.</p>
 </div>
-<div id="examine-output" class="section level2">
-<h2>Examine output</h2>
+<div id="examine-results-1" class="section level2">
+<h2>Examine results</h2>
 <p>As before, we get model results, using <code>getResults()</code> from our helper script, <code>helper.R</code>.</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb45-1"><a href="module-10-lab-2-pathway-level-features.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;helper.R&quot;</span>)</span>
 <span id="cb45-2"><a href="module-10-lab-2-pathway-level-features.html#cb45-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">getResults</span>(brca,model_full,</span>
@@ -426,13 +426,13 @@ This step needs a local copy of Cytoscape installed, so it won’t work on the A
 <span id="cb50-2"><a href="module-10-lab-2-pathway-level-features.html#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="do">###         groupClusters=TRUE, hideNodeLabels=TRUE)</span></span></code></pre></div>
 <p>If you wanted to look at one anyway, you can download the input files shown in <code>emap</code> by opening your web browser to: <code>http://your student instance&gt;</code>. Then build an Enrichment map using Cytoscape on your laptop as discussed earlier in the Cancer Analysis workshop.</p>
 <p>When you’re done, the Enrichment Map would look like this (below). The speech bubbles show pathway names within a couple top clusters.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb51-1"><a href="module-10-lab-2-pathway-level-features.html#cb51-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;images/Lab2_EMap.jpg&quot;</span>)</span></code></pre></div>
+<p><img src="images/Lab2_EMap.jpg" width="483" /></p>
 <p>You should be able to <a href="https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/LuminalA.cys">download the Cytoscape session file here</a> to see the finished result.</p>
 <p>In practice, it can take a good portion of an hour to adjust the layout of the EnrichmentMap and often longer to explore the contents. But at a glance you can see that the top pathway</p>
 </div>
 <div id="sessioninfo-1" class="section level2">
 <h2>sessionInfo</h2>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb52-1"><a href="module-10-lab-2-pathway-level-features.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb51-1"><a href="module-10-lab-2-pathway-level-features.html#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 
 </div>
 </div>
