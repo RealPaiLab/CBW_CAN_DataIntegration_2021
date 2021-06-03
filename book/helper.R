@@ -46,9 +46,12 @@ for (k in 1:numSplits) {
 }
 
 # only plot ROC and PR curves 
+auroc <- NULL; aupr <- NULL
 if (length(st)==2) {
 message("* Plotting performance")
 predPerf <- plotPerf(predList, predClasses=st)
+auroc <- unlist(lapply(predPerf, function(x) x$auroc))
+aupr <- unlist(lapply(predPerf, function(x) x$aupr))
 }
 
 message("* Compiling feature scores and calling selected features")
@@ -68,7 +71,9 @@ return(list(
     selectedFeatures=feats$selectedFeatures,
     featureScores=feats$featScores,
     performance=list(meanAccuracy=mean(acc),
-                    splitAccuracy=acc)
+                    splitAccuracy=acc,
+                    splitAUROC=auroc,
+                    splitAUPR=aupr)
 ))
 
 }

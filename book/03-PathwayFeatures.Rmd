@@ -259,10 +259,35 @@ results <- getResults(brca,model_full,
 	featureSelPct=0.9)
 ```
 
+As this is binary classification, we get ROC and precision-recall curves (bottom panel). The average AUROC and AUPR are shown in the top panel.
+Let's take a look at the average performance:
+```{r,class.source="codeblock",eval=TRUE}
+perf <- results$performance
+round(mean(perf$splitAUROC),2)*100
+round(mean(perf$splitAUPR),2)*100
+round(mean(perf$splitAccuracy),2)*100
+```
+
+Notice that although the AUROC is near perfect, the accuracy is lower, at around 86%. It is important to consider several measures of predictor performance to understand the behaviour of the predictor. Let us now look at the confusion matrix:
+
 Let's examine our confusion matrix:
 ```{r, class.source="codeblock",eval=TRUE}
 confMat <- confusionMatrix(model_full)
 ```
+
+We see that the predictor performs perfectly at classifying Luminal A tumours but does worse at classifying the residual, mainly because it often classifies other tumours as Luminal A! 
+
+```{block, type="rmd-note"}
+Particularly when there is class imbalance, i.e. one class has several-fold the number of samples than the other, predictors can achieve a baseline high accuracy by "cheating" and simply predicting all samples as being of the dominating label. e.g. if you have 99:1 class imbalance of two classes A and B, the predictor can achieve 99% accuracy simply by calling all samples of type "A"! 
+
+In practice, class imbalance should be handled using suitable performance evaluation metrics and sampling proportionally for training/test sets.
+```
+
+We indeed have a class imbalance in this dataset:
+```{r, class.source="codeblock",eval=TRUE}
+table(colData(brca)$STATUS,useNA="always")
+```
+
 
 This function returns the confusion matrix for each split, as well as the average shown in the image above:
 
@@ -319,7 +344,9 @@ You can also [download the Cytoscape session file here](https://github.com/RealP
 
 That's it!
 
-You've successfully generated a predictor using pathway-level features from gene expression and defined custom similarity metrics for clinical data. This completes our lab exercises for Module 10.
+You've successfully generated a predictor using pathway-level features from gene expression and defined custom similarity metrics for clinical data. 
+
+This completes our lab exercises for Module 10.
 
 
 ## sessionInfo
