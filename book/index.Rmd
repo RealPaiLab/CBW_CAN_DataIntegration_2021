@@ -6,7 +6,7 @@ date: "last modified `r Sys.Date()`"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
-bibliography: [book.bib, packages.bib]
+bibliography: [book.bib]
 biblio-style: nature
 csl: nature.csl
 link-citations: yes
