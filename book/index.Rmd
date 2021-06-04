@@ -16,13 +16,13 @@ description: "Covers patient classification using multi-modal data integration"
 
 # Multi-modal Data Integration (June 2021)
 
-This book contains lab exercises for Module 10: Multi-modal Data Integration, as part of the [Canadian Bioinformatics Workshop Cancer Analysis (CAN) Module](https://bioinformatics.ca/workshops/2021-cancer-analysis/).
+This book contains lab exercises for Module 11: Multi-modal Data Integration, as part of the [Canadian Bioinformatics Workshop Cancer Analysis (CAN) Workshop](https://bioinformatics.ca/workshops/2021-cancer-analysis/).
 
 ## Course materials
 
 You can download course slides here **LINK TBA**
 
-We will have two lab exercises, where we build patient classifiers using multi-modal data integration, using netDx **ADD REFERENCES**.
+We will have two lab exercises, where we build patient classifiers using multi-modal data integration, using netDx [@Pai2019-iu,Pai2021-um]. 
 
 ## Labs
 
