@@ -311,7 +311,7 @@ emap <- makeInputForEnrichmentMap (
 	EMapMinScore=7L, 
 	EMapMaxSore=10L,
 	EMapPctPass=0.7,
-	outDir="/home/spai/data" ### SP: CHANGE TO WORKSPACE ON AWS
+	outDir=tempdir() ### SP: CHANGE TO WORKSPACE ON AWS
 )
 ```
 This call will return paths to the output files, which you need to now download from AWS to your personal computer:
