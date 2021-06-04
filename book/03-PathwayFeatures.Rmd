@@ -13,6 +13,10 @@ Here, we will again use breast cancer samples, and discriminate between Luminal 
  * Clinical variables: A feature (or patient similarity network;PSN) will be defined at the level of selected  *variables* (e.g. age); we will define similarity as *normalized difference*. 
  * Gene expression: Features will be defined at the level of ***pathways***; i.e. each feature groups only those genes corresponding to the pathway. Similarity is defined as pairwise *Pearson correlation*.
 
+```{r, class.source="codeblock",echo=FALSE, fig.cap="Lab 2 design: We will integrate clinical and gene expression data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity.", echo=FALSE}
+knitr::include_graphics("images/Lab2_design.jpg")
+```
+
 ```{block type="rmd-design"}
  1. In practice I recommend running a predictor design with 2-3 different sets of pathway definitions, and comparing the predictive pathway themes. For instance, it could be useful to compare results from using all curated pathways, to just domain-specific ones.  
  Feature design is something of an art, and the choice of pathways depends on what your goals with building the predictor are. Are you looking to prioritize a known set of biological processes or interested in general discovery? These are tradeoffs. 
@@ -21,10 +25,6 @@ Here, we will again use breast cancer samples, and discriminate between Luminal 
  2. Note that while in this design we group gene expression measures into pathways, the same design can be used to group other types of data based on prior knowledge. For instance, measures from imaging data could be grouped by prior knowledge of correlated networks of regions of interest subserving specific functions. 
  
  ```
-
-```{r, class.source="codeblock",echo=FALSE, fig.cap="Lab 2 design: We will integrate clinical and gene expression data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity.", echo=FALSE}
-knitr::include_graphics("images/Lab2_design.jpg")
-```
  
 ## Get and prepare data
 
@@ -343,11 +343,19 @@ knitr::include_graphics("images/Lab2_EMap.jpg")
 
 We notice that the Enrichment Map identifies several pathways known to be dysregulated in Luminal A breast tumours, including estrogen receptor-mediating signaling (PLASMA_MEMBRANE_ESTROGEN_RESPONSE_SIGNALING), p38 signaling, pathways related to genomic stability and DNA damage response (ATM), cell profileration-related signaling (ErbB signaling). 
 
-```block,type="rmd-design"}
+## Outlook
 
+```block,type="rmd-outlook"}
+Where do you go from here? That depends on your study goals and prior knowledge. Here are some possibilities:
+
+* You may choose to focus on particular pathways for which you have targeting tools, for follow-up *in vitro* or *in vivo* experiments. 
+* You may compare and contrast known effectors from novel pathways and pursue that line of research. 
+* You may want to improve performance, and consider changing predictor design, including features, predictor settings, or pathway set choices.
+
+Machine learning is very much trial-and-error, and you have to be prepared to try a variety of designs to see what works.
+
+Future versions of netDx will include tools to help with some of this automation & also digging deeper into predictive features such as pathways, to understand what components contribute to predictive power.
 ```
-
-
 
 That's it!
 

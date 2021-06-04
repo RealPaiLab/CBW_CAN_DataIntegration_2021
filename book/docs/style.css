@@ -111,6 +111,12 @@ h1 {
   content: "";
 }
 
+.rmd-outlook {
+  padding: 0em 0em 0em 3em;
+  margin-bottom: 2px;
+  background:  #d1ebfe  url("images/iconfinder_3687825_adventure_road_street_sign_way_icon_128px.png") left center/3em no-repeat /*!important*/;
+}
+
 .rmd-datadownload {
   padding: 0em 0em 0em 3em;
   margin-bottom: 2px;

@@ -199,6 +199,7 @@ div.csl-indent {
 <li class="chapter" data-level="" data-path="module-11-lab-2-pathway-level-features.html"><a href="module-11-lab-2-pathway-level-features.html#build-predictor-1"><i class="fa fa-check"></i>Build predictor</a></li>
 <li class="chapter" data-level="" data-path="module-11-lab-2-pathway-level-features.html"><a href="module-11-lab-2-pathway-level-features.html#examine-results-1"><i class="fa fa-check"></i>Examine results</a></li>
 <li class="chapter" data-level="" data-path="module-11-lab-2-pathway-level-features.html"><a href="module-11-lab-2-pathway-level-features.html#visualize-top-pathways-in-cytoscape"><i class="fa fa-check"></i>Visualize top pathways in Cytoscape</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-2-pathway-level-features.html"><a href="module-11-lab-2-pathway-level-features.html#outlook"><i class="fa fa-check"></i>Outlook</a></li>
 <li class="chapter" data-level="" data-path="module-11-lab-2-pathway-level-features.html"><a href="module-11-lab-2-pathway-level-features.html#sessioninfo-1"><i class="fa fa-check"></i>sessionInfo</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -237,6 +238,12 @@ div.csl-indent {
 <li>Clinical variables: A feature (or patient similarity network;PSN) will be defined at the level of selected <em>variables</em> (e.g. age); we will define similarity as <em>normalized difference</em>.</li>
 <li>Gene expression: Features will be defined at the level of <strong><em>pathways</em></strong>; i.e. each feature groups only those genes corresponding to the pathway. Similarity is defined as pairwise <em>Pearson correlation</em>.</li>
 </ul>
+<div class="figure"><span id="fig:unnamed-chunk-35"></span>
+<img src="images/Lab2_design.jpg" alt="Lab 2 design: We will integrate clinical and gene expression data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity." width="874" />
+<p class="caption">
+Figure 3: Lab 2 design: We will integrate clinical and gene expression data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity.
+</p>
+</div>
 <div class="rmd-design">
 <ol style="list-style-type: decimal">
 <li>
@@ -251,12 +258,6 @@ Note that while in this design we group gene expression measures into pathways, 
 </p>
 </li>
 </ol>
-</div>
-<div class="figure"><span id="fig:unnamed-chunk-36"></span>
-<img src="images/Lab2_design.jpg" alt="Lab 2 design: We will integrate clinical and gene expression data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity." width="874" />
-<p class="caption">
-Figure 3: Lab 2 design: We will integrate clinical and gene expression data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity.
-</p>
 </div>
 </div>
 <div id="get-and-prepare-data-1" class="section level2">
@@ -492,7 +493,18 @@ In practice, it can take a good portion of an hour to adjust the layout of the E
 </p>
 </div>
 <p>We notice that the Enrichment Map identifies several pathways known to be dysregulated in Luminal A breast tumours, including estrogen receptor-mediating signaling (PLASMA_MEMBRANE_ESTROGEN_RESPONSE_SIGNALING), p38 signaling, pathways related to genomic stability and DNA damage response (ATM), cell profileration-related signaling (ErbB signaling).</p>
-<pre class="block,type=&quot;rmd-design&quot;}"><code></code></pre>
+</div>
+<div id="outlook" class="section level2">
+<h2>Outlook</h2>
+<pre class="block,type=&quot;rmd-outlook&quot;}"><code>Where do you go from here? That depends on your study goals and prior knowledge. Here are some possibilities:
+
+* You may choose to focus on particular pathways for which you have targeting tools, for follow-up *in vitro* or *in vivo* experiments. 
+* You may compare and contrast known effectors from novel pathways and pursue that line of research. 
+* You may want to improve performance, and consider changing predictor design, including features, predictor settings, or pathway set choices.
+
+Machine learning is very much trial-and-error, and you have to be prepared to try a variety of designs to see what works.
+
+Future versions of netDx will include tools to help with some of this automation &amp; also digging deeper into predictive features such as pathways, to understand what components contribute to predictive power.</code></pre>
 <p>That’s it!</p>
 <p>You’ve successfully generated a predictor using pathway-level features from gene expression and defined custom similarity metrics for clinical data.</p>
 <p>This completes our lab exercises for Module 11.</p>

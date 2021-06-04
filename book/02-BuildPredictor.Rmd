@@ -8,12 +8,12 @@ In this lab we will build a predictor to classify three different types of breas
 
 For this we will use data from the  The Cancer Genome Atlas, and will integrate four types of -omic data: 
 
-* gene expression (measured on XXX arrays)
-* DNA methylation (XXX arrays)
-* proteomic measures from XXX, and 
+* gene expression from Agilent mRNA microarrays
+* DNA methylation (Illumina HumanMethylation 27K microarrays))
+* proteomic measures from reverse-phase protein arrays, and 
 * miRNA sequencing 
 
-```{r, class.source="codeblock",echo=TRUE, fig.cap="Lab 1 design: We will integrate four layers of genomic data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity. ",echo=FALSE}
+```{r, fig.cap="Lab 1 design: We will integrate four layers of genomic data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity. ",echo=FALSE}
 knitr::include_graphics("images/Lab1_design.jpg")
 ```
 
