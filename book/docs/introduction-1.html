@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Multi-modal Data Integration</title>
+  <title>Introduction | Multi-modal Data Integration</title>
   <meta name="description" content="Covers patient classification using multi-modal data integration" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Multi-modal Data Integration" />
+  <meta property="og:title" content="Introduction | Multi-modal Data Integration" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Multi-modal Data Integration" />
+  <meta name="twitter:title" content="Introduction | Multi-modal Data Integration" />
   
   <meta name="twitter:description" content="Covers patient classification using multi-modal data integration" />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
-
-<link rel="next" href="introduction-1.html"/>
+<link rel="prev" href="index.html"/>
+<link rel="next" href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"/>
 <script src="libs/header-attrs-2.8/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -232,21 +232,15 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Multi-modal Data Integration</h1>
-<h2 class="subtitle"><em>CBW Cancer Analysis Workshop</em></h2>
-<p class="author"><em>Instructor: Shraddha Pai</em></p>
-<p class="date" style="margin-top: 1.5em;"><em>last modified 2021-06-04</em></p>
-</div>
-<div id="introduction" class="section level1">
+<div id="introduction-1" class="section level1">
 <h1>Introduction</h1>
 <p>This book contains lab exercises for Module 11: Multi-modal Data Integration, as part of the <a href="https://bioinformatics.ca/workshops/2021-cancer-analysis/">Canadian Bioinformatics Workshop Cancer Analysis (CAN) Workshop</a>.</p>
-<div id="course-materials" class="section level2">
+<div id="course-materials-1" class="section level2">
 <h2>Course materials</h2>
 <p>You can download course slides here <strong>LINK TBA</strong></p>
 <p>We will have two lab exercises, where we build patient classifiers using multi-modal data integration, using netDx.<span class="citation"><sup><a href="#ref-Pai2019-iu" role="doc-biblioref">1</a>,<a href="#ref-Pai2021-um" role="doc-biblioref">2</a></sup></span></p>
 </div>
-<div id="data" class="section level2">
+<div id="data-1" class="section level2">
 <h2>Data</h2>
 <p>For both lab exercises, we will use multi-modal breast cancer data from The Cancer Genome Atlas,<span class="citation"><sup><a href="#ref-noauthor_2012-nc" role="doc-biblioref">3</a></sup></span> and classify tumours by molecular subtypes originally defined using gene expression profiles.</p>
 <p>In particular, we will focus on classifying tumours as being of either <em>Luminal A</em>, <em>Luminal B</em>, or <em>Basal-like</em> subtypes. These subtypes vary by prevalence, prognosis for survival and relapse, activated cellular signaling pathways, immunohistochemical markers and treatment options.<span class="citation"><sup><a href="#ref-Yersal2014-km" role="doc-biblioref">4</a></sup></span></p>
@@ -260,34 +254,34 @@ div.csl-indent {
 * Subtypes are correlated with differences in clinical outcome and choice of treatment
 * For the purposes of this lab, it is instructive to use subtypes with known cellular signaling pathways</p>
 </div>
-<div id="labs" class="section level2">
+<div id="labs-1" class="section level2">
 <h2>Labs</h2>
-<div id="lab-1-a-gentle-introduction" class="section level3">
+<div id="lab-1-a-gentle-introduction-1" class="section level3">
 <h3>LAB 1: A gentle introduction</h3>
 <p>We will classify breast tumours as being one of three subtypes: Luminal A, Luminal B, and Basal-like. For this we will build a <strong>three-way classifier</strong> by integrating four types of -omic data: gene expression, miRNA, DNA methylation and proteomics. The design will be simple, using a single patient similarity network (feature) created from each layer. Similarity will be defined as pairwise Pearson correlation of profiles. Each network will use all measures from a given -omic data type (no filtering or grouping).</p>
 <p><img src="images/Lab1_design.jpg" width="874" /></p>
 </div>
-<div id="lab-2-pathway-features-custom-similarity-metrics" class="section level3">
+<div id="lab-2-pathway-features-custom-similarity-metrics-1" class="section level3">
 <h3>LAB 2: Pathway features &amp; custom similarity metrics</h3>
 <p>We will build a <strong>binary classifier</strong> of breast tumour subtype using gene expression and clinical data, but will use a slightly more complex design. We will define features at the <em>pathway level</em> for gene expression, so we can score pathways by their ability to predict outcome. With clinical data, we will define features at the level of <em>individual clinical variables</em> (e.g. age). We will also introduce the idea of using custom similarity metrics.</p>
 <p><img src="images/Lab2_design.jpg" width="874" /></p>
 </div>
 </div>
-<div id="instructions" class="section level2">
+<div id="instructions-1" class="section level2">
 <h2>Instructions</h2>
 <ul>
 <li>Labs will use <strong>Rstudio</strong>.</li>
 <li>Each lab will be provided as blocks of R code you will copy-paste into Rstudio to follow the building of the predictor. Code blocks to be pasted will be in yellow like so.</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb4-1"><a href="introduction-1.html#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">5</span></span></code></pre></div>
 <p>If you hover your mouse over the block, you should see a little clipboard icon. Clicking on that icon will allow you to copy the block in one shot. I would use that.</p>
 <p>In each case, the result of executing a code block is shown directly after the code, in grey blocks like the one below. These are not intended to be pasted in.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="introduction-1.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span></span></code></pre></div>
 <p>Sometimes we show “pseudocode” or conceptual code blocks; these will also be in grey. None of these are intended to be pasted in.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># do not paste me in!</span></span>
-<span id="cb3-2"><a href="index.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">loop_over</span> (all my patients){</span>
-<span id="cb3-3"><a href="index.html#cb3-3" aria-hidden="true" tabindex="-1"></a>    do something useful;</span>
-<span id="cb3-4"><a href="index.html#cb3-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="introduction-1.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># do not paste me in!</span></span>
+<span id="cb6-2"><a href="introduction-1.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">loop_over</span> (all my patients){</span>
+<span id="cb6-3"><a href="introduction-1.html#cb6-3" aria-hidden="true" tabindex="-1"></a>    do something useful;</span>
+<span id="cb6-4"><a href="introduction-1.html#cb6-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>That’s about it!</p>
 <p>Let’s go!</p>
 
@@ -313,8 +307,8 @@ div.csl-indent {
           </div>
         </div>
       </div>
-
-<a href="introduction-1.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -346,7 +340,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/index.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/01-Introduction.Rmd",
 "text": "Edit"
 },
 "history": {

@@ -1,20 +1,3 @@
---- 
-title: "Multi-modal Data Integration"
-subtitle: "CBW Cancer Analysis Workshop"
-author: "Instructor: Shraddha Pai"
-date: "last modified `r Sys.Date()`"
-site: bookdown::bookdown_site
-output: bookdown::gitbook
-documentclass: book
-bibliography: [book.bib]
-biblio-style: nature
-csl: nature.csl
-link-citations: yes
-github-repo: rstudio/bookdown-demo
-favicon: images/favicon.ico
-description: "Covers patient classification using multi-modal data integration"
----
-
 # Introduction
 
 This book contains lab exercises for Module 11: Multi-modal Data Integration, as part of the [Canadian Bioinformatics Workshop Cancer Analysis (CAN) Workshop](https://bioinformatics.ca/workshops/2021-cancer-analysis/).
