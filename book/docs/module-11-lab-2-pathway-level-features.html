@@ -252,10 +252,10 @@ Note that while in this design we group gene expression measures into pathways, 
 </li>
 </ol>
 </div>
-<div class="figure"><span id="fig:unnamed-chunk-36"></span>
+<div class="figure"><span id="fig:unnamed-chunk-35"></span>
 <img src="images/Lab2_design.jpg" alt="Lab 2 design: We will integrate clinical and gene expression data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity." width="874" />
 <p class="caption">
-Figure 3: Lab 2 design: We will integrate clinical and gene expression data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity.
+Figure 2: Lab 2 design: We will integrate clinical and gene expression data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity.
 </p>
 </div>
 </div>
@@ -294,10 +294,10 @@ This design changes model-building time to several hours, so avoid large gene se
 <span id="cb34-2"><a href="module-11-lab-2-pathway-level-features.html#cb34-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
 <p>The above pathway set was downloaded from <a href="http://download.baderlab.org/EM_Genesets">download.baderlab.org/EM_Genesets</a>, which is a good resource for routinely-updated curated pathway definitions. Pathways are compiled from Reactome, Panther, NCI, MSigDB, etc.,,<span class="citation"><sup><a href="#ref-Merico2010-nc" role="doc-biblioref">5</a></sup></span> and data is contained in <a href="https://software.broadinstitute.org/cancer/software/gsea/wiki/index.php/Data_formats#GMT:_Gene_Matrix_Transposed_file_format_.28.2A.gmt.29">GMT format</a>, a common format to represent gene-sets, such as pathways. You can see from the value of <code>x</code> that the file isn’t downloaded to our working directory, but rather is stored in a BioConductor-specific location for files (file cache), using the <a href="https://www.bioconductor.org/packages/release/bioc/html/BiocFileCache.html">BiocFileCache</a> class. This way if we rerun the script, BioConductor will only download the file again if it has changed since our last download.</p>
 <p>Here is an example of the GMT format:</p>
-<div class="figure"><span id="fig:unnamed-chunk-43"></span>
+<div class="figure"><span id="fig:unnamed-chunk-42"></span>
 <img src="images/GMT_screenshot.png" alt="Lab 2: Example of GMT file format." width="937" />
 <p class="caption">
-Figure 4: Lab 2: Example of GMT file format.
+Figure 3: Lab 2: Example of GMT file format.
 </p>
 </div>
 <p>We then use <code>readPathways()</code> to read the pathways into a list format to provide the predictor with. So the full call looks like this:</p>
@@ -479,10 +479,10 @@ We quantify this by asking only for features that score [<code>EMapMinScore</cod
 <span id="cb52-2"><a href="module-11-lab-2-pathway-level-features.html#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="do">###         groupClusters=TRUE, hideNodeLabels=TRUE)</span></span></code></pre></div>
 <p>If you wanted to look at an EnrichmentMap anyway, you can download the input files shown in the output of the <code>emap</code> object above by opening your web browser to: <code>http://your-student-instance</code> and downloading the files from there. Then build an Enrichment map using Cytoscape on your laptop as discussed earlier in the Cancer Analysis workshop.</p>
 <p>When you’re done, the Enrichment Map for top pathways predictive of Luminal A status would look like this (below). The speech bubbles show pathway names within a couple top clusters.</p>
-<div class="figure"><span id="fig:unnamed-chunk-61"></span>
+<div class="figure"><span id="fig:unnamed-chunk-60"></span>
 <img src="images/Lab2_EMap.jpg" alt="Lab 2: EnrichmentMap for top-scoring pathways predictive of Luminal A status. Nodes show pathways scoring 7+ out of 10 in over 70% of train/test splits. Edges connect pathways with shared genes. Yellow bubbles show pathway clusters, labelled by AutoAnnotate [@Kucera2016-yj]. Node fills indicate top score in 70%+ of the splits. Speech bubbles show pathways in example clusters." width="140%" />
 <p class="caption">
-Figure 5: Lab 2: EnrichmentMap for top-scoring pathways predictive of Luminal A status. Nodes show pathways scoring 7+ out of 10 in over 70% of train/test splits. Edges connect pathways with shared genes. Yellow bubbles show pathway clusters, labelled by AutoAnnotate.<span class="citation"><sup><a href="#ref-Kucera2016-yj" role="doc-biblioref">8</a></sup></span> Node fills indicate top score in 70%+ of the splits. Speech bubbles show pathways in example clusters.
+Figure 4: Lab 2: EnrichmentMap for top-scoring pathways predictive of Luminal A status. Nodes show pathways scoring 7+ out of 10 in over 70% of train/test splits. Edges connect pathways with shared genes. Yellow bubbles show pathway clusters, labelled by AutoAnnotate.<span class="citation"><sup><a href="#ref-Kucera2016-yj" role="doc-biblioref">8</a></sup></span> Node fills indicate top score in 70%+ of the splits. Speech bubbles show pathways in example clusters.
 </p>
 </div>
 <p><strong>Optional:</strong> You can <a href="https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/LuminalA.cys">download the Cytoscape session file here</a> to see the finished result.</p>

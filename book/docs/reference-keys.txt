@@ -1,5 +1,4 @@
-fig:unnamed-chunk-1
-fig:unnamed-chunk-7
-fig:unnamed-chunk-36
-fig:unnamed-chunk-43
-fig:unnamed-chunk-61
+fig:unnamed-chunk-6
+fig:unnamed-chunk-35
+fig:unnamed-chunk-42
+fig:unnamed-chunk-60
