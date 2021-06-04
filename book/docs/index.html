@@ -31,7 +31,7 @@
   
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
 
-<link rel="next" href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html"/>
+<link rel="next" href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"/>
 <script src="libs/header-attrs-2.8/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -119,6 +119,28 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -146,36 +168,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#instructions"><i class="fa fa-check"></i>Instructions</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html"><i class="fa fa-check"></i>Module 10 Lab 1: Three-way classifier from four genomic layers</a>
+<li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><i class="fa fa-check"></i>Module 11 Lab 1: Three-way classifier from four genomic layers</a>
 <ul>
-<li class="chapter" data-level="" data-path="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#introduction"><i class="fa fa-check"></i>Introduction</a></li>
-<li class="chapter" data-level="" data-path="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#get-and-prepare-data"><i class="fa fa-check"></i>Get and prepare data</a></li>
-<li class="chapter" data-level="" data-path="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#create-feature-design-rules"><i class="fa fa-check"></i>Create feature design rules</a>
+<li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#introduction"><i class="fa fa-check"></i>Introduction</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#get-and-prepare-data"><i class="fa fa-check"></i>Get and prepare data</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#create-feature-design-rules"><i class="fa fa-check"></i>Create feature design rules</a>
 <ul>
-<li class="chapter" data-level="" data-path="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#grouplist"><i class="fa fa-check"></i>groupList</a></li>
-<li class="chapter" data-level="" data-path="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#define-patient-similarity-for-each-network"><i class="fa fa-check"></i>Define patient similarity for each network</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#grouplist"><i class="fa fa-check"></i>groupList</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#define-patient-similarity-for-each-network"><i class="fa fa-check"></i>Define patient similarity for each network</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#build-predictor"><i class="fa fa-check"></i>Build predictor</a></li>
-<li class="chapter" data-level="" data-path="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#examine-results"><i class="fa fa-check"></i>Examine results</a>
+<li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#build-predictor"><i class="fa fa-check"></i>Build predictor</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#examine-results"><i class="fa fa-check"></i>Examine results</a>
 <ul>
-<li class="chapter" data-level="" data-path="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#get-model-results"><i class="fa fa-check"></i>Get model results</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#get-model-results"><i class="fa fa-check"></i>Get model results</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#conclusion"><i class="fa fa-check"></i>Conclusion</a></li>
-<li class="chapter" data-level="" data-path="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#sessioninfo"><i class="fa fa-check"></i>sessionInfo</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#conclusion"><i class="fa fa-check"></i>Conclusion</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#sessioninfo"><i class="fa fa-check"></i>sessionInfo</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html"><i class="fa fa-check"></i>Module 10 Lab 2: Pathway-level features</a>
+<li class="chapter" data-level="" data-path="module-11-lab-2-pathway-level-features.html"><a href="module-11-lab-2-pathway-level-features.html"><i class="fa fa-check"></i>Module 11 Lab 2: Pathway-level features</a>
 <ul>
-<li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#introduction-1"><i class="fa fa-check"></i>Introduction</a></li>
-<li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#get-and-prepare-data-1"><i class="fa fa-check"></i>Get and prepare data</a></li>
-<li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#create-feature-design-rules-1"><i class="fa fa-check"></i>Create feature design rules</a>
+<li class="chapter" data-level="" data-path="module-11-lab-2-pathway-level-features.html"><a href="module-11-lab-2-pathway-level-features.html#introduction-1"><i class="fa fa-check"></i>Introduction</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-2-pathway-level-features.html"><a href="module-11-lab-2-pathway-level-features.html#get-and-prepare-data-1"><i class="fa fa-check"></i>Get and prepare data</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-2-pathway-level-features.html"><a href="module-11-lab-2-pathway-level-features.html#create-feature-design-rules-1"><i class="fa fa-check"></i>Create feature design rules</a>
 <ul>
-<li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#rna-pathway-features"><i class="fa fa-check"></i>RNA: Pathway features</a></li>
-<li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#clinical-single-variables"><i class="fa fa-check"></i>Clinical: Single variables</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-2-pathway-level-features.html"><a href="module-11-lab-2-pathway-level-features.html#rna-pathway-features"><i class="fa fa-check"></i>RNA: Pathway features</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-2-pathway-level-features.html"><a href="module-11-lab-2-pathway-level-features.html#clinical-single-variables"><i class="fa fa-check"></i>Clinical: Single variables</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#build-predictor-1"><i class="fa fa-check"></i>Build predictor</a></li>
-<li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#examine-results-1"><i class="fa fa-check"></i>Examine results</a></li>
-<li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#visualize-top-pathways-in-cytoscape"><i class="fa fa-check"></i>Visualize top pathways in Cytoscape</a></li>
-<li class="chapter" data-level="" data-path="module-10-lab-2-pathway-level-features.html"><a href="module-10-lab-2-pathway-level-features.html#sessioninfo-1"><i class="fa fa-check"></i>sessionInfo</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-2-pathway-level-features.html"><a href="module-11-lab-2-pathway-level-features.html#build-predictor-1"><i class="fa fa-check"></i>Build predictor</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-2-pathway-level-features.html"><a href="module-11-lab-2-pathway-level-features.html#examine-results-1"><i class="fa fa-check"></i>Examine results</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-2-pathway-level-features.html"><a href="module-11-lab-2-pathway-level-features.html#visualize-top-pathways-in-cytoscape"><i class="fa fa-check"></i>Visualize top pathways in Cytoscape</a></li>
+<li class="chapter" data-level="" data-path="module-11-lab-2-pathway-level-features.html"><a href="module-11-lab-2-pathway-level-features.html#sessioninfo-1"><i class="fa fa-check"></i>sessionInfo</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -201,15 +223,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1 class="title">Multi-modal Data Integration</h1>
 <h2 class="subtitle"><em>CBW Cancer Analysis Workshop</em></h2>
 <p class="author"><em>Instructor: Shraddha Pai</em></p>
-<p class="date" style="margin-top: 1.5em;"><em>last modified 2021-06-03</em></p>
+<p class="date" style="margin-top: 1.5em;"><em>last modified 2021-06-04</em></p>
 </div>
 <div id="multi-modal-data-integration-june-2021" class="section level1">
 <h1>Multi-modal Data Integration (June 2021)</h1>
-<p>This book contains lab exercises for Module 10: Multi-modal Data Integration, as part of the <a href="https://bioinformatics.ca/workshops/2021-cancer-analysis/">Canadian Bioinformatics Workshop Cancer Analysis (CAN) Module</a>.</p>
+<p>This book contains lab exercises for Module 11: Multi-modal Data Integration, as part of the <a href="https://bioinformatics.ca/workshops/2021-cancer-analysis/">Canadian Bioinformatics Workshop Cancer Analysis (CAN) Workshop</a>.</p>
 <div id="course-materials" class="section level2">
 <h2>Course materials</h2>
 <p>You can download course slides here <strong>LINK TBA</strong></p>
-<p>We will have two lab exercises, where we build patient classifiers using multi-modal data integration, using netDx <strong>ADD REFERENCES</strong>.</p>
+<p>We will have two lab exercises, where we build patient classifiers using multi-modal data integration, using netDx <span class="citation">(<a href="#ref-Pai2019-iu" role="doc-biblioref">Pai et al. 2019, Pai2021–um</a>)</span>.</p>
 </div>
 <div id="labs" class="section level2">
 <h2>Labs</h2>
@@ -244,13 +266,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </div>
 </div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Pai2019-iu" class="csl-entry">
+Pai, Shraddha, Shirley Hui, Ruth Isserlin, Muhammad A Shah, Hussam Kaka, and Gary D Bader. 2019. <span>“netDx: Interpretable Patient Classification Using Integrated Patient Similarity Networks.”</span> <em>Mol. Syst. Biol.</em> 15 (3): e8497.
+</div>
+</div>
             </section>
 
           </div>
         </div>
       </div>
 
-<a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

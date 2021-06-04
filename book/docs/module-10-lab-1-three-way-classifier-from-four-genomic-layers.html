@@ -480,7 +480,7 @@ Within each split, it:</p>
 </ul>
 <div class="rmd-design">
 <p>
-These are unrealistically low values set so the example will run fast. In practice a good starting point is <code>featScoreMax=10</code>, <code>featSelCutoff=9</code> and <code>numSplits=100</code>, but these parameters depend on the sample sizes in the dataset and heterogeneity of the samples.
+These are unrealistically low values set so the example will run fast. In practice a good starting point is <code>featScoreMax=10</code>, <code>featSelCutoff=9</code> and <code>numSplits=10L</code>, but these parameters depend on the sample sizes in the dataset and heterogeneity of the samples.
 </p>
 </div>
 <div class="sourceCode" id="cb42"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb42-1"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># make results reproducible</span></span>
@@ -506,7 +506,7 @@ These are unrealistically low values set so the example will run fast. In practi
 <span id="cb42-21"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-21" aria-hidden="true" tabindex="-1"></a>  ))</span>
 <span id="cb42-22"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-22" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
 <span id="cb42-23"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-23" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(t1<span class="sc">-</span>t0)</span></code></pre></div>
-<pre><code>## Time difference of 16.34851 mins</code></pre>
+<pre><code>## Time difference of 16.30011 mins</code></pre>
 </div>
 <div id="examine-results" class="section level2">
 <h2>Examine results</h2>
@@ -553,14 +553,20 @@ This list contains:</p>
 <pre><code>##                  Length Class  Mode
 ## selectedFeatures 3      -none- list
 ## featureScores    3      -none- list
-## performance      2      -none- list</code></pre>
+## performance      4      -none- list</code></pre>
 <p>Look at the performance:</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb54-1"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#cb54-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>performance</span></code></pre></div>
 <pre><code>## $meanAccuracy
 ## [1] 0.7610799
 ## 
 ## $splitAccuracy
-##  [1] 0.7741935 0.7204301 0.7500000 0.7419355 0.7419355 0.8279570 0.7826087 0.8152174 0.7065217 0.7500000</code></pre>
+##  [1] 0.7741935 0.7204301 0.7500000 0.7419355 0.7419355 0.8279570 0.7826087 0.8152174 0.7065217 0.7500000
+## 
+## $splitAUROC
+## NULL
+## 
+## $splitAUPR
+## NULL</code></pre>
 <p>Look at feature scores for all labels, across all train-test splits:</p>
 <div class="sourceCode" id="cb56"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb56-1"><a href="module-10-lab-1-three-way-classifier-from-four-genomic-layers.html#cb56-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>featureScores</span></code></pre></div>
 <pre><code>## $Luminal.A
@@ -692,11 +698,11 @@ We end this tutorial with a call to <code>sessionInfo()</code> which prints the 
 ## [136] limma_3.46.0                  fansi_0.4.2                   pillar_1.6.1                 
 ## [139] lattice_0.20-41               fastmap_1.1.0                 httr_1.4.2                   
 ## [142] survival_3.2-10               interactiveDisplayBase_1.28.0 glue_1.4.2                   
-## [145] png_0.1-7                     iterators_1.0.13              BiocVersion_3.12.0           
-## [148] glmnet_4.1-1                  bit_4.0.4                     stringi_1.6.2                
-## [151] sass_0.4.0                    HDF5Array_1.18.1              blob_1.2.1                   
-## [154] BiocSingular_1.6.0            AnnotationHub_2.22.1          memoise_2.0.0                
-## [157] dplyr_1.0.6                   irlba_2.3.3                   ape_5.5</code></pre>
+## [145] iterators_1.0.13              BiocVersion_3.12.0            glmnet_4.1-1                 
+## [148] bit_4.0.4                     stringi_1.6.2                 sass_0.4.0                   
+## [151] HDF5Array_1.18.1              blob_1.2.1                    BiocSingular_1.6.0           
+## [154] AnnotationHub_2.22.1          memoise_2.0.0                 dplyr_1.0.6                  
+## [157] irlba_2.3.3                   ape_5.5</code></pre>
 
 </div>
 </div>
