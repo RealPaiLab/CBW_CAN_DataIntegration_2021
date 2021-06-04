@@ -345,7 +345,7 @@ We notice that the Enrichment Map identifies several pathways known to be dysreg
 
 ## Outlook
 
-```block,type="rmd-outlook"}
+```{block,type="rmd-outlook"}
 Where do you go from here? That depends on your study goals and prior knowledge. Here are some possibilities:
 
 * You may choose to focus on particular pathways for which you have targeting tools, for follow-up *in vitro* or *in vivo* experiments. 
