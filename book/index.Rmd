@@ -7,7 +7,8 @@ site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
 bibliography: [book.bib, packages.bib]
-biblio-style: nature.csl
+biblio-style: nature
+csl: nature.csl
 link-citations: yes
 github-repo: rstudio/bookdown-demo
 favicon: images/favicon.ico
@@ -22,7 +23,7 @@ This book contains lab exercises for Module 11: Multi-modal Data Integration, as
 
 You can download course slides here **LINK TBA**
 
-We will have two lab exercises, where we build patient classifiers using multi-modal data integration, using netDx [@Pai2019-iu,Pai2021-um]. 
+We will have two lab exercises, where we build patient classifiers using multi-modal data integration, using netDx [@Pai2019-iu Pai2021-um]. 
 
 ## Labs
 

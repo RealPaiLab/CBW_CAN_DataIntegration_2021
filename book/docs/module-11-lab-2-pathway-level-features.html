@@ -289,7 +289,7 @@ This design changes model-building time to several hours, so avoid large gene se
 1. You can <strong>download</strong> a compilation of pathways from curated databases using the <code>fetchPathwayDefinitions()</code> function in netDx, like so:</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb34-1"><a href="module-11-lab-2-pathway-level-features.html#cb34-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">fetchPathwayDefinitions</span>(<span class="st">&quot;March&quot;</span>,<span class="dv">2021</span>)</span>
 <span id="cb34-2"><a href="module-11-lab-2-pathway-level-features.html#cb34-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
-<p>The above pathway set was downloaded from <a href="http://download.baderlab.org/EM_Genesets">download.baderlab.org/EM_Genesets</a>, which is a good resource for routinely-updated curated pathway definitions. Pathways are compiled from Reactome, Panther, NCI, MSigDB, etc., <span class="citation">(<a href="#ref-Merico2010-nc" role="doc-biblioref">Merico et al. 2010</a>)</span>, and data is contained in <a href="https://software.broadinstitute.org/cancer/software/gsea/wiki/index.php/Data_formats#GMT:_Gene_Matrix_Transposed_file_format_.28.2A.gmt.29">GMT format</a>, a common format to represent gene-sets, such as pathways. You can see from the value of <code>x</code> that the file isn’t downloaded to our working directory, but rather is stored in a BioConductor-specific location for files (file cache), using the <a href="https://www.bioconductor.org/packages/release/bioc/html/BiocFileCache.html">BiocFileCache</a> class. This way if we rerun the script, BioConductor will only download the file again if it has changed since our last download.</p>
+<p>The above pathway set was downloaded from <a href="http://download.baderlab.org/EM_Genesets">download.baderlab.org/EM_Genesets</a>, which is a good resource for routinely-updated curated pathway definitions. Pathways are compiled from Reactome, Panther, NCI, MSigDB, etc.,,<span class="citation"><sup><a href="#ref-Merico2010-nc" role="doc-biblioref">2</a></sup></span> and data is contained in <a href="https://software.broadinstitute.org/cancer/software/gsea/wiki/index.php/Data_formats#GMT:_Gene_Matrix_Transposed_file_format_.28.2A.gmt.29">GMT format</a>, a common format to represent gene-sets, such as pathways. You can see from the value of <code>x</code> that the file isn’t downloaded to our working directory, but rather is stored in a BioConductor-specific location for files (file cache), using the <a href="https://www.bioconductor.org/packages/release/bioc/html/BiocFileCache.html">BiocFileCache</a> class. This way if we rerun the script, BioConductor will only download the file again if it has changed since our last download.</p>
 <p>Here is an example of the GMT format:</p>
 <div class="figure"><span id="fig:unnamed-chunk-42"></span>
 <img src="images/GMT_screenshot.png" alt="Lab 2: Example of GMT file format." width="937" />
@@ -301,7 +301,7 @@ Figure 3: Lab 2: Example of GMT file format.
 <div class="sourceCode" id="cb35"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb35-1"><a href="module-11-lab-2-pathway-level-features.html#cb35-1" aria-hidden="true" tabindex="-1"></a>pathList <span class="ot">&lt;-</span> <span class="fu">readPathways</span>(<span class="fu">fetchPathwayDefinitions</span>(<span class="st">&quot;March&quot;</span>,<span class="dv">2021</span>))</span>
 <span id="cb35-2"><a href="module-11-lab-2-pathway-level-features.html#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pathList)</span></code></pre></div>
 <ol style="list-style-type: decimal">
-<li>Alternatively, you can also provide a custom pathway set to netDx by reading in a GMT file, using the <code>readPathways()</code> function. In this example, I’ve downloaded a geneset of <a href="http://www.gsea-msigdb.org/gsea/msigdb/collections.jsp#C7">pathways often dysregulated in cancer</a>, set C6 from MSigDB <span class="citation">(<a href="#ref-Subramanian2005-am" role="doc-biblioref">Subramanian et al. 2005</a>)</span>:</li>
+<li>Alternatively, you can also provide a custom pathway set to netDx by reading in a GMT file, using the <code>readPathways()</code> function. In this example, I’ve downloaded a geneset of <a href="http://www.gsea-msigdb.org/gsea/msigdb/collections.jsp#C7">pathways often dysregulated in cancer</a>, set C6 from MSigDB:<span class="citation"><sup><a href="#ref-Subramanian2005-am" role="doc-biblioref">3</a></sup></span></li>
 </ol>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb36-1"><a href="module-11-lab-2-pathway-level-features.html#cb36-1" aria-hidden="true" tabindex="-1"></a>gmtFile <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;%s2/cancer_pathways.gmt&quot;</span>,<span class="fu">tempdir</span>())</span>
 <span id="cb36-2"><a href="module-11-lab-2-pathway-level-features.html#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%s2&quot;</span>,<span class="fu">tempdir</span>()))) {</span>
@@ -396,7 +396,7 @@ We have:</p>
 <li>created two PSN using clinical variables (<code>groupList$clinical</code>), and</li>
 <li>defined our similarity metrics (<code>makeNets()</code>).</li>
 </ul>
-<p>Now we build our predictors. For this tutorial, we use two train/test splits. For each split, we assign features a score between zero and two, and call features with score of 1+ “feature-selected.”</p>
+<p>Now we build our predictors. For this tutorial, we use two train/test splits. For each split, we assign features a score between zero and two, and call features with score of 1+ “feature-selected”.</p>
 <p><strong>Realistic parameters:</strong> When running this with your project, reasonable values are <code>numSplits=10L</code> (10 is a good start, just to see if you get signal, 100+ if firming up for publication), <code>featScoreMax=10L</code>, <code>featSelCutoff=9L</code>.</p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb43-1"><a href="module-11-lab-2-pathway-level-features.html#cb43-1" aria-hidden="true" tabindex="-1"></a>t0 <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
 <span id="cb43-2"><a href="module-11-lab-2-pathway-level-features.html#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># make results reproducible</span></span>
@@ -443,7 +443,7 @@ Let’s take a look at the average performance:</p>
 <p>We see that the predictor performs perfectly at classifying Luminal A tumours but does worse at classifying the residual, mainly because it often classifies other tumours as Luminal A!</p>
 <div class="rmd-note">
 <p>
-Particularly when there is class imbalance, i.e. one class has several-fold the number of samples than the other, predictors can achieve a baseline high accuracy by “cheating” and simply predicting all samples as being of the dominating label. e.g. if you have 99:1 class imbalance of two classes A and B, the predictor can achieve 99% accuracy simply by calling all samples of type “A!”
+Particularly when there is class imbalance, i.e. one class has several-fold the number of samples than the other, predictors can achieve a baseline high accuracy by “cheating” and simply predicting all samples as being of the dominating label. e.g. if you have 99:1 class imbalance of two classes A and B, the predictor can achieve 99% accuracy simply by calling all samples of type “A”!
 </p>
 <p>
 In practice, class imbalance should be handled using suitable performance evaluation metrics and sampling proportionally for training/test sets.
@@ -471,7 +471,7 @@ We quantify this by asking only for features that score [<code>EMapMinScore</cod
 <span id="cb50-9"><a href="module-11-lab-2-pathway-level-features.html#cb50-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>This call will return paths to the output files, which you need to now download from AWS to your personal computer:</p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb51-1"><a href="module-11-lab-2-pathway-level-features.html#cb51-1" aria-hidden="true" tabindex="-1"></a>emap</span></code></pre></div>
-<p>netDx can directly generate EnrichmentMaps on a locally-installed version of Cytosape using <a href="https://bioconductor.org/packages/release/bioc/html/RCy3.html">RCy3</a><span class="citation">(<a href="#ref-Gustavsen2019-ec" role="doc-biblioref">Gustavsen et al. 2019</a>)</span>. RCy3 allows programmatic control of Cytoscape from within R, so that visualizations such as EnrichmentMap can be programmatically created. This step needs a local copy of Cytoscape installed, so it won’t work on the lab AWS instance. Try it on your laptop after the lab.</p>
+<p>netDx can directly generate EnrichmentMaps on a locally-installed version of Cytosape using <a href="https://bioconductor.org/packages/release/bioc/html/RCy3.html">RCy3</a><span class="citation"><sup><a href="#ref-Gustavsen2019-ec" role="doc-biblioref">4</a></sup></span>. RCy3 allows programmatic control of Cytoscape from within R, so that visualizations such as EnrichmentMap can be programmatically created. This step needs a local copy of Cytoscape installed, so it won’t work on the lab AWS instance. Try it on your laptop after the lab.</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb52-1"><a href="module-11-lab-2-pathway-level-features.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="do">###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],</span></span>
 <span id="cb52-2"><a href="module-11-lab-2-pathway-level-features.html#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="do">###         groupClusters=TRUE, hideNodeLabels=TRUE)</span></span></code></pre></div>
 <p>If you wanted to look at an EnrichmentMap anyway, you can download the input files shown in the output of the <code>emap</code> object above by opening your web browser to: <code>http://your-student-instance</code> and downloading the files from there. Then build an Enrichment map using Cytoscape on your laptop as discussed earlier in the Cancer Analysis workshop.</p>
@@ -479,7 +479,7 @@ We quantify this by asking only for features that score [<code>EMapMinScore</cod
 <div class="figure"><span id="fig:unnamed-chunk-60"></span>
 <img src="images/Lab2_EMap.jpg" alt="Lab 2: EnrichmentMap for top-scoring pathways predictive of Luminal A status. Nodes show pathways scoring 7+ out of 10 in over 70% of train/test splits. Edges connect pathways with shared genes. Yellow bubbles show pathway clusters, labelled by AutoAnnotate [@Kucera2016-yj]. Node fills indicate top score in 70%+ of the splits. Speech bubbles show pathways in example clusters." width="140%" />
 <p class="caption">
-Figure 4: Lab 2: EnrichmentMap for top-scoring pathways predictive of Luminal A status. Nodes show pathways scoring 7+ out of 10 in over 70% of train/test splits. Edges connect pathways with shared genes. Yellow bubbles show pathway clusters, labelled by AutoAnnotate <span class="citation">(<a href="#ref-Kucera2016-yj" role="doc-biblioref">Kucera et al. 2016</a>)</span>. Node fills indicate top score in 70%+ of the splits. Speech bubbles show pathways in example clusters.
+Figure 4: Lab 2: EnrichmentMap for top-scoring pathways predictive of Luminal A status. Nodes show pathways scoring 7+ out of 10 in over 70% of train/test splits. Edges connect pathways with shared genes. Yellow bubbles show pathway clusters, labelled by AutoAnnotate.<span class="citation"><sup><a href="#ref-Kucera2016-yj" role="doc-biblioref">5</a></sup></span> Node fills indicate top score in 70%+ of the splits. Speech bubbles show pathways in example clusters.
 </p>
 </div>
 <p>You can also <a href="https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/LuminalA.cys">download the Cytoscape session file here</a> to see the finished result.</p>
@@ -496,38 +496,38 @@ In practice, it can take a good portion of an hour to adjust the layout of the E
 <h2>sessionInfo</h2>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb53-1"><a href="module-11-lab-2-pathway-level-features.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body" line-spacing="2">
 <div class="csl-entry">
-Gustavsen, Julia A, Shraddha Pai, Ruth Isserlin, Barry Demchak, and Alexander R Pico. 2019. <span>“<span>RCy3</span>: Network Biology Using Cytoscape from Within <span>R</span>.”</span> <em>F1000Res.</em> 8 (October): 1774.
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Pai, S. <em>et al.</em> netDx: Interpretable patient classification using integrated patient similarity networks. <em>Mol. Syst. Biol.</em> <strong>15,</strong> e8497 (2019).</div>
 </div>
 <div class="csl-entry">
-Kucera, Mike, Ruth Isserlin, Arkady Arkhangorodsky, and Gary D Bader. 2016. <span>“<span>AutoAnnotate</span>: A Cytoscape App for Summarizing Networks with Semantic Annotations.”</span> <em>F1000Res.</em> 5 (July): 1717.
+<div class="csl-left-margin">2. </div><div class="csl-right-inline">Merico, D., Isserlin, R., Stueker, O., Emili, A. &amp; Bader, G. D. Enrichment map: A network-based method for gene-set enrichment visualization and interpretation. <em>PLoS One</em> <strong>5,</strong> e13984 (2010).</div>
 </div>
 <div class="csl-entry">
-Merico, Daniele, Ruth Isserlin, Oliver Stueker, Andrew Emili, and Gary D Bader. 2010. <span>“Enrichment Map: A Network-Based Method for Gene-Set Enrichment Visualization and Interpretation.”</span> <em>PLoS One</em> 5 (11): e13984.
+<div class="csl-left-margin">3. </div><div class="csl-right-inline">Subramanian, A. <em>et al.</em> Gene set enrichment analysis: A knowledge-based approach for interpreting genome-wide expression profiles. <em>Proc. Natl. Acad. Sci. U. S. A.</em> <strong>102,</strong> 15545–15550 (2005).</div>
 </div>
 <div class="csl-entry">
-Pai, Shraddha, Shirley Hui, Ruth Isserlin, Muhammad A Shah, Hussam Kaka, and Gary D Bader. 2019. <span>“netDx: Interpretable Patient Classification Using Integrated Patient Similarity Networks.”</span> <em>Mol. Syst. Biol.</em> 15 (3): e8497.
+<div class="csl-left-margin">4. </div><div class="csl-right-inline">Gustavsen, J. A., Pai, S., Isserlin, R., Demchak, B. &amp; Pico, A. R. <span>RCy3</span>: Network biology using cytoscape from within <span>R</span>. <em>F1000Res.</em> <strong>8,</strong> 1774 (2019).</div>
 </div>
 <div class="csl-entry">
-Subramanian, Aravind, Pablo Tamayo, Vamsi K Mootha, Sayan Mukherjee, Benjamin L Ebert, Michael A Gillette, Amanda Paulovich, et al. 2005. <span>“Gene Set Enrichment Analysis: A Knowledge-Based Approach for Interpreting Genome-Wide Expression Profiles.”</span> <em>Proc. Natl. Acad. Sci. U. S. A.</em> 102 (43): 15545–50.
+<div class="csl-left-margin">5. </div><div class="csl-right-inline">Kucera, M., Isserlin, R., Arkhangorodsky, A. &amp; Bader, G. D. <span>AutoAnnotate</span>: A cytoscape app for summarizing networks with semantic annotations. <em>F1000Res.</em> <strong>5,</strong> 1717 (2016).</div>
 </div>
 </div>
 </div>
 </div>
 <h3>References</h3>
-<div id="refs" class="references csl-bib-body hanging-indent">
-<div id="ref-Gustavsen2019-ec" class="csl-entry">
-Gustavsen, Julia A, Shraddha Pai, Ruth Isserlin, Barry Demchak, and Alexander R Pico. 2019. <span>“<span>RCy3</span>: Network Biology Using Cytoscape from Within <span>R</span>.”</span> <em>F1000Res.</em> 8 (October): 1774.
-</div>
-<div id="ref-Kucera2016-yj" class="csl-entry">
-Kucera, Mike, Ruth Isserlin, Arkady Arkhangorodsky, and Gary D Bader. 2016. <span>“<span>AutoAnnotate</span>: A Cytoscape App for Summarizing Networks with Semantic Annotations.”</span> <em>F1000Res.</em> 5 (July): 1717.
-</div>
+<div id="refs" class="references csl-bib-body" line-spacing="2">
 <div id="ref-Merico2010-nc" class="csl-entry">
-Merico, Daniele, Ruth Isserlin, Oliver Stueker, Andrew Emili, and Gary D Bader. 2010. <span>“Enrichment Map: A Network-Based Method for Gene-Set Enrichment Visualization and Interpretation.”</span> <em>PLoS One</em> 5 (11): e13984.
+<div class="csl-left-margin">2. </div><div class="csl-right-inline">Merico, D., Isserlin, R., Stueker, O., Emili, A. &amp; Bader, G. D. Enrichment map: A network-based method for gene-set enrichment visualization and interpretation. <em>PLoS One</em> <strong>5,</strong> e13984 (2010).</div>
 </div>
 <div id="ref-Subramanian2005-am" class="csl-entry">
-Subramanian, Aravind, Pablo Tamayo, Vamsi K Mootha, Sayan Mukherjee, Benjamin L Ebert, Michael A Gillette, Amanda Paulovich, et al. 2005. <span>“Gene Set Enrichment Analysis: A Knowledge-Based Approach for Interpreting Genome-Wide Expression Profiles.”</span> <em>Proc. Natl. Acad. Sci. U. S. A.</em> 102 (43): 15545–50.
+<div class="csl-left-margin">3. </div><div class="csl-right-inline">Subramanian, A. <em>et al.</em> Gene set enrichment analysis: A knowledge-based approach for interpreting genome-wide expression profiles. <em>Proc. Natl. Acad. Sci. U. S. A.</em> <strong>102,</strong> 15545–15550 (2005).</div>
+</div>
+<div id="ref-Gustavsen2019-ec" class="csl-entry">
+<div class="csl-left-margin">4. </div><div class="csl-right-inline">Gustavsen, J. A., Pai, S., Isserlin, R., Demchak, B. &amp; Pico, A. R. <span>RCy3</span>: Network biology using cytoscape from within <span>R</span>. <em>F1000Res.</em> <strong>8,</strong> 1774 (2019).</div>
+</div>
+<div id="ref-Kucera2016-yj" class="csl-entry">
+<div class="csl-left-margin">5. </div><div class="csl-right-inline">Kucera, M., Isserlin, R., Arkhangorodsky, A. &amp; Bader, G. D. <span>AutoAnnotate</span>: A cytoscape app for summarizing networks with semantic annotations. <em>F1000Res.</em> <strong>5,</strong> 1717 (2016).</div>
 </div>
 </div>
             </section>
