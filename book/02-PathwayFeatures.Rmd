@@ -335,11 +335,19 @@ When you're done, the Enrichment Map for top pathways predictive of Luminal A st
 knitr::include_graphics("images/Lab2_EMap.jpg")
 ```
 
-You can also [download the Cytoscape session file here](https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/LuminalA.cys) to see the finished result. 
+**Optional:** You can [download the Cytoscape session file here](https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/LuminalA.cys) to see the finished result. 
 
 ```{block,type="rmd-note"}
  In practice, it can take a good portion of an hour to adjust the layout of the EnrichmentMap, and often longer to explore the contents. The automatically-generated pathway theme labels are often a reasonable first guess, but you'll find you'll often revise them upon closer inspection of the pathways within.
 ```
+
+We notice that the Enrichment Map identifies several pathways known to be dysregulated in Luminal A breast tumours, including estrogen receptor-mediating signaling (PLASMA_MEMBRANE_ESTROGEN_RESPONSE_SIGNALING), p38 signaling, pathways related to genomic stability and DNA damage response (ATM), cell profileration-related signaling (ErbB signaling). 
+
+```block,type="rmd-design"}
+
+```
+
+
 
 That's it!
 
