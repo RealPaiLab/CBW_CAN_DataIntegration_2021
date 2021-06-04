@@ -252,7 +252,7 @@ model <- suppressMessages(buildPredictor(
   	featSelCutoff=1L,		## threshold for calling something
 							## feature-selected
   	featScoreMax=2L,		## max score for feature selection
-    numCores=8L,			## set higher for parallelizing
+    numCores=4L,			## set higher for parallelizing
   	debugMode=FALSE,
   	keepAllData=FALSE,	## set to TRUE for debugging or low-level files used by the predictor
     logging="none"
@@ -322,6 +322,7 @@ Let's examine our confusion matrix:
 ```{r, class.source="codeblock",eval=TRUE}
 confMat <- confusionMatrix(model_full)
 ```
+
 *Note: Rows of this matrix don't add up to 100% because the matrix is an average of the confusion matrices from all of the train/test splits.*
 
 And here are selected features, which are those scoring 2 out of 2 in at least half of the splits. This threshold is simply for illustration. In practice we would run at least 10 train/test splits (ideally 100+), and look for features that score 7+ out of 10 in >70% splits.

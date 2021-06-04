@@ -273,7 +273,8 @@ confusionMatrix <- function(model) {
 #' @export
 tSNEPlotter <- function(psn,pheno,...) {
 
-    require(ggplot2)
+require(ggplot2)
+require(Rtsne)
 message("* Making symmetric matrix")
 symmForm <- suppressMessages(makeSymmetric(psn))
 symmForm[which(is.na(symmForm))] <- .Machine$double.eps
