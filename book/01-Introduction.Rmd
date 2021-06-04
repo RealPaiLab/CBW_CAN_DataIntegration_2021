@@ -20,7 +20,7 @@ For both lab exercises, we will use multi-modal breast cancer data from The Canc
 
 In particular, we will focus on classifying tumours as being of either *Luminal A*, *Luminal B*, or *Basal-like* subtypes. These subtypes vary by prevalence, prognosis for survival and relapse, activated cellular signaling pathways, immunohistochemical markers and treatment options [@Yersal2014-km]. 
 
-```{r,echo=FALSE,fig.cap="Reprinted from [Intrinsic and Molecular Subtypes of Breast Cancer](https://app.biorender.com/biorender-templates/figures/5f15ea4438c5ef002876ab4b/t-5f872409fb2c3900a82e109e-intrinsic-and-molecular-subtypes-of-breast-cancer), by BioRender, October 2020, Copyright 2021 by BioRender.",out.width="150%"}
+```{r,echo=FALSE,fig.cap="Reprinted from [Intrinsic and Molecular Subtypes of Breast Cancer](https://app.biorender.com/biorender-templates/figures/5f15ea4438c5ef002876ab4b/t-5f872409fb2c3900a82e109e-intrinsic-and-molecular-subtypes-of-breast-cancer), by BioRender, October 2020, Copyright 2021 by BioRender."}
 knitr::include_graphics("images/intrinsic-and-molecular-subtypes-of-breast-cancer.png")
 ```
 This dataset was selected because it has characteristics of a common use cancer in cancer genomics:
