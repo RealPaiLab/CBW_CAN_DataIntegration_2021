@@ -288,7 +288,6 @@ We indeed have a class imbalance in this dataset:
 table(colData(brca)$STATUS,useNA="always")
 ```
 
-
 This function returns the confusion matrix for each split, as well as the average shown in the image above:
 
 ```{r, class.source="codeblock",eval=TRUE}
