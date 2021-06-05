@@ -40,9 +40,8 @@ h1 {
 .rmd-caution {
   padding: 0em 0em 0em 3em;
   margin-bottom: 2px;
-  background:  /*#FFFF00*/  url("images/iconfinder_attention_309101.png") left center/3em no-repeat /*!important*/;
-  border-style:solid;
-  border-color:#ff6347;
+  background:  #ff9090  url("images/iconfinder_attention_309101.png") left center/3em no-repeat /*!important*/;
+  /* background: url("images/iconfinder_attention_309101.png") left center/3em no-repeat*/  /*!important*/ 
 }
 .rmd-caution:before {
   color: #ff6347;
@@ -50,17 +49,16 @@ h1 {
   content: "";
 }
 
-.rmd-original-history {
-  padding: 0em 0em 0em 4em;
+.rmd-design{
+  padding: 0em 0em 0em 3em;
   margin-bottom: 2px;
-  background:  /*#FFFF00*/  url("images/cc_icon.png") left center/3em no-repeat /*!important*/;
-  border-style:solid;
-  border-color:#000000;
+  background: #ffe9fe  url("images/iconfinder_art-tools_1291734.png") left top/3em no-repeat /*!important*/; 
 }
-.rmd-original-history:before {
-  color: #ff6347;
+.rmd-design:before {
+  padding: 0em 0em 0em 0.5em;
+  color: #42076a;
   font-size: 24px;
-  content: "About";
+  content: "Design notes";
 }
 
 
@@ -77,16 +75,13 @@ h1 {
   content: "Troubleshooting";
 }
 
-
 .rmd-tip {
   padding: 0em 0em 0em 3em;
   margin-bottom: 2px;
-  background:  #f2f1a2  url("images/iconfinder_idea_309059.png") left center/3em no-repeat /*!important*/;
-  border-style:solid;
-  border-color: #f2f1a2;
+  background:  #d1ebfe  url("images/iconfinder_idea_309059.png") left center/3em no-repeat /*!important*/;
 }
 .rmd-tip:before {
-  color: #a2aef2;
+  color: #b68d04;
   font-size: 24px;
   content: "Tip";
 }
@@ -95,12 +90,10 @@ h1 {
 .rmd-note {
   padding: 0em 0em 0em 3em;
   margin-bottom: 2px;
-  background:  #9ad4fe  url("images/iconfinder_document_309087.png") left center/3em no-repeat /*!important*/;
-  border-style:solid;
-  border-color: #9ad4fe;
+  background:  #d1ebfe  url("images/iconfinder_document_309087.png") left center/3em no-repeat /*!important*/;
 }
 .rmd-note:before {
-  color: #fcf403;
+  color: #332d54;
   font-size: 24px;
   content: "Note";
 }
@@ -117,6 +110,19 @@ h1 {
   font-size: 24px;
   content: "";
 }
+
+.rmd-outlook {
+  padding: 0em 0em 0em 3em;
+  margin-bottom: 2px;
+  background:  #d1ebfe  url("images/iconfinder_3687825_adventure_road_street_sign_way_icon_128px.png") left center/3em no-repeat /*!important*/;
+}
+
+.rmd-outlook:before {
+  color: #b68d04;
+  font-size: 24px;
+  content: "";
+}
+
 
 .rmd-datadownload {
   padding: 0em 0em 0em 3em;
@@ -141,4 +147,9 @@ h1 {
 .rmd-question:before {
   color: #b478f5;
   font-size: 24px;
-  conten
+  content: "Question";
+}
+
+.codeblock {
+  background-color: rgb(255, 251, 225) !important;
+}
