@@ -252,7 +252,7 @@ model <- suppressMessages(buildPredictor(
   	featSelCutoff=1L,		## threshold for calling something
 							## feature-selected
   	featScoreMax=2L,		## max score for feature selection
-    numCores=4L,			## set higher for parallelizing
+    numCores=8L,			## set higher for parallelizing
   	debugMode=FALSE,
   	keepAllData=FALSE,	## set to TRUE for debugging or low-level files used by the predictor
     logging="none"
