@@ -295,7 +295,6 @@ We quantify this by asking only for features that score [`EMapMinScore`,`EMapMax
 Here we ask for features scoring 7+ out of 10 for at least 70% of the train/test splits. 
 
 ```{r lab2-makeemapinput , class.source="codeblock", eval=TRUE}
-if (!file.exists("~/workspace")) dir.create("~/workspace")
 emap <- makeInputForEnrichmentMap (
 	model=model_full,
 	results=results,
