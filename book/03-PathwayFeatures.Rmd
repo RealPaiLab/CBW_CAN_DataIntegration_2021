@@ -294,7 +294,8 @@ We quantify this by asking only for features that score [`EMapMinScore`,`EMapMax
 
 Here we ask for features scoring 7+ out of 10 for at least 70% of the train/test splits. 
 
-```{r lab2-makeemapinput ,eval=TRUE}
+```{r lab2-makeemapinput , class.source="codeblock", eval=TRUE}
+if (!file.exists("~/workspace")) dir.create("~/workspace")
 emap <- makeInputForEnrichmentMap (
 	model=model_full,
 	results=results,
@@ -302,7 +303,7 @@ emap <- makeInputForEnrichmentMap (
 	EMapMinScore=7L, 
 	EMapMaxSore=10L,
 	EMapPctPass=0.7,
-	outDir=tempdir() 
+	outDir="~/workspace"
 )
 ```
 This call will return paths to the output files, which you need to now download from AWS to your personal computer:

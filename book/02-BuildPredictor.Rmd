@@ -219,7 +219,7 @@ Finally we call the function that runs the netDx predictor. We provide:
 * patient data  (`dataList`)
 * grouping rules (`groupList`)
 * function to create PSN from data, includes choice of similarity metric (`makeNetFunc`)
-* number of train/test splits over which to collect feature scores and average performance: `numSplits`, 
+* number of train/test splits over which to collect feature scores and average performance (`numSplits`), 
 * maximum score for features in one round of feature selection  (`featScoreMax`, set to 10)
 * threshold to call feature-selected networks for each train/test split (`featSelCutoff`); only features scoring this value or higher will be used to classify test patients,
 * number of cores to use for parallel processing (`numCores`).
@@ -234,6 +234,8 @@ Within each split, it:
 ```{block,type="rmd-design"}
 In practice a good starting point is `featScoreMax=10`, `featSelCutoff=9` and `numSplits=10L`, but these parameters depend on the sample sizes in the dataset and heterogeneity of the samples.
 ``` 
+
+This step can take up to a half-hour based on the current parameters, so we're commenting this out for the tutorial and will simply load the results.
  
 ```{r lab1-buildpredictor ,class.source="codeblock",eval=TRUE}
 set.seed(42) # make results reproducible

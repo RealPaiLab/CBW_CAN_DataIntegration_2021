@@ -555,33 +555,34 @@ In practice, class imbalance should be handled using suitable performance evalua
 <p>Let us say we only want to see pathways that scored in some target range for “most” of the trials; i.e. consistently high-scoring pathways.
 We quantify this by asking only for features that score [<code>EMapMinScore</code>,<code>EMapMaxScore</code>] for <code>EMapPctPass</code> fraction of trials.</p>
 <p>Here we ask for features scoring 7+ out of 10 for at least 70% of the train/test splits.</p>
-<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="module-11-lab-2-pathway-level-features.html#cb116-1" aria-hidden="true" tabindex="-1"></a>emap <span class="ot">&lt;-</span> <span class="fu">makeInputForEnrichmentMap</span> (</span>
-<span id="cb116-2"><a href="module-11-lab-2-pathway-level-features.html#cb116-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">model=</span>model_full,</span>
-<span id="cb116-3"><a href="module-11-lab-2-pathway-level-features.html#cb116-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">results=</span>results,</span>
-<span id="cb116-4"><a href="module-11-lab-2-pathway-level-features.html#cb116-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">pathwayList=</span>pathList,</span>
-<span id="cb116-5"><a href="module-11-lab-2-pathway-level-features.html#cb116-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">EMapMinScore=</span>7L, </span>
-<span id="cb116-6"><a href="module-11-lab-2-pathway-level-features.html#cb116-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">EMapMaxSore=</span>10L,</span>
-<span id="cb116-7"><a href="module-11-lab-2-pathway-level-features.html#cb116-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">EMapPctPass=</span><span class="fl">0.7</span>,</span>
-<span id="cb116-8"><a href="module-11-lab-2-pathway-level-features.html#cb116-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">outDir=</span><span class="fu">tempdir</span>() </span>
-<span id="cb116-9"><a href="module-11-lab-2-pathway-level-features.html#cb116-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb116-1"><a href="module-11-lab-2-pathway-level-features.html#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(<span class="st">&quot;~/workspace&quot;</span>)) <span class="fu">dir.create</span>(<span class="st">&quot;~/workspace&quot;</span>)</span>
+<span id="cb116-2"><a href="module-11-lab-2-pathway-level-features.html#cb116-2" aria-hidden="true" tabindex="-1"></a>emap <span class="ot">&lt;-</span> <span class="fu">makeInputForEnrichmentMap</span> (</span>
+<span id="cb116-3"><a href="module-11-lab-2-pathway-level-features.html#cb116-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">model=</span>model_full,</span>
+<span id="cb116-4"><a href="module-11-lab-2-pathway-level-features.html#cb116-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">results=</span>results,</span>
+<span id="cb116-5"><a href="module-11-lab-2-pathway-level-features.html#cb116-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">pathwayList=</span>pathList,</span>
+<span id="cb116-6"><a href="module-11-lab-2-pathway-level-features.html#cb116-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">EMapMinScore=</span>7L, </span>
+<span id="cb116-7"><a href="module-11-lab-2-pathway-level-features.html#cb116-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">EMapMaxSore=</span>10L,</span>
+<span id="cb116-8"><a href="module-11-lab-2-pathway-level-features.html#cb116-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">EMapPctPass=</span><span class="fl">0.7</span>,</span>
+<span id="cb116-9"><a href="module-11-lab-2-pathway-level-features.html#cb116-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">outDir=</span><span class="st">&quot;~/workspace&quot;</span></span>
+<span id="cb116-10"><a href="module-11-lab-2-pathway-level-features.html#cb116-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## * Creating input files for EnrichmentMap</code></pre>
 <pre><code>## * Writing files for network visualization</code></pre>
 <p>This call will return paths to the output files, which you need to now download from AWS to your personal computer:</p>
 <div class="sourceCode" id="cb119"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb119-1"><a href="module-11-lab-2-pathway-level-features.html#cb119-1" aria-hidden="true" tabindex="-1"></a>emap</span></code></pre></div>
 <pre><code>## $GMTfiles
 ## $GMTfiles$Luminal.A
-## [1] &quot;/tmp/RtmppmEQJv/Luminal.A.gmt&quot;
+## [1] &quot;~/workspace/Luminal.A.gmt&quot;
 ## 
 ## $GMTfiles$other
-## [1] &quot;/tmp/RtmppmEQJv/other.gmt&quot;
+## [1] &quot;~/workspace/other.gmt&quot;
 ## 
 ## 
 ## $NodeStyles
 ## $NodeStyles$Luminal.A
-## [1] &quot;/tmp/RtmppmEQJv/Luminal.A_nodeAttrs.txt&quot;
+## [1] &quot;~/workspace/Luminal.A_nodeAttrs.txt&quot;
 ## 
 ## $NodeStyles$other
-## [1] &quot;/tmp/RtmppmEQJv/other_nodeAttrs.txt&quot;</code></pre>
+## [1] &quot;~/workspace/other_nodeAttrs.txt&quot;</code></pre>
 <p>netDx can directly generate EnrichmentMaps on a locally-installed version of Cytosape using <a href="https://bioconductor.org/packages/release/bioc/html/RCy3.html">RCy3</a><span class="citation"><sup><a href="#ref-Gustavsen2019-ec" role="doc-biblioref">7</a></sup></span>. RCy3 allows programmatic control of Cytoscape from within R, so that visualizations such as EnrichmentMap can be programmatically created. This step needs a local copy of Cytoscape installed, so it won’t work on the lab AWS instance. Try it on your laptop after the lab.</p>
 <div class="sourceCode" id="cb121"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb121-1"><a href="module-11-lab-2-pathway-level-features.html#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="do">###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],</span></span>
 <span id="cb121-2"><a href="module-11-lab-2-pathway-level-features.html#cb121-2" aria-hidden="true" tabindex="-1"></a><span class="do">###         groupClusters=TRUE, hideNodeLabels=TRUE)</span></span></code></pre></div>
