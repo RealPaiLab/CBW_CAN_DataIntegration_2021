@@ -314,8 +314,12 @@ emap
 netDx can directly generate EnrichmentMaps on a locally-installed version of Cytosape using [RCy3](https://bioconductor.org/packages/release/bioc/html/RCy3.html)[@Gustavsen2019-ec]. RCy3 allows programmatic control of Cytoscape from within R, so that visualizations such as EnrichmentMap can be programmatically created. This step needs a local copy of Cytoscape installed, so it won't work on the lab AWS instance. Try it on your laptop after the lab.
 
 ```{r, class.source="codeblock",eval=TRUE}
-###plotEmap(gmtFiles[[1]],nodeAttrFiles[[1]],
-###         groupClusters=TRUE, hideNodeLabels=TRUE)
+###plotEmap(
+###	emap$GMTfiles[[1]],
+###	emap$NodeStyles[[1]],
+###	groupClusters=TRUE, 
+###	hideNodeLabels=TRUE
+###	)
 ```
 
 If you wanted to look at an EnrichmentMap anyway, you can download the input files shown in the output of the `emap` object above by opening your web browser to: `http://your-student-instance` and downloading the files from there. Then build an Enrichment map using Cytoscape on your laptop as discussed earlier in the Cancer Analysis workshop. 
