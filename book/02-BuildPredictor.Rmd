@@ -224,15 +224,15 @@ Finally we call the function that runs the netDx predictor. We provide:
 * threshold to call feature-selected networks for each train/test split (`featSelCutoff`); only features scoring this value or higher will be used to classify test patients,
 * number of cores to use for parallel processing (`numCores`).
 
-The call below runs 2 train/test splits, to be able to run fast. 
+The call below runs 10 train/test splits. 
 Within each split, it:
 
 * splits data into train/test using the default split of 80:20 (`trainProp=0.8`)
-* score networks between 0 to 2 (i.e. `featScoreMax=2L`)
-* uses networks that score >=1 out of 2 (`featSelCutoff=1L`) to classify test samples for that split.
+* score networks between 0 to 10 (i.e. `featScoreMax=2L`)
+* uses networks that score >=9 out of 10 (`featSelCutoff=9L`) to classify test samples for that split.
 
 ```{block,type="rmd-design"}
-These are unrealistically low values set so the example will run fast. In practice a good starting point is `featScoreMax=10`, `featSelCutoff=9` and `numSplits=10L`, but these parameters depend on the sample sizes in the dataset and heterogeneity of the samples.
+In practice a good starting point is `featScoreMax=10`, `featSelCutoff=9` and `numSplits=10L`, but these parameters depend on the sample sizes in the dataset and heterogeneity of the samples.
 ``` 
  
 ```{r lab1-buildpredictor ,class.source="codeblock",eval=TRUE}
@@ -241,28 +241,41 @@ outDir <- paste(tempdir(),randAlphanumString(),
 	"pred_output",sep=getFileSep())
 if (file.exists(outDir)) unlink(outDir,recursive=TRUE)
 t0 <- Sys.time()
-model <- suppressMessages(buildPredictor(
-	dataList=brca,			## your data
-	groupList=groupList,	## grouping strategy
-	makeNetFunc=makeNets,	## function to build PSNs
-	outDir=outDir, 			## output directory
-	trainProp=0.8,			## pct of samples to use to train model in
-							## each split
-	numSplits=2L,			## number of train/test splits
-  	featSelCutoff=1L,		## threshold for calling something
-							## feature-selected
-  	featScoreMax=2L,		## max score for feature selection
-    numCores=8L,			## set higher for parallelizing
-  	debugMode=FALSE,
-  	keepAllData=FALSE,	## set to TRUE for debugging or low-level files used by the predictor
-    logging="none"
-  ))
+###model <- suppressMessages(buildPredictor(
+###	dataList=brca,			## your data
+###	groupList=groupList,	## grouping strategy
+###	makeNetFunc=makeNets,	## function to build PSNs
+###	outDir=outDir, 			## output directory
+###	trainProp=0.8,			## pct of samples to use to train model in
+###							## each split
+###	numSplits=10L,			## number of train/test splits
+### featSelCutoff=9L,		## threshold for calling something
+###							## feature-selected
+###	featScoreMax=10L,		## max score for feature selection
+### numCores=8L,			## set higher for parallelizing
+### debugMode=FALSE,
+### keepAllData=FALSE,	## set to TRUE for debugging or low-level files used by the predictor
+### logging="none"
+###  ))
 t1 <- Sys.time()
 print(t1-t0)
 ```
 
 ## Examine results
-The results are stored in the list object returned by the `buildPredictor()` call.
+
+Now we get model output, including performance for various train/test splits and consistently high-scoring features. 
+
+
+Let's load those:
+
+```{r, class.source="codeblock",eval=TRUE}
+outFile <- sprintf("%s/CBW_Lab1_full.rda",tempdir())
+download.file("https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab1_files/Lab1_10splits.rda",
+	destfile=outFile)
+lnames <- load(outFile)
+```
+
+The results are stored in the list object returned by the `buildPredictor()` call (here, `model_full`).
 This list contains:
 
 * `inputNets`: all input networks that the model started with. 
@@ -274,26 +287,13 @@ This list contains:
 
 
 ```{r, class.source="codeblock",eval=TRUE}
-summary(model)
-summary(model$Split1)
+summary(model_full)
+summary(model_full$Split1)
 ```
 
-### Get model results
-Now we get model output, including performance for various train/test splits and consistently high-scoring features. We've actually generated results using more real-world parameters, including 10 train/test splits and a greater dynamic range for feature scores (`featScoreMax=10L` and `featSelCutoff=9L`).
+`helper.R` contains convenience functions to simply viewing results. These functions will be integrated into upcoming versions of netDx. 
 
-Let's load those for a better experience exploring results:
-
-```{r, class.source="codeblock",eval=TRUE}
-outFile <- sprintf("%s/CBW_Lab1_full.rda",tempdir())
-download.file("https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab1_files/Lab1_10splits.rda",
-	destfile=outFile)
-lnames <- load(outFile)
-```
-
-`helper.R` contains convenience functions to do this, which will be integrated into upcoming versions of netDx. 
-
-In the function below, we define top-scoring features as those which score at least 2 in at least half of the train/test splits
-
+In the function below, we define top-scoring features as those which score at least 9 in at least 90% of the train/test splits:
 
 ```{r lab1-getresults,class.source="codeblock",eval=TRUE}
 source("helper.R")
@@ -334,12 +334,15 @@ results$selectedFeatures
 We finally get the integrated PSN and visualize it using a tSNE plot:
 
 ```{r, class.source="codeblock",fig.width=8,fig.height=8, eval=TRUE}
+## this call doesn't work in Rstudio; for now we've commented this out and saved the PSN file. 
+## psn <- getPSN(brca,groupList_full,makeNets_full,results$selectedFeatures)
+
 psnFile <- sprintf("%s/psn.rda",tempdir())
 download.file("https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab1_files/Lab1_PSN.rda",
 	destfile=outFile)
 load(outFile)
-#psn <- getPSN(brca,groupList_full,makeNets_full,results$selectedFeatures)
 
+require(Rtsne)
 tsne <- tSNEPlotter(
 	psn$patientSimNetwork_unpruned, 
 	colData(brca)
