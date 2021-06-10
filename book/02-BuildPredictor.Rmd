@@ -228,7 +228,7 @@ The call below runs 10 train/test splits.
 Within each split, it:
 
 * splits data into train/test using the default split of 80:20 (`trainProp=0.8`)
-* score networks between 0 to 10 (i.e. `featScoreMax=2L`)
+* score networks between 0 to 10 (i.e. `featScoreMax=10L`)
 * uses networks that score >=9 out of 10 (`featSelCutoff=9L`) to classify test samples for that split.
 
 ```{block,type="rmd-design"}
@@ -240,7 +240,6 @@ set.seed(42) # make results reproducible
 outDir <- paste(tempdir(),randAlphanumString(),
 	"pred_output",sep=getFileSep())
 if (file.exists(outDir)) unlink(outDir,recursive=TRUE)
-t0 <- Sys.time()
 ###model <- suppressMessages(buildPredictor(
 ###	dataList=brca,			## your data
 ###	groupList=groupList,	## grouping strategy
@@ -257,14 +256,11 @@ t0 <- Sys.time()
 ### keepAllData=FALSE,	## set to TRUE for debugging or low-level files used by the predictor
 ### logging="none"
 ###  ))
-t1 <- Sys.time()
-print(t1-t0)
 ```
 
 ## Examine results
 
 Now we get model output, including performance for various train/test splits and consistently high-scoring features. 
-
 
 Let's load those:
 
@@ -284,7 +280,6 @@ This list contains:
   * `accuracy`: percent accuracy of predictions
   * `featureScores`: feature scores for each label (list with `g` entries, where `g` is number of patient labels). Each entry contains the feature selection scores for the corresponding label.
   * `featureSelected`: features passing feature selection in a split (list of length `g`, with one entry per label)
-
 
 ```{r, class.source="codeblock",eval=TRUE}
 summary(model_full)

@@ -257,7 +257,7 @@ round(mean(perf$splitAUPR),2)*100
 round(mean(perf$splitAccuracy),2)*100
 ```
 
-Notice that although the AUROC is near perfect, the accuracy is lower, at around 86%. It is important to consider several measures of predictor performance to understand the behaviour of the predictor. Let us now look at the confusion matrix:
+Notice that although the AUROC is near perfect, the accuracy is lower, at around 86%. It is important to consider several measures of predictor performance to understand the behaviour of the predictor. 
 
 Let's examine our confusion matrix:
 ```{r, class.source="codeblock",eval=TRUE}
@@ -326,7 +326,7 @@ When you're done, the Enrichment Map for top pathways predictive of Luminal A st
 knitr::include_graphics("images/Lab2_EMap.jpg")
 ```
 
-**Optional:** You can [download the Cytoscape session file here](https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/LuminalA.cys) to see the finished result. 
+**Optional:** You can also [download the Cytoscape session file here](https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab2_files/LuminalA.cys) to see the finished result. 
 
 ```{block,type="rmd-note"}
  In practice, it can take a good portion of an hour to adjust the layout of the EnrichmentMap, and often longer to explore the contents. The automatically-generated pathway theme labels are often a reasonable first guess, but you'll find you'll often revise them upon closer inspection of the pathways within.
@@ -340,9 +340,8 @@ We notice that the Enrichment Map identifies several pathways known to be dysreg
 Where do you go from here? That depends on your study goals and prior knowledge. Here are some possibilities:
 
 * You may choose to focus on particular pathways for which you have targeting tools, for follow-up *in vitro* or *in vivo* experiments. 
-* You may compare and contrast known effectors from novel pathways and pursue that line of research. 
-* You may want to improve performance, and consider changing predictor design, including features, predictor settings, or pathway set choices.
-* If you're satisfied with predictor design, you may want to [validate on an independent dataset](http://bioconductor.org/packages/release/bioc/vignettes/netDx/inst/doc/ValidateNew.html). This is something we haven't covered in this lab. 
+* You may want to improve performance, in which case consider changing predictor design, including features, predictor settings, or pathway set choices. *Note: This is usually a good idea.*
+* Once you're satisfied with predictor design, you may want to [validate on an independent dataset](http://bioconductor.org/packages/release/bioc/vignettes/netDx/inst/doc/ValidateNew.html). This is something we haven't covered in this lab. 
 
 Machine learning is very much trial-and-error, and you have to be prepared to try a variety of designs to see what works.
 
