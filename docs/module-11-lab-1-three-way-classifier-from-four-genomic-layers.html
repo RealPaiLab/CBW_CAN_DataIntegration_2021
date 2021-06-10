@@ -578,22 +578,22 @@ This list contains:</p>
 <pre><code>## $Luminal.A
 ##                              Feature Split1 Split2 Split3 Split4 Split5 Split6 Split7 Split8 Split9 Split10
 ## 1 BRCA_Methylation_methyl27-20160128      7      9      9     10      9      8      8      7     10      10
-## 2            BRCA_RPPAArray-20160128     10     10     10     10     10     10     10     10     10      10
+## 2         BRCA_miRNASeqGene-20160128      9      5      6     10      5      6      6      9     10       7
 ## 3            BRCA_mRNAArray-20160128     10     10     10     10     10     10     10     10     10      10
-## 4         BRCA_miRNASeqGene-20160128      9      5      6     10      5      6      6      9     10       7
+## 4            BRCA_RPPAArray-20160128     10     10     10     10     10     10     10     10     10      10
 ## 
 ## $Basal.like
 ##                              Feature Split1 Split2 Split3 Split4 Split5 Split6 Split7 Split8 Split9 Split10
 ## 1 BRCA_Methylation_methyl27-20160128     10     10     10     10     10     10     10     10     10      10
-## 2            BRCA_RPPAArray-20160128     10     10     10     10     10     10     10     10     10      10
+## 2         BRCA_miRNASeqGene-20160128     NA      4     NA      1      4      1     NA     NA      7       2
 ## 3            BRCA_mRNAArray-20160128     10     10     10     10     10     10     10     10     10      10
-## 4         BRCA_miRNASeqGene-20160128     NA      4     NA      1      4      1     NA     NA      7       2
+## 4            BRCA_RPPAArray-20160128     10     10     10     10     10     10     10     10     10      10
 ## 
 ## $Luminal.B
 ##                              Feature Split1 Split2 Split3 Split4 Split5 Split6 Split7 Split8 Split9 Split10
 ## 1 BRCA_Methylation_methyl27-20160128     10     10     10     10     10     10     10     10     10      10
-## 2            BRCA_RPPAArray-20160128     10     10     10     10     10     10     10     10     10      10
-## 3            BRCA_mRNAArray-20160128     10     10     10     10     10     10     10     10     10      10</code></pre>
+## 2            BRCA_mRNAArray-20160128     10     10     10     10     10     10     10     10     10      10
+## 3            BRCA_RPPAArray-20160128     10     10     10     10     10     10     10     10     10      10</code></pre>
 <p>Let’s examine our confusion matrix:</p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb57-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb57-1" aria-hidden="true" tabindex="-1"></a>confMat <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(model_full)</span></code></pre></div>
 <p><img src="bookdown-demo_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
@@ -601,13 +601,13 @@ This list contains:</p>
 <p>And here are selected features, which are those scoring 2 out of 2 in at least half of the splits. This threshold is simply for illustration. In practice we would run at least 10 train/test splits (ideally 100+), and look for features that score 7+ out of 10 in &gt;70% splits.</p>
 <div class="sourceCode" id="cb58"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb58-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb58-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>selectedFeatures</span></code></pre></div>
 <pre><code>## $Luminal.A
-## [1] &quot;BRCA_RPPAArray-20160128&quot; &quot;BRCA_mRNAArray-20160128&quot;
+## [1] &quot;BRCA_mRNAArray-20160128&quot; &quot;BRCA_RPPAArray-20160128&quot;
 ## 
 ## $Basal.like
-## [1] &quot;BRCA_Methylation_methyl27-20160128&quot; &quot;BRCA_RPPAArray-20160128&quot;            &quot;BRCA_mRNAArray-20160128&quot;           
+## [1] &quot;BRCA_Methylation_methyl27-20160128&quot; &quot;BRCA_mRNAArray-20160128&quot;            &quot;BRCA_RPPAArray-20160128&quot;           
 ## 
 ## $Luminal.B
-## [1] &quot;BRCA_Methylation_methyl27-20160128&quot; &quot;BRCA_RPPAArray-20160128&quot;            &quot;BRCA_mRNAArray-20160128&quot;</code></pre>
+## [1] &quot;BRCA_Methylation_methyl27-20160128&quot; &quot;BRCA_mRNAArray-20160128&quot;            &quot;BRCA_RPPAArray-20160128&quot;</code></pre>
 <p>We finally get the integrated PSN and visualize it using a tSNE plot:</p>
 <div class="sourceCode" id="cb60"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb60-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="do">## this call doesn&#39;t work in Rstudio; for now we&#39;ve commented this out and saved the PSN file. </span></span>
 <span id="cb60-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="do">## psn &lt;- getPSN(brca,groupList_full,makeNets_full,results$selectedFeatures)</span></span>
@@ -647,8 +647,8 @@ We end this tutorial with a call to <code>sessionInfo()</code> which prints the 
 ## BLAS/LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.8.so
 ## 
 ## locale:
-##  [1] LC_CTYPE=C                 LC_NUMERIC=C               LC_TIME=C                  LC_COLLATE=C              
-##  [5] LC_MONETARY=C              LC_MESSAGES=C              LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C              LC_PAPER=en_US.UTF-8       LC_NAME=C                 
 ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C             LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
