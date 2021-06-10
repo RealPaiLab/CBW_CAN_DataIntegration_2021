@@ -180,10 +180,7 @@ div.csl-indent {
 <li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#define-patient-similarity-for-each-network"><i class="fa fa-check"></i>Define patient similarity for each network</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#build-predictor"><i class="fa fa-check"></i>Build predictor</a></li>
-<li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#examine-results"><i class="fa fa-check"></i>Examine results</a>
-<ul>
-<li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#get-model-results"><i class="fa fa-check"></i>Get model results</a></li>
-</ul></li>
+<li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#examine-results"><i class="fa fa-check"></i>Examine results</a></li>
 <li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#conclusion"><i class="fa fa-check"></i>Conclusion</a></li>
 <li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#sessioninfo"><i class="fa fa-check"></i>sessionInfo</a></li>
 </ul></li>
@@ -472,51 +469,54 @@ While netDx provides a high degree of flexibility in achieving your design of ch
 <li>patient data (<code>dataList</code>)</li>
 <li>grouping rules (<code>groupList</code>)</li>
 <li>function to create PSN from data, includes choice of similarity metric (<code>makeNetFunc</code>)</li>
-<li>number of train/test splits over which to collect feature scores and average performance: <code>numSplits</code>,</li>
+<li>number of train/test splits over which to collect feature scores and average performance (<code>numSplits</code>),</li>
 <li>maximum score for features in one round of feature selection (<code>featScoreMax</code>, set to 10)</li>
 <li>threshold to call feature-selected networks for each train/test split (<code>featSelCutoff</code>); only features scoring this value or higher will be used to classify test patients,</li>
 <li>number of cores to use for parallel processing (<code>numCores</code>).</li>
 </ul>
-<p>The call below runs 2 train/test splits, to be able to run fast.
+<p>The call below runs 10 train/test splits.
 Within each split, it:</p>
 <ul>
 <li>splits data into train/test using the default split of 80:20 (<code>trainProp=0.8</code>)</li>
-<li>score networks between 0 to 2 (i.e. <code>featScoreMax=2L</code>)</li>
-<li>uses networks that score &gt;=1 out of 2 (<code>featSelCutoff=1L</code>) to classify test samples for that split.</li>
+<li>score networks between 0 to 10 (i.e. <code>featScoreMax=10L</code>)</li>
+<li>uses networks that score &gt;=9 out of 10 (<code>featSelCutoff=9L</code>) to classify test samples for that split.</li>
 </ul>
 <div class="rmd-design">
 <p>
-These are unrealistically low values set so the example will run fast. In practice a good starting point is <code>featScoreMax=10</code>, <code>featSelCutoff=9</code> and <code>numSplits=10L</code>, but these parameters depend on the sample sizes in the dataset and heterogeneity of the samples.
+In practice a good starting point is <code>featScoreMax=10</code>, <code>featSelCutoff=9</code> and <code>numSplits=10L</code>, but these parameters depend on the sample sizes in the dataset and heterogeneity of the samples.
 </p>
 </div>
+<p>This step can take up to a half-hour based on the current parameters, so we’re commenting this out for the tutorial and will simply load the results.</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb42-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># make results reproducible</span></span>
 <span id="cb42-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-2" aria-hidden="true" tabindex="-1"></a>outDir <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">tempdir</span>(),<span class="fu">randAlphanumString</span>(),</span>
 <span id="cb42-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;pred_output&quot;</span>,<span class="at">sep=</span><span class="fu">getFileSep</span>())</span>
 <span id="cb42-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(outDir)) <span class="fu">unlink</span>(outDir,<span class="at">recursive=</span><span class="cn">TRUE</span>)</span>
-<span id="cb42-5"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-5" aria-hidden="true" tabindex="-1"></a>t0 <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb42-6"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-6" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">buildPredictor</span>(</span>
-<span id="cb42-7"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">dataList=</span>brca,          <span class="do">## your data</span></span>
-<span id="cb42-8"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">groupList=</span>groupList,    <span class="do">## grouping strategy</span></span>
-<span id="cb42-9"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">makeNetFunc=</span>makeNets,   <span class="do">## function to build PSNs</span></span>
-<span id="cb42-10"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">outDir=</span>outDir,          <span class="do">## output directory</span></span>
-<span id="cb42-11"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">trainProp=</span><span class="fl">0.8</span>,          <span class="do">## pct of samples to use to train model in</span></span>
-<span id="cb42-12"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-12" aria-hidden="true" tabindex="-1"></a>                            <span class="do">## each split</span></span>
-<span id="cb42-13"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">numSplits=</span>2L,           <span class="do">## number of train/test splits</span></span>
-<span id="cb42-14"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">featSelCutoff=</span>1L,       <span class="do">## threshold for calling something</span></span>
-<span id="cb42-15"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-15" aria-hidden="true" tabindex="-1"></a>                            <span class="do">## feature-selected</span></span>
-<span id="cb42-16"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">featScoreMax=</span>2L,        <span class="do">## max score for feature selection</span></span>
-<span id="cb42-17"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">numCores=</span>8L,            <span class="do">## set higher for parallelizing</span></span>
-<span id="cb42-18"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">debugMode=</span><span class="cn">FALSE</span>,</span>
-<span id="cb42-19"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">keepAllData=</span><span class="cn">FALSE</span>,  <span class="do">## set to TRUE for debugging or low-level files used by the predictor</span></span>
-<span id="cb42-20"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">logging=</span><span class="st">&quot;none&quot;</span></span>
-<span id="cb42-21"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-21" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb42-22"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-22" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb42-23"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-23" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(t1<span class="sc">-</span>t0)</span></code></pre></div>
-<pre><code>## Time difference of 15.731 mins</code></pre>
+<span id="cb42-5"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="do">###model &lt;- suppressMessages(buildPredictor(</span></span>
+<span id="cb42-6"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="do">### dataList=brca,          ## your data</span></span>
+<span id="cb42-7"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="do">### groupList=groupList,    ## grouping strategy</span></span>
+<span id="cb42-8"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="do">### makeNetFunc=makeNets,   ## function to build PSNs</span></span>
+<span id="cb42-9"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="do">### outDir=outDir,          ## output directory</span></span>
+<span id="cb42-10"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="do">### trainProp=0.8,          ## pct of samples to use to train model in</span></span>
+<span id="cb42-11"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-11" aria-hidden="true" tabindex="-1"></a><span class="do">###                         ## each split</span></span>
+<span id="cb42-12"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-12" aria-hidden="true" tabindex="-1"></a><span class="do">### numSplits=10L,          ## number of train/test splits</span></span>
+<span id="cb42-13"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-13" aria-hidden="true" tabindex="-1"></a><span class="do">### featSelCutoff=9L,       ## threshold for calling something</span></span>
+<span id="cb42-14"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-14" aria-hidden="true" tabindex="-1"></a><span class="do">###                         ## feature-selected</span></span>
+<span id="cb42-15"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-15" aria-hidden="true" tabindex="-1"></a><span class="do">### featScoreMax=10L,       ## max score for feature selection</span></span>
+<span id="cb42-16"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-16" aria-hidden="true" tabindex="-1"></a><span class="do">### numCores=8L,            ## set higher for parallelizing</span></span>
+<span id="cb42-17"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-17" aria-hidden="true" tabindex="-1"></a><span class="do">### debugMode=FALSE,</span></span>
+<span id="cb42-18"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-18" aria-hidden="true" tabindex="-1"></a><span class="do">### keepAllData=FALSE,  ## set to TRUE for debugging or low-level files used by the predictor</span></span>
+<span id="cb42-19"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-19" aria-hidden="true" tabindex="-1"></a><span class="do">### logging=&quot;none&quot;</span></span>
+<span id="cb42-20"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-20" aria-hidden="true" tabindex="-1"></a><span class="do">###  ))</span></span></code></pre></div>
 </div>
 <div id="examine-results" class="section level2">
 <h2>Examine results</h2>
-<p>The results are stored in the list object returned by the <code>buildPredictor()</code> call.
+<p>Now we get model output, including performance for various train/test splits and consistently high-scoring features.</p>
+<p>Let’s load those:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb43-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-1" aria-hidden="true" tabindex="-1"></a>outFile <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;%s/CBW_Lab1_full.rda&quot;</span>,<span class="fu">tempdir</span>())</span>
+<span id="cb43-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab1_files/Lab1_10splits.rda&quot;</span>,</span>
+<span id="cb43-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">destfile=</span>outFile)</span>
+<span id="cb43-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-4" aria-hidden="true" tabindex="-1"></a>lnames <span class="ot">&lt;-</span> <span class="fu">load</span>(outFile)</span></code></pre></div>
+<p>The results are stored in the list object returned by the <code>buildPredictor()</code> call (here, <code>model_full</code>).
 This list contains:</p>
 <ul>
 <li><code>inputNets</code>: all input networks that the model started with.</li>
@@ -528,40 +528,40 @@ This list contains:</p>
 <li><code>featureSelected</code>: features passing feature selection in a split (list of length <code>g</code>, with one entry per label)</li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb44-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb44-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_full)</span></code></pre></div>
 <pre><code>##           Length Class  Mode     
 ## inputNets 8      -none- character
 ## Split1    4      -none- list     
-## Split2    4      -none- list</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb46-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model<span class="sc">$</span>Split1)</span></code></pre></div>
+## Split2    4      -none- list     
+## Split3    4      -none- list     
+## Split4    4      -none- list     
+## Split5    4      -none- list     
+## Split6    4      -none- list     
+## Split7    4      -none- list     
+## Split8    4      -none- list     
+## Split9    4      -none- list     
+## Split10   4      -none- list</code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb46-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_full<span class="sc">$</span>Split1)</span></code></pre></div>
 <pre><code>##                 Length Class      Mode   
 ## featureScores      3   -none-     list   
 ## featureSelected    3   -none-     list   
 ## predictions     2692   data.frame list   
 ## accuracy           1   -none-     numeric</code></pre>
-<div id="get-model-results" class="section level3">
-<h3>Get model results</h3>
-<p>Now we get model output, including performance for various train/test splits and consistently high-scoring features. We’ve actually generated results using more real-world parameters, including 10 train/test splits and a greater dynamic range for feature scores (<code>featScoreMax=10L</code> and <code>featSelCutoff=9L</code>).</p>
-<p>Let’s load those for a better experience exploring results:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb48-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb48-1" aria-hidden="true" tabindex="-1"></a>outFile <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;%s/CBW_Lab1_full.rda&quot;</span>,<span class="fu">tempdir</span>())</span>
-<span id="cb48-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab1_files/Lab1_10splits.rda&quot;</span>,</span>
-<span id="cb48-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb48-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">destfile=</span>outFile)</span>
-<span id="cb48-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb48-4" aria-hidden="true" tabindex="-1"></a>lnames <span class="ot">&lt;-</span> <span class="fu">load</span>(outFile)</span></code></pre></div>
-<p><code>helper.R</code> contains convenience functions to do this, which will be integrated into upcoming versions of netDx.</p>
-<p>In the function below, we define top-scoring features as those which score at least 2 in at least half of the train/test splits</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb49-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;helper.R&quot;</span>)</span>
-<span id="cb49-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb49-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">getResults</span>(brca,model_full,<span class="at">featureSelCutoff=</span>9L,</span>
-<span id="cb49-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb49-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">featureSelPct=</span><span class="fl">0.9</span>)</span></code></pre></div>
+<p><code>helper.R</code> contains convenience functions to simply viewing results. These functions will be integrated into upcoming versions of netDx.</p>
+<p>In the function below, we define top-scoring features as those which score at least 9 in at least 90% of the train/test splits:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb48-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;helper.R&quot;</span>)</span>
+<span id="cb48-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb48-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">getResults</span>(brca,model_full,<span class="at">featureSelCutoff=</span>9L,</span>
+<span id="cb48-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb48-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">featureSelPct=</span><span class="fl">0.9</span>)</span></code></pre></div>
 <pre><code>## Detected 10 splits and 3 classes</code></pre>
 <pre><code>## * Compiling feature scores and calling selected features</code></pre>
 <p><code>results</code> contains <code>performance</code>, <code>selectedFeatures</code> for each patient label, and the table of feature <code>scores</code>.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb52-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results)</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb51-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results)</span></code></pre></div>
 <pre><code>##                  Length Class  Mode
 ## selectedFeatures 3      -none- list
 ## featureScores    3      -none- list
 ## performance      4      -none- list</code></pre>
 <p>Look at the performance:</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb54-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb54-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>performance</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb53-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb53-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>performance</span></code></pre></div>
 <pre><code>## $meanAccuracy
 ## [1] 0.7610799
 ## 
@@ -574,7 +574,7 @@ This list contains:</p>
 ## $splitAUPR
 ## NULL</code></pre>
 <p>Look at feature scores for all labels, across all train-test splits:</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb56-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb56-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>featureScores</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb55-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb55-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>featureScores</span></code></pre></div>
 <pre><code>## $Luminal.A
 ##                              Feature Split1 Split2 Split3 Split4 Split5 Split6 Split7 Split8 Split9 Split10
 ## 1 BRCA_Methylation_methyl27-20160128      7      9      9     10      9      8      8      7     10      10
@@ -595,11 +595,11 @@ This list contains:</p>
 ## 2            BRCA_RPPAArray-20160128     10     10     10     10     10     10     10     10     10      10
 ## 3            BRCA_mRNAArray-20160128     10     10     10     10     10     10     10     10     10      10</code></pre>
 <p>Let’s examine our confusion matrix:</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb58-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb58-1" aria-hidden="true" tabindex="-1"></a>confMat <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(model_full)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb57-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb57-1" aria-hidden="true" tabindex="-1"></a>confMat <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(model_full)</span></code></pre></div>
 <p><img src="bookdown-demo_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
 <p><em>Note: Rows of this matrix don’t add up to 100% because the matrix is an average of the confusion matrices from all of the train/test splits.</em></p>
 <p>And here are selected features, which are those scoring 2 out of 2 in at least half of the splits. This threshold is simply for illustration. In practice we would run at least 10 train/test splits (ideally 100+), and look for features that score 7+ out of 10 in &gt;70% splits.</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb59-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb59-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>selectedFeatures</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb58-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb58-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>selectedFeatures</span></code></pre></div>
 <pre><code>## $Luminal.A
 ## [1] &quot;BRCA_RPPAArray-20160128&quot; &quot;BRCA_mRNAArray-20160128&quot;
 ## 
@@ -609,21 +609,23 @@ This list contains:</p>
 ## $Luminal.B
 ## [1] &quot;BRCA_Methylation_methyl27-20160128&quot; &quot;BRCA_RPPAArray-20160128&quot;            &quot;BRCA_mRNAArray-20160128&quot;</code></pre>
 <p>We finally get the integrated PSN and visualize it using a tSNE plot:</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb61-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb61-1" aria-hidden="true" tabindex="-1"></a>psnFile <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;%s/psn.rda&quot;</span>,<span class="fu">tempdir</span>())</span>
-<span id="cb61-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab1_files/Lab1_PSN.rda&quot;</span>,</span>
-<span id="cb61-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb61-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">destfile=</span>outFile)</span>
-<span id="cb61-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb61-4" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(outFile)</span>
-<span id="cb61-5"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb61-5" aria-hidden="true" tabindex="-1"></a><span class="co">#psn &lt;- getPSN(brca,groupList_full,makeNets_full,results$selectedFeatures)</span></span>
-<span id="cb61-6"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb61-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-7"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb61-7" aria-hidden="true" tabindex="-1"></a>tsne <span class="ot">&lt;-</span> <span class="fu">tSNEPlotter</span>(</span>
-<span id="cb61-8"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb61-8" aria-hidden="true" tabindex="-1"></a>    psn<span class="sc">$</span>patientSimNetwork_unpruned, </span>
-<span id="cb61-9"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb61-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colData</span>(brca)</span>
-<span id="cb61-10"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb61-10" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb60-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="do">## this call doesn&#39;t work in Rstudio; for now we&#39;ve commented this out and saved the PSN file. </span></span>
+<span id="cb60-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="do">## psn &lt;- getPSN(brca,groupList_full,makeNets_full,results$selectedFeatures)</span></span>
+<span id="cb60-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-4" aria-hidden="true" tabindex="-1"></a>psnFile <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;%s/psn.rda&quot;</span>,<span class="fu">tempdir</span>())</span>
+<span id="cb60-5"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-5" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab1_files/Lab1_PSN.rda&quot;</span>,</span>
+<span id="cb60-6"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">destfile=</span>outFile)</span>
+<span id="cb60-7"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-7" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(outFile)</span>
+<span id="cb60-8"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-9"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-9" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(Rtsne)</span>
+<span id="cb60-10"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-10" aria-hidden="true" tabindex="-1"></a>tsne <span class="ot">&lt;-</span> <span class="fu">tSNEPlotter</span>(</span>
+<span id="cb60-11"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-11" aria-hidden="true" tabindex="-1"></a>    psn<span class="sc">$</span>patientSimNetwork_unpruned, </span>
+<span id="cb60-12"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colData</span>(brca)</span>
+<span id="cb60-13"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-13" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
 <pre><code>## * Making symmetric matrix</code></pre>
 <pre><code>## * Running tSNE</code></pre>
 <pre><code>## * Plotting</code></pre>
 <p><img src="bookdown-demo_files/figure-html/unnamed-chunk-33-1.png" width="768" /></p>
-</div>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
@@ -636,7 +638,7 @@ We end this tutorial with a call to <code>sessionInfo()</code> which prints the 
 </div>
 <div id="sessioninfo" class="section level2">
 <h2>sessionInfo</h2>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.0.5 (2021-03-31)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Ubuntu 20.04.2 LTS
