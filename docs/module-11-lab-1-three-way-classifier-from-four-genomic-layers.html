@@ -169,6 +169,7 @@ div.csl-indent {
 <li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#lab-2-pathway-features-custom-similarity-metrics"><i class="fa fa-check"></i>LAB 2: Pathway features &amp; custom similarity metrics</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#instructions"><i class="fa fa-check"></i>Instructions</a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#post-script-installing-netdx-on-your-own-laptop"><i class="fa fa-check"></i>Post-script: Installing netDx on your own laptop</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html"><i class="fa fa-check"></i>Module 11 Lab 1: Three-way classifier from four genomic layers</a>
 <ul>
@@ -233,7 +234,7 @@ div.csl-indent {
 <li>proteomic measures from reverse-phase protein arrays, and</li>
 <li>miRNA sequencing</li>
 </ul>
-<div class="figure"><span id="fig:unnamed-chunk-7"></span>
+<div class="figure"><span id="fig:unnamed-chunk-8"></span>
 <img src="images/Lab1_design.jpg" alt="Lab 1 design: We will integrate four layers of genomic data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity. " width="874" />
 <p class="caption">
 Figure 2: Lab 1 design: We will integrate four layers of genomic data. Each layer will be converted into a single patient similarity network using Pearson correlation for pairwise similarity.
@@ -243,37 +244,71 @@ Figure 2: Lab 1 design: We will integrate four layers of genomic data. Each laye
 <div id="get-and-prepare-data" class="section level2">
 <h2>Get and prepare data</h2>
 <p>In this example, we use curated multi-modal data from The Cancer Genome Atlas, gotten from the BioConductor <code>curatedTCGAData</code> package. Data for all cancer types profiled in TCGA are available through this package; <a href="https://bioconductor.org/packages/release/data/experiment/vignettes/curatedTCGAData/inst/doc/curatedTCGAData.html">see this tutorial for details</a>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb4-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(curatedTCGAData))</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb6-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(curatedTCGAData))</span></code></pre></div>
 <p>Let’s take a look at the available data for breast cancer, without downloading any (set <code>dry.run=TRUE</code>).
 Note that the new release of BioConductor (3.13) actually allows users to fetch one of two versions of TCGA data.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb5-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">curatedTCGAData</span>(<span class="at">diseaseCode=</span><span class="st">&quot;BRCA&quot;</span>, <span class="at">assays=</span><span class="st">&quot;*&quot;</span>,<span class="at">dry.run=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb7-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">curatedTCGAData</span>(<span class="at">diseaseCode=</span><span class="st">&quot;BRCA&quot;</span>, <span class="at">assays=</span><span class="st">&quot;*&quot;</span>,<span class="at">dry.run=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>## snapshotDate(): 2020-10-27</code></pre>
 <pre><code>## See &#39;?curatedTCGAData&#39; for &#39;diseaseCode&#39; and &#39;assays&#39; inputs</code></pre>
-<pre><code>##     ah_id                                      title file_size                 rdataclass rdatadateadded rdatadateremoved
-## 1   EH584                       BRCA_CNASeq-20160128      0 Mb           RaggedExperiment     2017-10-10             &lt;NA&gt;
-## 2   EH585                       BRCA_CNASNP-20160128    9.8 Mb           RaggedExperiment     2017-10-10             &lt;NA&gt;
-## 3   EH586                       BRCA_CNVSNP-20160128    2.8 Mb           RaggedExperiment     2017-10-10             &lt;NA&gt;
-## 4   EH588             BRCA_GISTIC_AllByGene-20160128    1.3 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;
-## 5  EH2121                 BRCA_GISTIC_Peaks-20160128      0 Mb RangedSummarizedExperiment     2019-01-09             &lt;NA&gt;
-## 6   EH589     BRCA_GISTIC_ThresholdedByGene-20160128    0.4 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;
-## 7  EH2122  BRCA_Methylation_methyl27-20160128_assays   63.2 Mb       SummarizedExperiment     2019-01-09             &lt;NA&gt;
-## 8  EH2123      BRCA_Methylation_methyl27-20160128_se    0.4 Mb       SummarizedExperiment     2019-01-09             &lt;NA&gt;
-## 9  EH2124 BRCA_Methylation_methyl450-20160128_assays 2613.2 Mb           RaggedExperiment     2019-01-09             &lt;NA&gt;
-## 10 EH2125     BRCA_Methylation_methyl450-20160128_se    6.1 Mb       SummarizedExperiment     2019-01-09             &lt;NA&gt;
-## 11  EH593                 BRCA_miRNASeqGene-20160128    0.6 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;
-## 12  EH594                    BRCA_mRNAArray-20160128   27.3 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;
-## 13  EH595                     BRCA_Mutation-20160128    4.5 Mb           RaggedExperiment     2017-10-10             &lt;NA&gt;
-## 14  EH596              BRCA_RNASeq2GeneNorm-20160128   64.5 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;
-## 15  EH597                   BRCA_RNASeqGene-20160128     30 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;
-## 16  EH598                    BRCA_RPPAArray-20160128    1.6 Mb       SummarizedExperiment     2017-10-10             &lt;NA&gt;</code></pre>
+<pre><code>##     ah_id                                      title
+## 1   EH584                       BRCA_CNASeq-20160128
+## 2   EH585                       BRCA_CNASNP-20160128
+## 3   EH586                       BRCA_CNVSNP-20160128
+## 4   EH588             BRCA_GISTIC_AllByGene-20160128
+## 5  EH2121                 BRCA_GISTIC_Peaks-20160128
+## 6   EH589     BRCA_GISTIC_ThresholdedByGene-20160128
+## 7  EH2122  BRCA_Methylation_methyl27-20160128_assays
+## 8  EH2123      BRCA_Methylation_methyl27-20160128_se
+## 9  EH2124 BRCA_Methylation_methyl450-20160128_assays
+## 10 EH2125     BRCA_Methylation_methyl450-20160128_se
+## 11  EH593                 BRCA_miRNASeqGene-20160128
+## 12  EH594                    BRCA_mRNAArray-20160128
+## 13  EH595                     BRCA_Mutation-20160128
+## 14  EH596              BRCA_RNASeq2GeneNorm-20160128
+## 15  EH597                   BRCA_RNASeqGene-20160128
+## 16  EH598                    BRCA_RPPAArray-20160128
+##    file_size                 rdataclass rdatadateadded
+## 1       0 Mb           RaggedExperiment     2017-10-10
+## 2     9.8 Mb           RaggedExperiment     2017-10-10
+## 3     2.8 Mb           RaggedExperiment     2017-10-10
+## 4     1.3 Mb       SummarizedExperiment     2017-10-10
+## 5       0 Mb RangedSummarizedExperiment     2019-01-09
+## 6     0.4 Mb       SummarizedExperiment     2017-10-10
+## 7    63.2 Mb       SummarizedExperiment     2019-01-09
+## 8     0.4 Mb       SummarizedExperiment     2019-01-09
+## 9  2613.2 Mb           RaggedExperiment     2019-01-09
+## 10    6.1 Mb       SummarizedExperiment     2019-01-09
+## 11    0.6 Mb       SummarizedExperiment     2017-10-10
+## 12   27.3 Mb       SummarizedExperiment     2017-10-10
+## 13    4.5 Mb           RaggedExperiment     2017-10-10
+## 14   64.5 Mb       SummarizedExperiment     2017-10-10
+## 15     30 Mb       SummarizedExperiment     2017-10-10
+## 16    1.6 Mb       SummarizedExperiment     2017-10-10
+##    rdatadateremoved
+## 1              &lt;NA&gt;
+## 2              &lt;NA&gt;
+## 3              &lt;NA&gt;
+## 4              &lt;NA&gt;
+## 5              &lt;NA&gt;
+## 6              &lt;NA&gt;
+## 7              &lt;NA&gt;
+## 8              &lt;NA&gt;
+## 9              &lt;NA&gt;
+## 10             &lt;NA&gt;
+## 11             &lt;NA&gt;
+## 12             &lt;NA&gt;
+## 13             &lt;NA&gt;
+## 14             &lt;NA&gt;
+## 15             &lt;NA&gt;
+## 16             &lt;NA&gt;</code></pre>
 <p>Now let’s actually download the data, getting just the four layers we need:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb9-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb9-1" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">curatedTCGAData</span>(<span class="st">&quot;BRCA&quot;</span>,</span>
-<span id="cb9-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb9-2" aria-hidden="true" tabindex="-1"></a>                                         <span class="fu">c</span>(<span class="st">&quot;mRNAArray&quot;</span>,<span class="st">&quot;Methylation_methyl27&quot;</span>, </span>
-<span id="cb9-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb9-3" aria-hidden="true" tabindex="-1"></a>                                         <span class="st">&quot;RPPAArray&quot;</span>,<span class="st">&quot;miRNASeqGene&quot;</span>),</span>
-<span id="cb9-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb9-4" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">dry.run=</span><span class="cn">FALSE</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb11-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb11-1" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">curatedTCGAData</span>(<span class="st">&quot;BRCA&quot;</span>,</span>
+<span id="cb11-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb11-2" aria-hidden="true" tabindex="-1"></a>                                         <span class="fu">c</span>(<span class="st">&quot;mRNAArray&quot;</span>,<span class="st">&quot;Methylation_methyl27&quot;</span>, </span>
+<span id="cb11-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb11-3" aria-hidden="true" tabindex="-1"></a>                                         <span class="st">&quot;RPPAArray&quot;</span>,<span class="st">&quot;miRNASeqGene&quot;</span>),</span>
+<span id="cb11-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb11-4" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">dry.run=</span><span class="cn">FALSE</span>))</span></code></pre></div>
 <p>This call returns a <code>MultiAssayExperiment</code> object. Recall that this is a container for storing multiple assays performed on the same set of samples. <a href="https://bioconductor.org/packages/release/bioc/vignettes/MultiAssayExperiment/inst/doc/QuickStartMultiAssay.html">See this tutorial</a> to learn more.</p>
 <p>Let’s briefly explore the <code>brca</code> <code>MultiAssayExperiment</code> object.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb10-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb10-1" aria-hidden="true" tabindex="-1"></a>brca</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb12-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb12-1" aria-hidden="true" tabindex="-1"></a>brca</span></code></pre></div>
 <pre><code>## A MultiAssayExperiment object of 4 listed
 ##  experiments with user-defined names and respective classes.
 ##  Containing an ExperimentList class object of length 4:
@@ -290,23 +325,46 @@ Note that the new release of BioConductor (3.13) actually allows users to fetch 
 ##  assays() - convert ExperimentList to a SimpleList of matrices
 ##  exportClass() - save all data to files</code></pre>
 <p><code>assays()</code> returns a <code>list</code> with all -omic data associated with this object.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb12-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">assays</span>(brca))</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb14-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">assays</span>(brca))</span></code></pre></div>
 <pre><code>## [1] &quot;List object of length 4 with 0 metadata columns&quot;</code></pre>
 <p><code>names()</code> shows the datatypes in each slot of <code>assays()</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb14-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(<span class="fu">assays</span>(brca))</span></code></pre></div>
-<pre><code>## [1] &quot;BRCA_miRNASeqGene-20160128&quot;         &quot;BRCA_mRNAArray-20160128&quot;            &quot;BRCA_RPPAArray-20160128&quot;           
+<div class="sourceCode" id="cb16"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb16-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(<span class="fu">assays</span>(brca))</span></code></pre></div>
+<pre><code>## [1] &quot;BRCA_miRNASeqGene-20160128&quot;        
+## [2] &quot;BRCA_mRNAArray-20160128&quot;           
+## [3] &quot;BRCA_RPPAArray-20160128&quot;           
 ## [4] &quot;BRCA_Methylation_methyl27-20160128&quot;</code></pre>
 <p>So miRNA data is in slot 1, gene expression in slot 2, etc.,</p>
 <p>We can subset the data to see what it looks like. Let’s do that for the miRNA data, looking at just the first five measures</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb16-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb16-1" aria-hidden="true" tabindex="-1"></a>mir <span class="ot">&lt;-</span> <span class="fu">assays</span>(brca)[[<span class="st">&quot;BRCA_miRNASeqGene-20160128&quot;</span>]]</span>
-<span id="cb16-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mir[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code></pre></div>
-<pre><code>##              TCGA-3C-AAAU-01A-11R-A41G-13 TCGA-3C-AALI-01A-11R-A41G-13 TCGA-3C-AALJ-01A-31R-A41G-13 TCGA-3C-AALK-01A-11R-A41G-13
-## hsa-let-7a-1                        95618                        49201                        75342                        57278
-## hsa-let-7a-2                       189674                        98691                       150472                       114320
-## hsa-let-7a-3                        96815                        49035                        76206                        57540
-## hsa-let-7b                         264034                       148591                        99938                       164553
-## hsa-let-7c                           3641                         5095                         5799                        18464
-## hsa-let-7d                           4333                         3263                         5658                         2114
+<div class="sourceCode" id="cb18"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb18-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb18-1" aria-hidden="true" tabindex="-1"></a>mir <span class="ot">&lt;-</span> <span class="fu">assays</span>(brca)[[<span class="st">&quot;BRCA_miRNASeqGene-20160128&quot;</span>]]</span>
+<span id="cb18-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mir[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code></pre></div>
+<pre><code>##              TCGA-3C-AAAU-01A-11R-A41G-13
+## hsa-let-7a-1                        95618
+## hsa-let-7a-2                       189674
+## hsa-let-7a-3                        96815
+## hsa-let-7b                         264034
+## hsa-let-7c                           3641
+## hsa-let-7d                           4333
+##              TCGA-3C-AALI-01A-11R-A41G-13
+## hsa-let-7a-1                        49201
+## hsa-let-7a-2                        98691
+## hsa-let-7a-3                        49035
+## hsa-let-7b                         148591
+## hsa-let-7c                           5095
+## hsa-let-7d                           3263
+##              TCGA-3C-AALJ-01A-31R-A41G-13
+## hsa-let-7a-1                        75342
+## hsa-let-7a-2                       150472
+## hsa-let-7a-3                        76206
+## hsa-let-7b                          99938
+## hsa-let-7c                           5799
+## hsa-let-7d                           5658
+##              TCGA-3C-AALK-01A-11R-A41G-13
+## hsa-let-7a-1                        57278
+## hsa-let-7a-2                       114320
+## hsa-let-7a-3                        57540
+## hsa-let-7b                         164553
+## hsa-let-7c                          18464
+## hsa-let-7d                           2114
 ##              TCGA-4H-AAAK-01A-12R-A41G-13
 ## hsa-let-7a-1                        67196
 ## hsa-let-7a-2                       134563
@@ -315,25 +373,46 @@ Note that the new release of BioConductor (3.13) actually allows users to fetch 
 ## hsa-let-7c                          20429
 ## hsa-let-7d                           2162</code></pre>
 <p>Patient metadata is contained in the <code>colData()</code> slot. Rows contain data for each patient and columns contain measures such as clinical characteristics:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb18-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb18-1" aria-hidden="true" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">colData</span>(brca)</span>
-<span id="cb18-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(pheno)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>]</span></code></pre></div>
-<pre><code>##  [1] &quot;patientID&quot;                            &quot;years_to_birth&quot;                       &quot;vital_status&quot;                        
-##  [4] &quot;days_to_death&quot;                        &quot;days_to_last_followup&quot;                &quot;tumor_tissue_site&quot;                   
-##  [7] &quot;pathologic_stage&quot;                     &quot;pathology_T_stage&quot;                    &quot;pathology_N_stage&quot;                   
-## [10] &quot;pathology_M_stage&quot;                    &quot;gender&quot;                               &quot;date_of_initial_pathologic_diagnosis&quot;
-## [13] &quot;days_to_last_known_alive&quot;             &quot;radiation_therapy&quot;                    &quot;histological_type&quot;                   
-## [16] &quot;number_of_lymph_nodes&quot;                &quot;race&quot;                                 &quot;ethnicity&quot;                           
-## [19] &quot;admin.bcr&quot;                            &quot;admin.day_of_dcc_upload&quot;</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb20-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb20-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb20-1" aria-hidden="true" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">colData</span>(brca)</span>
+<span id="cb20-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(pheno)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>]</span></code></pre></div>
+<pre><code>##  [1] &quot;patientID&quot;                           
+##  [2] &quot;years_to_birth&quot;                      
+##  [3] &quot;vital_status&quot;                        
+##  [4] &quot;days_to_death&quot;                       
+##  [5] &quot;days_to_last_followup&quot;               
+##  [6] &quot;tumor_tissue_site&quot;                   
+##  [7] &quot;pathologic_stage&quot;                    
+##  [8] &quot;pathology_T_stage&quot;                   
+##  [9] &quot;pathology_N_stage&quot;                   
+## [10] &quot;pathology_M_stage&quot;                   
+## [11] &quot;gender&quot;                              
+## [12] &quot;date_of_initial_pathologic_diagnosis&quot;
+## [13] &quot;days_to_last_known_alive&quot;            
+## [14] &quot;radiation_therapy&quot;                   
+## [15] &quot;histological_type&quot;                   
+## [16] &quot;number_of_lymph_nodes&quot;               
+## [17] &quot;race&quot;                                
+## [18] &quot;ethnicity&quot;                           
+## [19] &quot;admin.bcr&quot;                           
+## [20] &quot;admin.day_of_dcc_upload&quot;</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb22-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code></pre></div>
 <pre><code>## DataFrame with 6 rows and 5 columns
-##                 patientID years_to_birth vital_status days_to_death days_to_last_followup
-##               &lt;character&gt;      &lt;integer&gt;    &lt;integer&gt;     &lt;integer&gt;             &lt;integer&gt;
-## TCGA-A1-A0SB TCGA-A1-A0SB             70            0            NA                   259
-## TCGA-A1-A0SD TCGA-A1-A0SD             59            0            NA                   437
-## TCGA-A1-A0SE TCGA-A1-A0SE             56            0            NA                  1321
-## TCGA-A1-A0SF TCGA-A1-A0SF             54            0            NA                  1463
-## TCGA-A1-A0SG TCGA-A1-A0SG             61            0            NA                   434
-## TCGA-A1-A0SH TCGA-A1-A0SH             39            0            NA                  1437</code></pre>
+##                 patientID years_to_birth vital_status
+##               &lt;character&gt;      &lt;integer&gt;    &lt;integer&gt;
+## TCGA-A1-A0SB TCGA-A1-A0SB             70            0
+## TCGA-A1-A0SD TCGA-A1-A0SD             59            0
+## TCGA-A1-A0SE TCGA-A1-A0SE             56            0
+## TCGA-A1-A0SF TCGA-A1-A0SF             54            0
+## TCGA-A1-A0SG TCGA-A1-A0SG             61            0
+## TCGA-A1-A0SH TCGA-A1-A0SH             39            0
+##              days_to_death days_to_last_followup
+##                  &lt;integer&gt;             &lt;integer&gt;
+## TCGA-A1-A0SB            NA                   259
+## TCGA-A1-A0SD            NA                   437
+## TCGA-A1-A0SE            NA                  1321
+## TCGA-A1-A0SF            NA                  1463
+## TCGA-A1-A0SG            NA                   434
+## TCGA-A1-A0SH            NA                  1437</code></pre>
 <p>This next code block prepares the TCGA data. This includes:</p>
 <ul>
 <li>removing duplicate samples</li>
@@ -342,8 +421,8 @@ Note that the new release of BioConductor (3.13) actually allows users to fetch 
 <li>creating a <code>STATUS</code> column in <code>colData(brca)</code> which contains the patient labels (i.e what we want netDx to classify).</li>
 </ul>
 <p>In practice you would prepare the dataset once and save it to file, then separately load it before running netDx; i.e. decouple data processing and running the predictor. The data processing code has been moved into a supporting file, <code>prepare_data.R</code>. You can explore it after the lab to see how some things are achieved (e.g. removing duplicate samples). For now, let’s just run it.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb22-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;prepare_data.R&quot;</span>)</span>
-<span id="cb22-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb22-2" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">prepareDataForCBW</span>(brca)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb24-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;prepare_data.R&quot;</span>)</span>
+<span id="cb24-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb24-2" aria-hidden="true" tabindex="-1"></a>brca <span class="ot">&lt;-</span> <span class="fu">prepareDataForCBW</span>(brca)</span></code></pre></div>
 <pre><code>## harmonizing input:
 ##   removing 42 sampleMap rows with &#39;colname&#39; not in colnames of experiments</code></pre>
 <pre><code>## harmonizing input:
@@ -358,8 +437,8 @@ Note that the new release of BioConductor (3.13) actually allows users to fetch 
 netDx requires <code>ID</code> and <code>STATUS</code> columns in <code>colData(…)</code>. Be sure to define these in the code you use to prepare the data. Otherwise the function to build the predictor will return an error.
 </p>
 </div>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb27-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb27-1" aria-hidden="true" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">colData</span>(brca)</span>
-<span id="cb27-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno[,<span class="fu">c</span>(<span class="st">&quot;ID&quot;</span>,<span class="st">&quot;STATUS&quot;</span>)])</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb29-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb29-1" aria-hidden="true" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">colData</span>(brca)</span>
+<span id="cb29-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno[,<span class="fu">c</span>(<span class="st">&quot;ID&quot;</span>,<span class="st">&quot;STATUS&quot;</span>)])</span></code></pre></div>
 <pre><code>## DataFrame with 6 rows and 2 columns
 ##                        ID      STATUS
 ##               &lt;character&gt; &lt;character&gt;
@@ -369,7 +448,7 @@ netDx requires <code>ID</code> and <code>STATUS</code> columns in <code>colData(
 ## TCGA-A1-A0SJ TCGA-A1-A0SJ   Luminal.A
 ## TCGA-A1-A0SK TCGA-A1-A0SK  Basal.like
 ## TCGA-A1-A0SM TCGA-A1-A0SM   Luminal.B</code></pre>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb29-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(pheno<span class="sc">$</span>STATUS,<span class="at">useNA=</span><span class="st">&quot;always&quot;</span>)  <span class="co"># good practice: useNA=&quot;always&quot; shows missing values</span></span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb31-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(pheno<span class="sc">$</span>STATUS,<span class="at">useNA=</span><span class="st">&quot;always&quot;</span>)  <span class="co"># good practice: useNA=&quot;always&quot; shows missing values</span></span></code></pre></div>
 <pre><code>## 
 ## Basal.like  Luminal.A  Luminal.B       &lt;NA&gt; 
 ##         98        231        127          0</code></pre>
@@ -388,39 +467,40 @@ netDx requires <code>ID</code> and <code>STATUS</code> columns in <code>colData(
 <li><code>makeNets()</code>: an R function telling netDx what similarity metric to use for each data layer</li>
 </ul>
 <p>Let’s start by loading the <code>netDx</code> package.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb31-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressWarnings</span>(<span class="fu">suppressMessages</span>(<span class="fu">require</span>(netDx)))</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb33-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressWarnings</span>(<span class="fu">suppressMessages</span>(<span class="fu">require</span>(netDx)))</span></code></pre></div>
 <p>Let’s set up each of the input arguments one by one.</p>
 <div id="grouplist" class="section level3">
 <h3>groupList</h3>
 <p><strong>What is this:</strong> <code>groupList</code> tells netDx how to group measures within a layer, to generate a PSN. Measures could be individual genes, proteins, CpG bases (in DNA methylation data), clinical variables, etc.,</p>
 <p>In this simple example we just create a single PSN for each datatype, containing all measures from that datatype.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb32-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb32-1" aria-hidden="true" tabindex="-1"></a>expr <span class="ot">&lt;-</span> <span class="fu">assays</span>(brca)</span>
-<span id="cb32-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb32-2" aria-hidden="true" tabindex="-1"></a>groupList <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb32-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(expr)) { <span class="co"># loop over all layers</span></span>
-<span id="cb32-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb32-4" aria-hidden="true" tabindex="-1"></a>    cur <span class="ot">&lt;-</span> expr[[k]]; nm <span class="ot">&lt;-</span> <span class="fu">names</span>(expr)[k]</span>
-<span id="cb32-5"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-6"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># all measures from this layer go into our single PSN</span></span>
-<span id="cb32-7"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb32-7" aria-hidden="true" tabindex="-1"></a>    groupList[[nm]] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">nm=</span><span class="fu">rownames</span>(cur)) </span>
-<span id="cb32-8"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-9"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb32-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># assign same layer name as in input data</span></span>
-<span id="cb32-10"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">names</span>(groupList[[nm]])[<span class="dv">1</span>] <span class="ot">&lt;-</span> nm;</span>
-<span id="cb32-11"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb32-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb34-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb34-1" aria-hidden="true" tabindex="-1"></a>expr <span class="ot">&lt;-</span> <span class="fu">assays</span>(brca)</span>
+<span id="cb34-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb34-2" aria-hidden="true" tabindex="-1"></a>groupList <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb34-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(expr)) { <span class="co"># loop over all layers</span></span>
+<span id="cb34-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb34-4" aria-hidden="true" tabindex="-1"></a>    cur <span class="ot">&lt;-</span> expr[[k]]; nm <span class="ot">&lt;-</span> <span class="fu">names</span>(expr)[k]</span>
+<span id="cb34-5"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># all measures from this layer go into our single PSN</span></span>
+<span id="cb34-7"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb34-7" aria-hidden="true" tabindex="-1"></a>    groupList[[nm]] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">nm=</span><span class="fu">rownames</span>(cur)) </span>
+<span id="cb34-8"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-9"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb34-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># assign same layer name as in input data</span></span>
+<span id="cb34-10"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb34-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">names</span>(groupList[[nm]])[<span class="dv">1</span>] <span class="ot">&lt;-</span> nm;</span>
+<span id="cb34-11"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb34-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>Notice that <code>groupList</code> is a two tiered list, or list-of-lists. The first tier is for each data layers, with names matching those in <code>assays(brca)</code>. The second tier contains all the PSNs we want to make for that layer. In this lab exercise we create only one PSN per data layer, using all the measures from an -omic assay. e.g. One PSN based on similarity across entire transcriptome, one for methylome, etc.,). So in this lab exercise, the inner tier simply contains one entry, with all measures for the given layer.</p>
 <p>This design will get more interesting in Lab 2, when we create pathway-level features.</p>
 <p>Let’s take a look at <code>groupList</code>. Here is the first tier:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb33-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(groupList)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb35-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(groupList)</span></code></pre></div>
 <pre><code>##                                    Length Class  Mode
 ## BRCA_miRNASeqGene-20160128         1      -none- list
 ## BRCA_mRNAArray-20160128            1      -none- list
 ## BRCA_RPPAArray-20160128            1      -none- list
 ## BRCA_Methylation_methyl27-20160128 1      -none- list</code></pre>
 <p>And the second tier:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb35-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(groupList[[<span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>]])</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb37-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(groupList[[<span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>]])</span></code></pre></div>
 <pre><code>## [1] &quot;BRCA_mRNAArray-20160128&quot;</code></pre>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb37-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(groupList[[<span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>]][[<span class="dv">1</span>]])</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb39-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(groupList[[<span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>]][[<span class="dv">1</span>]])</span></code></pre></div>
 <pre><code>## [1] 17814</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb39-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(groupList[[<span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>]][[<span class="dv">1</span>]])</span></code></pre></div>
-<pre><code>## [1] &quot;ELMO2&quot;    &quot;CREB3L1&quot;  &quot;RPS11&quot;    &quot;PNMA1&quot;    &quot;MMP2&quot;     &quot;C10orf90&quot;</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb41-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(groupList[[<span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>]][[<span class="dv">1</span>]])</span></code></pre></div>
+<pre><code>## [1] &quot;ELMO2&quot;    &quot;CREB3L1&quot;  &quot;RPS11&quot;    &quot;PNMA1&quot;   
+## [5] &quot;MMP2&quot;     &quot;C10orf90&quot;</code></pre>
 </div>
 <div id="define-patient-similarity-for-each-network" class="section level3">
 <h3>Define patient similarity for each network</h3>
@@ -430,31 +510,31 @@ netDx requires <code>ID</code> and <code>STATUS</code> columns in <code>colData(
 <ul>
 <li><code>dataList</code>,<code>groupList</code>, and <code>netDir</code> as input variables. The residual <code>...</code> parameter is to pass additional variables to <code>makePSN_NamedMatrix()</code>, notably number of cores for parallel processing (<code>numCores</code>).</li>
 </ul>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb41-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-1" aria-hidden="true" tabindex="-1"></a>makeNets <span class="ot">&lt;-</span> <span class="cf">function</span>(dataList, groupList, netDir,...) {</span>
-<span id="cb41-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-2" aria-hidden="true" tabindex="-1"></a>    netList <span class="ot">&lt;-</span> <span class="fu">c</span>() <span class="co"># initialize before is.null() check</span></span>
-<span id="cb41-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-3" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb41-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-4" aria-hidden="true" tabindex="-1"></a>    layerNames <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;BRCA_miRNASeqGene-20160128&quot;</span>,</span>
-<span id="cb41-5"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>,</span>
-<span id="cb41-6"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;BRCA_RPPAArray-20160128&quot;</span>,</span>
-<span id="cb41-7"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;BRCA_Methylation_methyl27-20160128&quot;</span>)</span>
-<span id="cb41-8"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-8" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb41-9"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (nm <span class="cf">in</span> layerNames){             <span class="do">## for each layer</span></span>
-<span id="cb41-10"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(groupList[[nm]])){ <span class="do">## must check for null for each layer</span></span>
-<span id="cb41-11"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-11" aria-hidden="true" tabindex="-1"></a>            netList_cur <span class="ot">&lt;-</span> <span class="fu">makePSN_NamedMatrix</span>(</span>
-<span id="cb41-12"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-12" aria-hidden="true" tabindex="-1"></a>                dataList[[nm]],</span>
-<span id="cb41-13"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-13" aria-hidden="true" tabindex="-1"></a>                <span class="fu">rownames</span>(dataList[[nm]]),   <span class="do">## names of measures (e.g. genes, CpGs)</span></span>
-<span id="cb41-14"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-14" aria-hidden="true" tabindex="-1"></a>                groupList[[nm]],            <span class="do">## how to group measures in that layer</span></span>
-<span id="cb41-15"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-15" aria-hidden="true" tabindex="-1"></a>                netDir,                     <span class="do">## leave this as-is, netDx will figure out where this is.</span></span>
-<span id="cb41-16"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">verbose=</span><span class="cn">FALSE</span>,          </span>
-<span id="cb41-17"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">writeProfiles=</span><span class="cn">TRUE</span>,         <span class="do">## use Pearson correlation-based similarity</span></span>
-<span id="cb41-18"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-18" aria-hidden="true" tabindex="-1"></a>                ...</span>
-<span id="cb41-19"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-19" aria-hidden="true" tabindex="-1"></a>                )</span>
-<span id="cb41-20"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-21"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-21" aria-hidden="true" tabindex="-1"></a>            netList <span class="ot">&lt;-</span> <span class="fu">c</span>(netList,netList_cur)   <span class="do">## just leave this in</span></span>
-<span id="cb41-22"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-22" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb41-23"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-23" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb41-24"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">unlist</span>(netList)) <span class="do">## just leave this in </span></span>
-<span id="cb41-25"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb41-25" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb43-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-1" aria-hidden="true" tabindex="-1"></a>makeNets <span class="ot">&lt;-</span> <span class="cf">function</span>(dataList, groupList, netDir,...) {</span>
+<span id="cb43-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-2" aria-hidden="true" tabindex="-1"></a>    netList <span class="ot">&lt;-</span> <span class="fu">c</span>() <span class="co"># initialize before is.null() check</span></span>
+<span id="cb43-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb43-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-4" aria-hidden="true" tabindex="-1"></a>    layerNames <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;BRCA_miRNASeqGene-20160128&quot;</span>,</span>
+<span id="cb43-5"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;BRCA_mRNAArray-20160128&quot;</span>,</span>
+<span id="cb43-6"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;BRCA_RPPAArray-20160128&quot;</span>,</span>
+<span id="cb43-7"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;BRCA_Methylation_methyl27-20160128&quot;</span>)</span>
+<span id="cb43-8"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb43-9"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (nm <span class="cf">in</span> layerNames){             <span class="do">## for each layer</span></span>
+<span id="cb43-10"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(groupList[[nm]])){ <span class="do">## must check for null for each layer</span></span>
+<span id="cb43-11"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-11" aria-hidden="true" tabindex="-1"></a>            netList_cur <span class="ot">&lt;-</span> <span class="fu">makePSN_NamedMatrix</span>(</span>
+<span id="cb43-12"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-12" aria-hidden="true" tabindex="-1"></a>                dataList[[nm]],</span>
+<span id="cb43-13"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-13" aria-hidden="true" tabindex="-1"></a>                <span class="fu">rownames</span>(dataList[[nm]]),   <span class="do">## names of measures (e.g. genes, CpGs)</span></span>
+<span id="cb43-14"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-14" aria-hidden="true" tabindex="-1"></a>                groupList[[nm]],            <span class="do">## how to group measures in that layer</span></span>
+<span id="cb43-15"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-15" aria-hidden="true" tabindex="-1"></a>                netDir,                     <span class="do">## leave this as-is, netDx will figure out where this is.</span></span>
+<span id="cb43-16"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">verbose=</span><span class="cn">FALSE</span>,          </span>
+<span id="cb43-17"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">writeProfiles=</span><span class="cn">TRUE</span>,         <span class="do">## use Pearson correlation-based similarity</span></span>
+<span id="cb43-18"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-18" aria-hidden="true" tabindex="-1"></a>                ...</span>
+<span id="cb43-19"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-19" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb43-20"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-21"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-21" aria-hidden="true" tabindex="-1"></a>            netList <span class="ot">&lt;-</span> <span class="fu">c</span>(netList,netList_cur)   <span class="do">## just leave this in</span></span>
+<span id="cb43-22"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-22" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb43-23"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-23" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb43-24"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">unlist</span>(netList)) <span class="do">## just leave this in </span></span>
+<span id="cb43-25"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-25" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <div class="rmd-design">
 <p>
 While netDx provides a high degree of flexibility in achieving your design of choice, it is up to the user to ensure that the design, i.e. choice of similarity metrics and variable groupings, is appropriate for your application. Domain knowledge is almost likely required for good design.
@@ -486,36 +566,36 @@ Within each split, it:</p>
 In practice a good starting point is <code>featScoreMax=10</code>, <code>featSelCutoff=9</code> and <code>numSplits=10L</code>, but these parameters depend on the sample sizes in the dataset and heterogeneity of the samples.
 </p>
 </div>
-<p>This step can take up to a half-hour based on the current parameters, so we’re commenting this out for the tutorial and will simply load the results.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb42-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># make results reproducible</span></span>
-<span id="cb42-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-2" aria-hidden="true" tabindex="-1"></a>outDir <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">tempdir</span>(),<span class="fu">randAlphanumString</span>(),</span>
-<span id="cb42-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;pred_output&quot;</span>,<span class="at">sep=</span><span class="fu">getFileSep</span>())</span>
-<span id="cb42-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(outDir)) <span class="fu">unlink</span>(outDir,<span class="at">recursive=</span><span class="cn">TRUE</span>)</span>
-<span id="cb42-5"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="do">###model &lt;- suppressMessages(buildPredictor(</span></span>
-<span id="cb42-6"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="do">### dataList=brca,          ## your data</span></span>
-<span id="cb42-7"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="do">### groupList=groupList,    ## grouping strategy</span></span>
-<span id="cb42-8"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="do">### makeNetFunc=makeNets,   ## function to build PSNs</span></span>
-<span id="cb42-9"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="do">### outDir=outDir,          ## output directory</span></span>
-<span id="cb42-10"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="do">### trainProp=0.8,          ## pct of samples to use to train model in</span></span>
-<span id="cb42-11"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-11" aria-hidden="true" tabindex="-1"></a><span class="do">###                         ## each split</span></span>
-<span id="cb42-12"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-12" aria-hidden="true" tabindex="-1"></a><span class="do">### numSplits=10L,          ## number of train/test splits</span></span>
-<span id="cb42-13"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-13" aria-hidden="true" tabindex="-1"></a><span class="do">### featSelCutoff=9L,       ## threshold for calling something</span></span>
-<span id="cb42-14"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-14" aria-hidden="true" tabindex="-1"></a><span class="do">###                         ## feature-selected</span></span>
-<span id="cb42-15"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-15" aria-hidden="true" tabindex="-1"></a><span class="do">### featScoreMax=10L,       ## max score for feature selection</span></span>
-<span id="cb42-16"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-16" aria-hidden="true" tabindex="-1"></a><span class="do">### numCores=8L,            ## set higher for parallelizing</span></span>
-<span id="cb42-17"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-17" aria-hidden="true" tabindex="-1"></a><span class="do">### debugMode=FALSE,</span></span>
-<span id="cb42-18"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-18" aria-hidden="true" tabindex="-1"></a><span class="do">### keepAllData=FALSE,  ## set to TRUE for debugging or low-level files used by the predictor</span></span>
-<span id="cb42-19"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-19" aria-hidden="true" tabindex="-1"></a><span class="do">### logging=&quot;none&quot;</span></span>
-<span id="cb42-20"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb42-20" aria-hidden="true" tabindex="-1"></a><span class="do">###  ))</span></span></code></pre></div>
+<p>This step can take a few hours based on the current parameters, so we’re commenting this out for the tutorial and will simply load the results.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb44-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># make results reproducible</span></span>
+<span id="cb44-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-2" aria-hidden="true" tabindex="-1"></a>outDir <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">tempdir</span>(),<span class="fu">randAlphanumString</span>(),</span>
+<span id="cb44-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;pred_output&quot;</span>,<span class="at">sep=</span><span class="fu">getFileSep</span>())</span>
+<span id="cb44-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(outDir)) <span class="fu">unlink</span>(outDir,<span class="at">recursive=</span><span class="cn">TRUE</span>)</span>
+<span id="cb44-5"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="do">###model &lt;- suppressMessages(buildPredictor(</span></span>
+<span id="cb44-6"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="do">### dataList=brca,          ## your data</span></span>
+<span id="cb44-7"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="do">### groupList=groupList,    ## grouping strategy</span></span>
+<span id="cb44-8"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="do">### makeNetFunc=makeNets,   ## function to build PSNs</span></span>
+<span id="cb44-9"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="do">### outDir=outDir,          ## output directory</span></span>
+<span id="cb44-10"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="do">### trainProp=0.8,          ## pct of samples to use to train model in</span></span>
+<span id="cb44-11"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="do">###                         ## each split</span></span>
+<span id="cb44-12"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-12" aria-hidden="true" tabindex="-1"></a><span class="do">### numSplits=10L,          ## number of train/test splits</span></span>
+<span id="cb44-13"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="do">### featSelCutoff=9L,       ## threshold for calling something</span></span>
+<span id="cb44-14"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-14" aria-hidden="true" tabindex="-1"></a><span class="do">###                         ## feature-selected</span></span>
+<span id="cb44-15"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-15" aria-hidden="true" tabindex="-1"></a><span class="do">### featScoreMax=10L,       ## max score for feature selection</span></span>
+<span id="cb44-16"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-16" aria-hidden="true" tabindex="-1"></a><span class="do">### numCores=8L,            ## set higher for parallelizing</span></span>
+<span id="cb44-17"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-17" aria-hidden="true" tabindex="-1"></a><span class="do">### debugMode=FALSE,</span></span>
+<span id="cb44-18"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-18" aria-hidden="true" tabindex="-1"></a><span class="do">### keepAllData=FALSE,  ## set to TRUE for debugging or low-level files used by the predictor</span></span>
+<span id="cb44-19"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-19" aria-hidden="true" tabindex="-1"></a><span class="do">### logging=&quot;none&quot;</span></span>
+<span id="cb44-20"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-20" aria-hidden="true" tabindex="-1"></a><span class="do">###  ))</span></span></code></pre></div>
 </div>
 <div id="examine-results" class="section level2">
 <h2>Examine results</h2>
 <p>Now we get model output, including performance for various train/test splits and consistently high-scoring features.</p>
 <p>Let’s load those:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb43-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-1" aria-hidden="true" tabindex="-1"></a>outFile <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;%s/CBW_Lab1_full.rda&quot;</span>,<span class="fu">tempdir</span>())</span>
-<span id="cb43-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab1_files/Lab1_10splits.rda&quot;</span>,</span>
-<span id="cb43-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">destfile=</span>outFile)</span>
-<span id="cb43-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb43-4" aria-hidden="true" tabindex="-1"></a>lnames <span class="ot">&lt;-</span> <span class="fu">load</span>(outFile)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb45-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb45-1" aria-hidden="true" tabindex="-1"></a>outFile <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;%s/CBW_Lab1_full.rda&quot;</span>,<span class="fu">tempdir</span>())</span>
+<span id="cb45-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab1_files/Lab1_10splits.rda&quot;</span>,</span>
+<span id="cb45-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb45-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">destfile=</span>outFile)</span>
+<span id="cb45-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb45-4" aria-hidden="true" tabindex="-1"></a>lnames <span class="ot">&lt;-</span> <span class="fu">load</span>(outFile)</span></code></pre></div>
 <p>The results are stored in the list object returned by the <code>buildPredictor()</code> call (here, <code>model_full</code>).
 This list contains:</p>
 <ul>
@@ -528,7 +608,7 @@ This list contains:</p>
 <li><code>featureSelected</code>: features passing feature selection in a split (list of length <code>g</code>, with one entry per label)</li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb44-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_full)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb46-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_full)</span></code></pre></div>
 <pre><code>##           Length Class  Mode     
 ## inputNets 8      -none- character
 ## Split1    4      -none- list     
@@ -541,7 +621,7 @@ This list contains:</p>
 ## Split8    4      -none- list     
 ## Split9    4      -none- list     
 ## Split10   4      -none- list</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb46-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_full<span class="sc">$</span>Split1)</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb48-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_full<span class="sc">$</span>Split1)</span></code></pre></div>
 <pre><code>##                 Length Class      Mode   
 ## featureScores      3   -none-     list   
 ## featureSelected    3   -none-     list   
@@ -549,24 +629,25 @@ This list contains:</p>
 ## accuracy           1   -none-     numeric</code></pre>
 <p><code>helper.R</code> contains convenience functions to simply viewing results. These functions will be integrated into upcoming versions of netDx.</p>
 <p>In the function below, we define top-scoring features as those which score at least 9 in at least 90% of the train/test splits:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb48-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;helper.R&quot;</span>)</span>
-<span id="cb48-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb48-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">getResults</span>(brca,model_full,<span class="at">featureSelCutoff=</span>9L,</span>
-<span id="cb48-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb48-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">featureSelPct=</span><span class="fl">0.9</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb50-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;helper.R&quot;</span>)</span>
+<span id="cb50-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb50-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">getResults</span>(brca,model_full,<span class="at">featureSelCutoff=</span>9L,</span>
+<span id="cb50-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb50-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">featureSelPct=</span><span class="fl">0.9</span>)</span></code></pre></div>
 <pre><code>## Detected 10 splits and 3 classes</code></pre>
 <pre><code>## * Compiling feature scores and calling selected features</code></pre>
 <p><code>results</code> contains <code>performance</code>, <code>selectedFeatures</code> for each patient label, and the table of feature <code>scores</code>.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb51-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results)</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb53-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results)</span></code></pre></div>
 <pre><code>##                  Length Class  Mode
 ## selectedFeatures 3      -none- list
 ## featureScores    3      -none- list
 ## performance      4      -none- list</code></pre>
 <p>Look at the performance:</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb53-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb53-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>performance</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb55-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb55-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>performance</span></code></pre></div>
 <pre><code>## $meanAccuracy
 ## [1] 0.7610799
 ## 
 ## $splitAccuracy
-##  [1] 0.7741935 0.7204301 0.7500000 0.7419355 0.7419355 0.8279570 0.7826087 0.8152174 0.7065217 0.7500000
+##  [1] 0.7741935 0.7204301 0.7500000 0.7419355 0.7419355
+##  [6] 0.8279570 0.7826087 0.8152174 0.7065217 0.7500000
 ## 
 ## $splitAUROC
 ## NULL
@@ -574,58 +655,90 @@ This list contains:</p>
 ## $splitAUPR
 ## NULL</code></pre>
 <p>Look at feature scores for all labels, across all train-test splits:</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb55-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb55-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>featureScores</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb57-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb57-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>featureScores</span></code></pre></div>
 <pre><code>## $Luminal.A
-##                              Feature Split1 Split2 Split3 Split4 Split5 Split6 Split7 Split8 Split9 Split10
-## 1 BRCA_Methylation_methyl27-20160128      7      9      9     10      9      8      8      7     10      10
-## 2         BRCA_miRNASeqGene-20160128      9      5      6     10      5      6      6      9     10       7
-## 3            BRCA_mRNAArray-20160128     10     10     10     10     10     10     10     10     10      10
-## 4            BRCA_RPPAArray-20160128     10     10     10     10     10     10     10     10     10      10
+##                              Feature Split1 Split2
+## 1 BRCA_Methylation_methyl27-20160128      7      9
+## 2            BRCA_RPPAArray-20160128     10     10
+## 3            BRCA_mRNAArray-20160128     10     10
+## 4         BRCA_miRNASeqGene-20160128      9      5
+##   Split3 Split4 Split5 Split6 Split7 Split8 Split9
+## 1      9     10      9      8      8      7     10
+## 2     10     10     10     10     10     10     10
+## 3     10     10     10     10     10     10     10
+## 4      6     10      5      6      6      9     10
+##   Split10
+## 1      10
+## 2      10
+## 3      10
+## 4       7
 ## 
 ## $Basal.like
-##                              Feature Split1 Split2 Split3 Split4 Split5 Split6 Split7 Split8 Split9 Split10
-## 1 BRCA_Methylation_methyl27-20160128     10     10     10     10     10     10     10     10     10      10
-## 2         BRCA_miRNASeqGene-20160128     NA      4     NA      1      4      1     NA     NA      7       2
-## 3            BRCA_mRNAArray-20160128     10     10     10     10     10     10     10     10     10      10
-## 4            BRCA_RPPAArray-20160128     10     10     10     10     10     10     10     10     10      10
+##                              Feature Split1 Split2
+## 1 BRCA_Methylation_methyl27-20160128     10     10
+## 2            BRCA_RPPAArray-20160128     10     10
+## 3            BRCA_mRNAArray-20160128     10     10
+## 4         BRCA_miRNASeqGene-20160128     NA      4
+##   Split3 Split4 Split5 Split6 Split7 Split8 Split9
+## 1     10     10     10     10     10     10     10
+## 2     10     10     10     10     10     10     10
+## 3     10     10     10     10     10     10     10
+## 4     NA      1      4      1     NA     NA      7
+##   Split10
+## 1      10
+## 2      10
+## 3      10
+## 4       2
 ## 
 ## $Luminal.B
-##                              Feature Split1 Split2 Split3 Split4 Split5 Split6 Split7 Split8 Split9 Split10
-## 1 BRCA_Methylation_methyl27-20160128     10     10     10     10     10     10     10     10     10      10
-## 2            BRCA_mRNAArray-20160128     10     10     10     10     10     10     10     10     10      10
-## 3            BRCA_RPPAArray-20160128     10     10     10     10     10     10     10     10     10      10</code></pre>
+##                              Feature Split1 Split2
+## 1 BRCA_Methylation_methyl27-20160128     10     10
+## 2            BRCA_RPPAArray-20160128     10     10
+## 3            BRCA_mRNAArray-20160128     10     10
+##   Split3 Split4 Split5 Split6 Split7 Split8 Split9
+## 1     10     10     10     10     10     10     10
+## 2     10     10     10     10     10     10     10
+## 3     10     10     10     10     10     10     10
+##   Split10
+## 1      10
+## 2      10
+## 3      10</code></pre>
 <p>Let’s examine our confusion matrix:</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb57-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb57-1" aria-hidden="true" tabindex="-1"></a>confMat <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(model_full)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb59-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb59-1" aria-hidden="true" tabindex="-1"></a>confMat <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(model_full)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
 <p><em>Note: Rows of this matrix don’t add up to 100% because the matrix is an average of the confusion matrices from all of the train/test splits.</em></p>
 <p>And here are selected features, which are those scoring 2 out of 2 in at least half of the splits. This threshold is simply for illustration. In practice we would run at least 10 train/test splits (ideally 100+), and look for features that score 7+ out of 10 in &gt;70% splits.</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb58-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb58-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>selectedFeatures</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb60-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>selectedFeatures</span></code></pre></div>
 <pre><code>## $Luminal.A
-## [1] &quot;BRCA_mRNAArray-20160128&quot; &quot;BRCA_RPPAArray-20160128&quot;
+## [1] &quot;BRCA_RPPAArray-20160128&quot; &quot;BRCA_mRNAArray-20160128&quot;
 ## 
 ## $Basal.like
-## [1] &quot;BRCA_Methylation_methyl27-20160128&quot; &quot;BRCA_mRNAArray-20160128&quot;            &quot;BRCA_RPPAArray-20160128&quot;           
+## [1] &quot;BRCA_Methylation_methyl27-20160128&quot;
+## [2] &quot;BRCA_RPPAArray-20160128&quot;           
+## [3] &quot;BRCA_mRNAArray-20160128&quot;           
 ## 
 ## $Luminal.B
-## [1] &quot;BRCA_Methylation_methyl27-20160128&quot; &quot;BRCA_mRNAArray-20160128&quot;            &quot;BRCA_RPPAArray-20160128&quot;</code></pre>
+## [1] &quot;BRCA_Methylation_methyl27-20160128&quot;
+## [2] &quot;BRCA_RPPAArray-20160128&quot;           
+## [3] &quot;BRCA_mRNAArray-20160128&quot;</code></pre>
 <p>We finally get the integrated PSN and visualize it using a tSNE plot:</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb60-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="do">## this call doesn&#39;t work in Rstudio; for now we&#39;ve commented this out and saved the PSN file. </span></span>
-<span id="cb60-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="do">## psn &lt;- getPSN(brca,groupList_full,makeNets_full,results$selectedFeatures)</span></span>
-<span id="cb60-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb60-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-4" aria-hidden="true" tabindex="-1"></a>psnFile <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;%s/psn.rda&quot;</span>,<span class="fu">tempdir</span>())</span>
-<span id="cb60-5"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-5" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab1_files/Lab1_PSN.rda&quot;</span>,</span>
-<span id="cb60-6"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">destfile=</span>outFile)</span>
-<span id="cb60-7"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-7" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(outFile)</span>
-<span id="cb60-8"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb60-9"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-9" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(Rtsne)</span>
-<span id="cb60-10"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-10" aria-hidden="true" tabindex="-1"></a>tsne <span class="ot">&lt;-</span> <span class="fu">tSNEPlotter</span>(</span>
-<span id="cb60-11"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-11" aria-hidden="true" tabindex="-1"></a>    psn<span class="sc">$</span>patientSimNetwork_unpruned, </span>
-<span id="cb60-12"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colData</span>(brca)</span>
-<span id="cb60-13"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb60-13" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r codeblock"><code class="sourceCode r"><span id="cb62-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="do">## this call doesn&#39;t work in Rstudio; for now we&#39;ve commented this out and saved the PSN file. </span></span>
+<span id="cb62-2"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="do">## psn &lt;- getPSN(brca,groupList_full,makeNets_full,results$selectedFeatures)</span></span>
+<span id="cb62-3"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb62-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-4"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb62-4" aria-hidden="true" tabindex="-1"></a>psnFile <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;%s/psn.rda&quot;</span>,<span class="fu">tempdir</span>())</span>
+<span id="cb62-5"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://github.com/RealPaiLab/CBW_CAN_DataIntegration_2021/raw/master/supporting_files/Lab1_files/Lab1_PSN.rda&quot;</span>,</span>
+<span id="cb62-6"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb62-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">destfile=</span>outFile)</span>
+<span id="cb62-7"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb62-7" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(outFile)</span>
+<span id="cb62-8"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb62-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-9"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb62-9" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(Rtsne)</span>
+<span id="cb62-10"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb62-10" aria-hidden="true" tabindex="-1"></a>tsne <span class="ot">&lt;-</span> <span class="fu">tSNEPlotter</span>(</span>
+<span id="cb62-11"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb62-11" aria-hidden="true" tabindex="-1"></a>    psn<span class="sc">$</span>patientSimNetwork_unpruned, </span>
+<span id="cb62-12"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb62-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colData</span>(brca)</span>
+<span id="cb62-13"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb62-13" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
 <pre><code>## * Making symmetric matrix</code></pre>
 <pre><code>## * Running tSNE</code></pre>
 <pre><code>## * Plotting</code></pre>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-33-1.png" width="768" /></p>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-34-1.png" width="768" /></p>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
@@ -638,7 +751,7 @@ We end this tutorial with a call to <code>sessionInfo()</code> which prints the 
 </div>
 <div id="sessioninfo" class="section level2">
 <h2>sessionInfo</h2>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="module-11-lab-1-three-way-classifier-from-four-genomic-layers.html#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.0.5 (2021-03-31)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Ubuntu 20.04.2 LTS
@@ -647,61 +760,202 @@ We end this tutorial with a call to <code>sessionInfo()</code> which prints the 
 ## BLAS/LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.8.so
 ## 
 ## locale:
-##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C              LC_PAPER=en_US.UTF-8       LC_NAME=C                 
-##  [9] LC_ADDRESS=C               LC_TELEPHONE=C             LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+##  [1] LC_CTYPE=C                
+##  [2] LC_NUMERIC=C              
+##  [3] LC_TIME=C                 
+##  [4] LC_COLLATE=C              
+##  [5] LC_MONETARY=C             
+##  [6] LC_MESSAGES=C             
+##  [7] LC_PAPER=en_US.UTF-8      
+##  [8] LC_NAME=C                 
+##  [9] LC_ADDRESS=C              
+## [10] LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8
+## [12] LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
-## [1] parallel  stats4    stats     graphics  grDevices utils     datasets  methods   base     
+## [1] parallel  stats4    stats     graphics  grDevices
+## [6] utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] plotrix_3.8-1               ggplot2_3.3.3               Rtsne_0.15                  netDx_1.2.3                
-##  [5] bigmemory_4.5.36            rhdf5_2.34.0                curatedTCGAData_1.12.1      MultiAssayExperiment_1.16.0
-##  [9] SummarizedExperiment_1.20.0 Biobase_2.50.0              GenomicRanges_1.42.0        GenomeInfoDb_1.26.7        
-## [13] IRanges_2.24.1              S4Vectors_0.28.1            BiocGenerics_0.36.1         MatrixGenerics_1.2.1       
+##  [1] plotrix_3.8-1              
+##  [2] ggplot2_3.3.3              
+##  [3] Rtsne_0.15                 
+##  [4] netDx_1.2.3                
+##  [5] bigmemory_4.5.36           
+##  [6] rhdf5_2.34.0               
+##  [7] curatedTCGAData_1.12.1     
+##  [8] MultiAssayExperiment_1.16.0
+##  [9] SummarizedExperiment_1.20.0
+## [10] Biobase_2.50.0             
+## [11] GenomicRanges_1.42.0       
+## [12] GenomeInfoDb_1.26.7        
+## [13] IRanges_2.24.1             
+## [14] S4Vectors_0.28.1           
+## [15] BiocGenerics_0.36.1        
+## [16] MatrixGenerics_1.2.1       
 ## [17] matrixStats_0.58.0         
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] utf8_1.2.1                    R.utils_2.10.1                tidyselect_1.1.1              RSQLite_2.2.7                
-##   [5] AnnotationDbi_1.52.0          grid_4.0.5                    combinat_0.0-8                BiocParallel_1.24.1          
-##   [9] RNeXML_2.4.5                  munsell_0.5.0                 codetools_0.2-18              withr_2.4.2                  
-##  [13] colorspace_2.0-1              highr_0.9                     knitr_1.33                    uuid_0.1-4                   
-##  [17] zinbwave_1.12.0               rstudioapi_0.13               SingleCellExperiment_1.12.0   ROCR_1.0-11                  
-##  [21] NMF_0.23.0                    labeling_0.4.2                GenomeInfoDbData_1.2.4        farver_2.1.0                 
-##  [25] bit64_4.0.5                   vctrs_0.3.8                   generics_0.1.0                xfun_0.23                    
-##  [29] BiocFileCache_1.14.0          R6_2.5.0                      doParallel_1.0.16             ggbeeswarm_0.6.0             
-##  [33] netSmooth_1.10.0              rsvd_1.0.5                    RJSONIO_1.3-1.4               locfit_1.5-9.4               
-##  [37] bitops_1.0-7                  rhdf5filters_1.2.1            cachem_1.0.5                  DelayedArray_0.16.3          
-##  [41] assertthat_0.2.1              promises_1.2.0.1              scales_1.1.1                  beeswarm_0.3.1               
-##  [45] gtable_0.3.0                  phylobase_0.8.10              beachmat_2.6.4                rlang_0.4.11                 
-##  [49] genefilter_1.72.1             splines_4.0.5                 lazyeval_0.2.2                BiocManager_1.30.15          
-##  [53] yaml_2.2.1                    reshape2_1.4.4                httpuv_1.6.1                  tools_4.0.5                  
-##  [57] bookdown_0.22                 gridBase_0.4-7                ellipsis_0.3.2                jquerylib_0.1.4              
-##  [61] RColorBrewer_1.1-2            Rcpp_1.0.6                    plyr_1.8.6                    sparseMatrixStats_1.2.1      
-##  [65] progress_1.2.2                zlibbioc_1.36.0               purrr_0.3.4                   RCurl_1.98-1.3               
-##  [69] prettyunits_1.1.1             viridis_0.6.1                 cluster_2.1.1                 tinytex_0.31                 
-##  [73] magrittr_2.0.1                data.table_1.14.0             RSpectra_0.16-0               hms_1.1.0                    
-##  [77] mime_0.10                     evaluate_0.14                 xtable_1.8-4                  XML_3.99-0.6                 
-##  [81] jpeg_0.1-8.1                  gridExtra_2.3                 shape_1.4.6                   compiler_4.0.5               
-##  [85] scater_1.18.6                 tibble_3.1.2                  RCy3_2.10.2                   crayon_1.4.1                 
-##  [89] R.oo_1.24.0                   htmltools_0.5.1.1             entropy_1.3.0                 later_1.2.0                  
-##  [93] tidyr_1.1.3                   howmany_0.3-1                 DBI_1.1.1                     ExperimentHub_1.16.1         
-##  [97] dbplyr_2.1.1                  MASS_7.3-53.1                 rappdirs_0.3.3                Matrix_1.3-2                 
-## [101] ade4_1.7-16                   R.methodsS3_1.8.1             igraph_1.2.6                  pkgconfig_2.0.3              
-## [105] bigmemory.sri_0.1.3           rncl_0.8.4                    registry_0.5-1                locfdr_1.1-8                 
-## [109] scuttle_1.0.4                 xml2_1.3.2                    foreach_1.5.1                 annotate_1.68.0              
-## [113] vipor_0.4.5                   bslib_0.2.5.1                 rngtools_1.5                  pkgmaker_0.32.2              
-## [117] XVector_0.30.0                stringr_1.4.0                 digest_0.6.27                 pracma_2.3.3                 
-## [121] graph_1.68.0                  softImpute_1.4-1              rmarkdown_2.8                 edgeR_3.32.1                 
-## [125] DelayedMatrixStats_1.12.3     curl_4.3.1                    kernlab_0.9-29                shiny_1.6.0                  
-## [129] lifecycle_1.0.0               nlme_3.1-152                  jsonlite_1.7.2                clusterExperiment_2.10.1     
-## [133] Rhdf5lib_1.12.1               BiocNeighbors_1.8.2           viridisLite_0.4.0             limma_3.46.0                 
-## [137] fansi_0.4.2                   pillar_1.6.1                  lattice_0.20-41               fastmap_1.1.0                
-## [141] httr_1.4.2                    survival_3.2-10               interactiveDisplayBase_1.28.0 glue_1.4.2                   
-## [145] png_0.1-7                     iterators_1.0.13              BiocVersion_3.12.0            glmnet_4.1-1                 
-## [149] bit_4.0.4                     stringi_1.6.2                 sass_0.4.0                    HDF5Array_1.18.1             
-## [153] blob_1.2.1                    BiocSingular_1.6.0            AnnotationHub_2.22.1          memoise_2.0.0                
-## [157] dplyr_1.0.6                   irlba_2.3.3                   ape_5.5</code></pre>
+##   [1] utf8_1.2.1                   
+##   [2] R.utils_2.10.1               
+##   [3] tidyselect_1.1.1             
+##   [4] RSQLite_2.2.7                
+##   [5] AnnotationDbi_1.52.0         
+##   [6] grid_4.0.5                   
+##   [7] combinat_0.0-8               
+##   [8] BiocParallel_1.24.1          
+##   [9] RNeXML_2.4.5                 
+##  [10] munsell_0.5.0                
+##  [11] codetools_0.2-18             
+##  [12] withr_2.4.2                  
+##  [13] colorspace_2.0-1             
+##  [14] highr_0.9                    
+##  [15] knitr_1.33                   
+##  [16] uuid_0.1-4                   
+##  [17] zinbwave_1.12.0              
+##  [18] rstudioapi_0.13              
+##  [19] SingleCellExperiment_1.12.0  
+##  [20] ROCR_1.0-11                  
+##  [21] NMF_0.23.0                   
+##  [22] labeling_0.4.2               
+##  [23] GenomeInfoDbData_1.2.4       
+##  [24] farver_2.1.0                 
+##  [25] bit64_4.0.5                  
+##  [26] vctrs_0.3.8                  
+##  [27] generics_0.1.0               
+##  [28] xfun_0.23                    
+##  [29] BiocFileCache_1.14.0         
+##  [30] R6_2.5.0                     
+##  [31] doParallel_1.0.16            
+##  [32] ggbeeswarm_0.6.0             
+##  [33] netSmooth_1.10.0             
+##  [34] rsvd_1.0.5                   
+##  [35] RJSONIO_1.3-1.4              
+##  [36] locfit_1.5-9.4               
+##  [37] bitops_1.0-7                 
+##  [38] rhdf5filters_1.2.1           
+##  [39] cachem_1.0.5                 
+##  [40] DelayedArray_0.16.3          
+##  [41] assertthat_0.2.1             
+##  [42] promises_1.2.0.1             
+##  [43] scales_1.1.1                 
+##  [44] beeswarm_0.3.1               
+##  [45] gtable_0.3.0                 
+##  [46] phylobase_0.8.10             
+##  [47] beachmat_2.6.4               
+##  [48] rlang_0.4.11                 
+##  [49] genefilter_1.72.1            
+##  [50] splines_4.0.5                
+##  [51] lazyeval_0.2.2               
+##  [52] BiocManager_1.30.15          
+##  [53] yaml_2.2.1                   
+##  [54] reshape2_1.4.4               
+##  [55] httpuv_1.6.1                 
+##  [56] tools_4.0.5                  
+##  [57] bookdown_0.22                
+##  [58] gridBase_0.4-7               
+##  [59] ellipsis_0.3.2               
+##  [60] jquerylib_0.1.4              
+##  [61] RColorBrewer_1.1-2           
+##  [62] Rcpp_1.0.6                   
+##  [63] plyr_1.8.6                   
+##  [64] sparseMatrixStats_1.2.1      
+##  [65] progress_1.2.2               
+##  [66] zlibbioc_1.36.0              
+##  [67] purrr_0.3.4                  
+##  [68] RCurl_1.98-1.3               
+##  [69] prettyunits_1.1.1            
+##  [70] viridis_0.6.1                
+##  [71] cluster_2.1.1                
+##  [72] tinytex_0.31                 
+##  [73] magrittr_2.0.1               
+##  [74] data.table_1.14.0            
+##  [75] RSpectra_0.16-0              
+##  [76] hms_1.1.0                    
+##  [77] mime_0.10                    
+##  [78] evaluate_0.14                
+##  [79] xtable_1.8-4                 
+##  [80] XML_3.99-0.6                 
+##  [81] jpeg_0.1-8.1                 
+##  [82] gridExtra_2.3                
+##  [83] shape_1.4.6                  
+##  [84] compiler_4.0.5               
+##  [85] scater_1.18.6                
+##  [86] tibble_3.1.2                 
+##  [87] RCy3_2.10.2                  
+##  [88] crayon_1.4.1                 
+##  [89] R.oo_1.24.0                  
+##  [90] htmltools_0.5.1.1            
+##  [91] entropy_1.3.0                
+##  [92] later_1.2.0                  
+##  [93] tidyr_1.1.3                  
+##  [94] howmany_0.3-1                
+##  [95] DBI_1.1.1                    
+##  [96] ExperimentHub_1.16.1         
+##  [97] dbplyr_2.1.1                 
+##  [98] MASS_7.3-53.1                
+##  [99] rappdirs_0.3.3               
+## [100] Matrix_1.3-2                 
+## [101] ade4_1.7-16                  
+## [102] R.methodsS3_1.8.1            
+## [103] igraph_1.2.6                 
+## [104] pkgconfig_2.0.3              
+## [105] bigmemory.sri_0.1.3          
+## [106] rncl_0.8.4                   
+## [107] registry_0.5-1               
+## [108] locfdr_1.1-8                 
+## [109] scuttle_1.0.4                
+## [110] xml2_1.3.2                   
+## [111] foreach_1.5.1                
+## [112] annotate_1.68.0              
+## [113] vipor_0.4.5                  
+## [114] bslib_0.2.5.1                
+## [115] rngtools_1.5                 
+## [116] pkgmaker_0.32.2              
+## [117] XVector_0.30.0               
+## [118] stringr_1.4.0                
+## [119] digest_0.6.27                
+## [120] pracma_2.3.3                 
+## [121] graph_1.68.0                 
+## [122] softImpute_1.4-1             
+## [123] rmarkdown_2.8                
+## [124] edgeR_3.32.1                 
+## [125] DelayedMatrixStats_1.12.3    
+## [126] curl_4.3.1                   
+## [127] kernlab_0.9-29               
+## [128] shiny_1.6.0                  
+## [129] lifecycle_1.0.0              
+## [130] nlme_3.1-152                 
+## [131] jsonlite_1.7.2               
+## [132] clusterExperiment_2.10.1     
+## [133] Rhdf5lib_1.12.1              
+## [134] BiocNeighbors_1.8.2          
+## [135] viridisLite_0.4.0            
+## [136] limma_3.46.0                 
+## [137] fansi_0.4.2                  
+## [138] pillar_1.6.1                 
+## [139] lattice_0.20-41              
+## [140] fastmap_1.1.0                
+## [141] httr_1.4.2                   
+## [142] survival_3.2-10              
+## [143] interactiveDisplayBase_1.28.0
+## [144] glue_1.4.2                   
+## [145] png_0.1-7                    
+## [146] iterators_1.0.13             
+## [147] BiocVersion_3.12.0           
+## [148] glmnet_4.1-1                 
+## [149] bit_4.0.4                    
+## [150] stringi_1.6.2                
+## [151] sass_0.4.0                   
+## [152] HDF5Array_1.18.1             
+## [153] blob_1.2.1                   
+## [154] BiocSingular_1.6.0           
+## [155] AnnotationHub_2.22.1         
+## [156] memoise_2.0.0                
+## [157] dplyr_1.0.6                  
+## [158] irlba_2.3.3                  
+## [159] ape_5.5</code></pre>
 
 </div>
 </div>
