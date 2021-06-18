@@ -221,8 +221,8 @@ numSplits <- 10L
 ##	   makeNetFunc=makeNets,
 ##	   outDir=outDir, 
 ##	   numSplits=numSplits, 
-##	   featScoreMax=2L, 
-##	   featSelCutoff=1L,
+##	   featScoreMax=10L, 
+##	   featSelCutoff=9L,
 ##	   numCores=8L
 ##	   )
 ##)

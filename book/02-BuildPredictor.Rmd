@@ -235,7 +235,7 @@ Within each split, it:
 In practice a good starting point is `featScoreMax=10`, `featSelCutoff=9` and `numSplits=10L`, but these parameters depend on the sample sizes in the dataset and heterogeneity of the samples.
 ``` 
 
-This step can take up to a half-hour based on the current parameters, so we're commenting this out for the tutorial and will simply load the results.
+This step can take a few hours based on the current parameters, so we're commenting this out for the tutorial and will simply load the results.
  
 ```{r lab1-buildpredictor ,class.source="codeblock",eval=TRUE}
 set.seed(42) # make results reproducible

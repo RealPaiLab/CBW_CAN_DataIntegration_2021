@@ -4,7 +4,7 @@ This book contains lab exercises for Module 11: Multi-modal Data Integration, as
 
 ## Course materials
 
-You can download course slides here **LINK TBA**
+You can [download course slides here](https://drive.google.com/file/d/1om3f86m3h8NWyCGHnim2mgFdc_n5Ym7M/view?usp=sharing)
 
 We will have two lab exercises, where we build patient classifiers using multi-modal data integration, using netDx [@Pai2019-iu; @Pai2021-um]. 
 
@@ -76,3 +76,29 @@ That's about it!
 
 Let's go!
 
+## Post-script: Installing netDx on your own laptop
+
+You will need:
+* [Java](https://java.com/en/download/help/download_options.html)
+* [Cytoscape](https://cytoscape.org/) with the apps EnrichmentMap and Auto Annotate installed
+* On Unix: 
+```{eval=FALSE}
+$ sudo apt-get update
+$ sudo apt-get install libxml2 zlib1g-dev libglpk40
+ ```
+
+* In `R`, install the following packages:
+```{r,eval=FALSE}
+# install BioConductor
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(version = "3.13") # could need 3.12 if R < 4.1
+
+# install R dependencies
+install.packages(c("ROCR", "pracma", "ggplot2", "glmnet", "igraph", "reshape2", "bigmemory", "doParallel", "foreach", "combinat", "rappdirs", "RColorBrewer", "Rtsne", "rmarkdown"))
+
+# install BioConductor dependencies
+BiocManager::install(c("RCy3", "biomaRt", "MultiAssayExperiment", "curatedTCGAData", "TCGAutils", "BiocFileCache", "GenomicRanges", "GenomeInfoDb", "IRanges", "scater", "clusterExperiment", "netSmooth",  "BiocStyle","Rtsne"))
+
+BiocManager::install("netDx")
+```
