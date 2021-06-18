@@ -95,10 +95,17 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install(version = "3.13") # could need 3.12 if R < 4.1
 
 # install R dependencies
-install.packages(c("ROCR", "pracma", "ggplot2", "glmnet", "igraph", "reshape2", "bigmemory", "doParallel", "foreach", "combinat", "rappdirs", "RColorBrewer", "Rtsne", "rmarkdown"))
+install.packages(c("ROCR", "pracma", "ggplot2", "glmnet", 
+  "igraph", "reshape2", "bigmemory", "doParallel", 
+  "foreach", "combinat", "rappdirs", "RColorBrewer", 
+  "Rtsne", "rmarkdown"))
 
 # install BioConductor dependencies
-BiocManager::install(c("RCy3", "biomaRt", "MultiAssayExperiment", "curatedTCGAData", "TCGAutils", "BiocFileCache", "GenomicRanges", "GenomeInfoDb", "IRanges", "scater", "clusterExperiment", "netSmooth",  "BiocStyle","Rtsne"))
+BiocManager::install(c("RCy3", "biomaRt", "MultiAssayExperiment", 
+  "curatedTCGAData", "TCGAutils", "BiocFileCache", 
+  "GenomicRanges", "GenomeInfoDb", "IRanges", 
+  "scater", "clusterExperiment", "netSmooth",  
+  "BiocStyle","Rtsne"))
 
 BiocManager::install("netDx")
 ```
